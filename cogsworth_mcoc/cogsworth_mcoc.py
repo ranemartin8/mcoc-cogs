@@ -31,7 +31,7 @@ class anothercog:
                 champ = champ.lower().strip().replace(" ","")
                 if synergies[champ]:
                     tochampions = synergies[champ][0]
-                    pprint(tochampions)
+                    #pprint(tochampions)
                     i = 0
                     out_text = ''
                     for tochamp in tochampions:
