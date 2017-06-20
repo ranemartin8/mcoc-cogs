@@ -13,11 +13,40 @@ class anothercog:
 
     def __init__(self, bot):
         self.bot = bot
-        
+
     @commands.command(pass_context=True)
     async def git_text(self):
         """test github push"""
         await self.bot.say("It works!")
+
+    @commands.command(pass_context=True)
+    async def champsyn(self,ctx, *, champ: str):
+        """finds syneries"""
+        #print(len(champs))
+        if len(champ) > 0:
+            with open('data/Synergies.json') as data_file:
+                synergies = json.load(data_file)
+        #    pprint(data)
+            try:
+                champ = champ.lower().strip().replace(" ","")
+                if synergies[champ]:
+                    tochampions = synergies[champ][0]
+                    pprint(tochampions)
+                    i = 0
+                    out_text = ''
+                    for tochamp in tochampions:
+                        idx = str(i)
+                        c_name = tochampions[idx][0]
+                        c_syn = tochampions[idx][1]
+                        out_text += 'Champ: {} - Synergy: {} \n'.format(c_name.title(),c_syn.title())
+                        i += 1
+                    await self.bot.say("**Synergies for {}**\n\n{}".format(champ.title(),out_text.replace("_"," ")))
+                else:
+                    await self.bot.say("No synergies found")
+            except:
+                raise
+        else:
+            await self.bot.say("No champion provided.")
 
     @commands.command(pass_context=True)
     async def syn(self,ctx):
