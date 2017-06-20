@@ -509,6 +509,7 @@ class MCOC(ChampionFactory):
     async def champ_bio(self, *, champ : ChampConverterDebug):
         '''Retrieve the Bio of a Champion'''
         try:
+            print(champ)
             bio_desc = await champ.get_bio()
         except KeyError:
             await self.say_user_error("Cannot find bio for Champion '{}'".format(champ.full_name))
@@ -552,6 +553,7 @@ class MCOC(ChampionFactory):
     @command_arg_help(aliases=('champ_stat', 'champ_stats', 'cstat', 'about_champ', 'about'))
     async def champ_about(self, *, champ : ChampConverterRank):
         '''Retrieve Champion Base Stats'''
+        print(champ)
         data = champ.get_spotlight(default='x')
         title = 'Base Attributes for {}'.format(champ.verbose_str)
         em = discord.Embed(color=champ.class_color,
