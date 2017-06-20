@@ -682,7 +682,7 @@ class MCOC(ChampionFactory):
     async def champsyn(self,ctx, *, champ : ChampConverter):
         """finds synergies"""
 
-        if len(champ) > 0:
+        if len(str(champ)) > 0:
             with open('data/Synergies.json') as data_file:
                 synergies = json.load(data_file)
         #    pprint(data)
