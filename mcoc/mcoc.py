@@ -698,11 +698,12 @@ class MCOC(ChampionFactory):
                         idx = str(i)
                         c_name = tochampions[idx][0]
                         c_syn = tochampions[idx][1]
-                        out_text += 'Champion: {}  -  Synergy: {} \n'.format(c_name.title(),c_syn.title())
+                        out_text += '•  {}  -  Synergy: {} \n'.format(c_name.title(),c_syn.title())
                         i += 1
                     em = discord.Embed(color=champ.class_color,
-                    title=champ.full_name + ' Synergies',description=out_text.replace("_"," "),url='https://hook.github.io/champions')
+                    title=champ.full_name + ' Synergies',url=champ.infopage)
                     em.set_thumbnail(url=champ.get_avatar())
+                    em.add_field(name=' ', value=out_text.replace("_"," "))
                     await self.bot.say(embed=em)
                 else:
                     await self.bot.say("No synergies found")
