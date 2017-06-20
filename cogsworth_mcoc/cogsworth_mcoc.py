@@ -13,6 +13,11 @@ class anothercog:
 
     def __init__(self, bot):
         self.bot = bot
+        
+    @commands.command(pass_context=True)
+    async def git_text(self):
+        """test github push"""
+        await self.bot.say("It works!")
 
     @commands.command(pass_context=True)
     async def syn(self,ctx):
