@@ -20,7 +20,7 @@ class anothercog:
         await self.bot.say("It works!")
 
     @commands.command(pass_context=True)
-    async def champsyn(self,ctx, *, champ: str):
+    async def champsyn_beta(self,ctx, *, champ: str):
         """finds syneries"""
         #print(len(champs))
         if len(champ) > 0:

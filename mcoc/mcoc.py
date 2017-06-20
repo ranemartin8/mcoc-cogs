@@ -638,7 +638,7 @@ class MCOC(ChampionFactory):
         '''In-Development: Retrieve Champion Abilities'''
         specials = champ.get_special_attacks()
         em = discord.Embed(color=champ.class_color,
-        title=champ.full_name + 'Abilities')
+        title=champ.full_name + ' Abilities')
         # em.add_field(name='Passive',value='placeholder')
         # em.add_field(name='All Attacks',value='placeholder')
         # em.add_field(name='When Attacked',value='placeholder')
@@ -675,6 +675,43 @@ class MCOC(ChampionFactory):
     #
     #     em.set_thumbnail(url=champ.get_avatar())
     #     await self.bot.say(embed=em)
+
+###### RANE'S CODE ###### RANE'S CODE ###### RANE'S CODE #######
+
+    @commands.command(pass_context=True)
+    async def champsyn(self,ctx, *, champ : ChampConverter):
+        """finds synergies"""
+
+        if len(champ) > 0:
+            with open('data/Synergies.json') as data_file:
+                synergies = json.load(data_file)
+        #    pprint(data)
+            try:
+                print(champ)
+                print(champ.hookid)
+                if synergies[champ.hookid]:
+                    tochampions = synergies[champ.hookid][0]
+                    #pprint(tochampions)
+                    i = 0
+                    out_text = ''
+                    for tochamp in tochampions:
+                        idx = str(i)
+                        c_name = tochampions[idx][0]
+                        c_syn = tochampions[idx][1]
+                        out_text += 'Champion: {}  -  Synergy: {} \n'.format(c_name.title(),c_syn.title())
+                        i += 1
+                    em = discord.Embed(color=champ.class_color,
+                    title=champ.full_name + ' Synergies',description=out_text.replace("_"," "),url='https://hook.github.io/champions')
+                    em.set_thumbnail(url=champ.get_avatar())
+                    await self.bot.say(embed=em)
+                else:
+                    await self.bot.say("No synergies found")
+            except:
+                raise
+        else:
+            await self.bot.say("No champion provided.")
+
+###### RANE'S CODE ###### RANE'S CODE ###### RANE'S CODE #######
 
     @command_arg_help(aliases=('prestige',))
     async def champ_prestige(self, *, champs : ChampConverterMult):
