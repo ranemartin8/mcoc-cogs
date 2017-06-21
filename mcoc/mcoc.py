@@ -676,7 +676,8 @@ class MCOC(ChampionFactory):
     #     em.set_thumbnail(url=champ.get_avatar())
     #     await self.bot.say(embed=em)
 
-###### RANE'S CODE ###### RANE'S CODE ###### RANE'S CODE #######
+###### RANE'S CODE ###### RANE'S CODE ###### RANE'S CODE ####### RANE'S CODE ###### RANE'S CODE ###### RANE'S CODE #######
+
 
     @commands.command(aliases=['syn',])
     async def champsyn(self, *, champ : ChampConverter):
@@ -712,7 +713,12 @@ class MCOC(ChampionFactory):
         else:
             await self.bot.say("No champion provided.")
 
-###### RANE'S CODE ###### RANE'S CODE ###### RANE'S CODE #######
+
+
+###### RANE'S CODE ###### RANE'S CODE ###### RANE'S CODE ####### RANE'S CODE ###### RANE'S CODE ###### RANE'S CODE #######
+
+
+
 
     @command_arg_help(aliases=('prestige',))
     async def champ_prestige(self, *, champs : ChampConverterMult):

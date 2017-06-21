@@ -7,48 +7,33 @@ import requests
 import re
 import pprint
 import json
+import os
+from .utils.dataIO import dataIO
+from .utils.dataIO import fileIO
 
 class anothercog:
     """This is a cog."""
 
     def __init__(self, bot):
         self.bot = bot
+        self.syn_data_dir = 'data/hook/'
+        self.syn_file = self.syn_data_dir + 'synergies.json'
 
-    @commands.command(pass_context=True)
-    async def git_text(self):
-        """test github push"""
-        await self.bot.say("It works!")
+    def create_syn_file(self):                          #(step two)
+        if not os.path.exists(self.syn_file):           #check if the FILE exists
+            if not os.path.exists(self.syn_data_dir):   #if not, check if the FOLDER exists
+                os.makedirs(self.syn_data_dir)          #if not, MAKE the FOLDER
+            self.save_syn_data(data)                    #then save the file in that folder
 
-    @commands.command(pass_context=True)
-    async def champsyn_beta(self,ctx, *, champ: str):
-        """finds syneries"""
-        #print(len(champs))
-        if len(champ) > 0:
-            with open('data/Synergies.json') as data_file:
-                synergies = json.load(data_file)
-        #    pprint(data)
-            try:
-                champ = champ.lower().strip().replace(" ","")
-                if synergies[champ]:
-                    tochampions = synergies[champ][0]
-                    #pprint(tochampions)
-                    i = 0
-                    out_text = ''
-                    for tochamp in tochampions:
-                        idx = str(i)
-                        c_name = tochampions[idx][0]
-                        c_syn = tochampions[idx][1]
-                        out_text += 'Champ: {} - Synergy: {} \n'.format(c_name.title(),c_syn.title())
-                        i += 1
-                    await self.bot.say("**Synergies for {}**\n\n{}".format(champ.title(),out_text.replace("_"," ")))
-                else:
-                    await self.bot.say("No synergies found")
-            except:
-                raise
-        else:
-            await self.bot.say("No champion provided.")
+    def load_syn_data(self):                            #(step one)
+        self.create_syn_file()                          #call create_syn_file function to check if folder/file exists (& if not, create them)
+        return dataIO.load_json(self.syn_file)          #Load the new or existing file
 
-    @commands.command(pass_context=True)
+    def save_syn_data(self, data):                      #(step three)
+        dataIO.save_json(self.syn_file, data)           #save the file
+
+
+    @commands.command(pass_context=True,aliases=['updatesyn','synjson',])
     async def synergy_json(self,ctx):
         """This command translates Hooks JS synergies file into a readable json file"""
         url = 'https://raw.githubusercontent.com/hook/champions/master/src/data/synergies.js'
@@ -91,15 +76,50 @@ class anothercog:
                 c_all.update(ch_dict) #append all champion blocks to final output dictionary
             if find_start > 0:
                 try:
-                    text_file = open("data/Synergies.json", "w")
-                    str_all = str(c_all).replace('\'',"\"").replace("drvoodoo","brothervoodoo") #convert to string. alnd json doesn't like single quotes
-                    text_file.write(str_all) #overwrites existing content
-                    text_file.close()
-                    await self.bot.send_file(ctx.message.channel,"data/Synergies.json")
+                    str_all = str(c_all).replace('\'',"\"").replace("drvoodoo","brothervoodoo") #convert to string. and json doesn't like single quotes
+                    self.load_syn_data()
+                    self.save_syn_data(str_all)
+                    await self.bot.say("Synergies.json - Update Success.")
+                #    text_file = open("data/Synergies.json", "w")
+                #    text_file.write(str_all) #overwrites existing content
+                #    text_file.close()
+                #    await self.bot.send_file(ctx.message.channel,"data/Synergies.json")
                 except:
                     raise #idk...
             else:
                 await self.bot.say("nada")
-
+    # @commands.command(pass_context=True)
+    # async def git_text(self):
+    #     """test github push"""
+    #     await self.bot.say("It works!")
+    #
+    # @commands.command(pass_context=True)
+    # async def champsyn_beta(self,ctx, *, champ: str):
+    #     """finds syneries"""
+    #     #print(len(champs))
+    #     if len(champ) > 0:
+    #         with open('data/Synergies.json') as data_file:
+    #             synergies = json.load(data_file)
+    #     #    pprint(data)
+    #         try:
+    #             champ = champ.lower().strip().replace(" ","")
+    #             if synergies[champ]:
+    #                 tochampions = synergies[champ][0]
+    #                 #pprint(tochampions)
+    #                 i = 0
+    #                 out_text = ''
+    #                 for tochamp in tochampions:
+    #                     idx = str(i)
+    #                     c_name = tochampions[idx][0]
+    #                     c_syn = tochampions[idx][1]
+    #                     out_text += 'Champ: {} - Synergy: {} \n'.format(c_name.title(),c_syn.title())
+    #                     i += 1
+    #                 await self.bot.say("**Synergies for {}**\n\n{}".format(champ.title(),out_text.replace("_"," ")))
+    #             else:
+    #                 await self.bot.say("No synergies found")
+    #         except:
+    #             raise
+    #     else:
+    #         await self.bot.say("No champion provided.")
 def setup(bot):
     bot.add_cog(anothercog(bot))
