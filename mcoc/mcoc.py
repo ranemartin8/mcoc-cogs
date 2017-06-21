@@ -705,7 +705,7 @@ class MCOC(ChampionFactory):
                     else:
                         link = champ.infopage
                     em = discord.Embed(color=champ.class_color,
-                    title=champ.bold_name + ' Synergies',url=link)
+                    title='Synergies for ' + champ.bold_name.upper(),url=link)
                     em.add_field(name='Outgoing\n', value=out_text.replace("_"," "))
                     em.set_thumbnail(url=champ.get_avatar())
                     await self.bot.say(embed=em)
