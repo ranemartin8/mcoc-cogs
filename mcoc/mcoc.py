@@ -463,7 +463,7 @@ class MCOC(ChampionFactory):
         return remote_check
 
     @commands.command(hidden=True)
-    async def cache_gsheets(self):
+    async def cache_gsheetss(self):
         s = requests.Session()
         #gs = Sheets.from_files('data/mcoc/client_secrets.json')
         for k, v in gsheet_files.items():
