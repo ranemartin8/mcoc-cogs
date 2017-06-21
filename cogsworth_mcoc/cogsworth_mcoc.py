@@ -49,7 +49,7 @@ class anothercog:
             await self.bot.say("No champion provided.")
 
     @commands.command(pass_context=True)
-    async def syn(self,ctx):
+    async def synjson(self,ctx):
         """This command translates Hooks JS synergies file into a readable json file"""
         url = 'https://raw.githubusercontent.com/hook/champions/master/src/data/synergies.js'
         async with aiohttp.get(url) as response:
