@@ -678,7 +678,7 @@ class MCOC(ChampionFactory):
 
 ###### RANE'S CODE ###### RANE'S CODE ###### RANE'S CODE #######
 
-    @commands.command(aliases=('synergy',))
+    @commands.command()
     async def champsyn(self, *, champ : ChampConverter):
         """finds synergies"""
 
