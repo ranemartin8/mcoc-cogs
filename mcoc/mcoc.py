@@ -685,7 +685,10 @@ class MCOC(ChampionFactory):
         if len(str(champ)) > 0:
             with open('data/Synergies.json') as data_file:
                 synergies = json.load(data_file)
+        #    pprint(data)
             try:
+                print(champ)
+                print(champ.hookid)
                 if synergies[champ.hookid]:
                     tochampions = synergies[champ.hookid][0]
                     #pprint(tochampions)
