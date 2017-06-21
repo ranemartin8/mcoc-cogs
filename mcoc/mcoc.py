@@ -705,9 +705,9 @@ class MCOC(ChampionFactory):
                     else:
                         link = champ.infopage
                     em = discord.Embed(color=champ.class_color,
-                    title=champ.full_name + ' Synergies',url=link)
+                    title=champ.champ.verbose_str + ' Synergies',url=link)
+                    em.add_field(name=' Outgoing', value=out_text.replace("_"," "))
                     em.set_thumbnail(url=champ.get_avatar())
-                    em.add_field(name=' ', value=out_text.replace("_"," "))
                     await self.bot.say(embed=em)
                 else:
                     await self.bot.say("No synergies found")
