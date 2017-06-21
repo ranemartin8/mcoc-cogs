@@ -678,27 +678,23 @@ class MCOC(ChampionFactory):
 
 ###### RANE'S CODE ###### RANE'S CODE ###### RANE'S CODE #######
 
-    @commands.command(pass_context=True)
-    async def champsyn(self,ctx, *, champ : ChampConverter):
-        """finds synergies"""
+    @commands.command(aliases=['syn',])
+    async def champsyn(self, *, champ : ChampConverter):
+        """Find outgoing synergies for a specific champion"""
 
-        if len(str(champ)) > 0:
+        if len(str(champ)) > 0: #check if a champ arg was provided.
             with open('data/Synergies.json') as data_file:
                 synergies = json.load(data_file)
-        #    pprint(data)
             try:
-                print(champ)
-                print(champ.hookid)
-                if synergies[champ.hookid]:
-                    tochampions = synergies[champ.hookid][0]
-                    #pprint(tochampions)
+                if synergies[champ.hookid]:  #check if synergies are available for this champ with hookid
+                    tochampions = synergies[champ.hookid][0] #get json block of all outgoing synergies for champ
                     i = 0
                     out_text = ''
-                    for tochamp in tochampions:
-                        idx = str(i)
-                        c_name = tochampions[idx][0]
-                        c_syn = tochampions[idx][1]
-                        out_text += '•  {}  -  Syn: {} \n'.format(c_name.title(),c_syn.title())
+                    for tochamp in tochampions: #for each "to" champ in synergy block...
+                        idx = str(i)  #convert index number to string, as its represented in json. ie. "0","1" instead of 0,1
+                        c_name = tochampions[idx][0] #get first item from list (name)
+                        c_syn = tochampions[idx][1] #get second item from list (synergy name)
+                        out_text += '•  {}  -  Syn: {} \n'.format(c_name.title(),c_syn.title()) #combine name and synergy onto 1 line, append to prev.
                         i += 1
                     if champ.infopage == 'none':
                         link = 'https://hook.github.io/champions'
