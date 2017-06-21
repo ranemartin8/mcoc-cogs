@@ -678,8 +678,8 @@ class MCOC(ChampionFactory):
 
 ###### RANE'S CODE ###### RANE'S CODE ###### RANE'S CODE #######
 
-    @commands.command(pass_context=True)
-    async def champsyn(self,ctx, *, champ : ChampConverter):
+    @commands.command(aliases=['syn',])
+    async def champsyn(self, *, champ : ChampConverter):
         """finds synergies"""
 
         if len(str(champ)) > 0:
@@ -698,7 +698,7 @@ class MCOC(ChampionFactory):
                         idx = str(i)
                         c_name = tochampions[idx][0]
                         c_syn = tochampions[idx][1]
-                        out_text += '•  {}  -  Synergy: {} \n'.format(c_name.title(),c_syn.title())
+                        out_text += '•  {}  -  Syn: {} \n'.format(c_name.title(),c_syn.title())
                         i += 1
                     if champ.infopage == 'none':
                         link = 'https://hook.github.io/champions'
