@@ -20,7 +20,7 @@ import discord
 from discord.ext import commands
 from .utils.dataIO import fileIO #rane added this
 from .utils import chat_formatting as chat
-import pprint #rane added this
+from pprint import pprint #rane added this
 
 
 data_files = {
@@ -671,7 +671,8 @@ class MCOC(ChampionFactory):
             #    syn_load = dataIO.load_json(self.syn_file)
                 with open(self.syn_file) as syn_load:
                     synergies = json.load(syn_load)
-            #    print(synergies)
+                print(synergies)
+                pprint(synergies)
                 for champ in champs:
                     try:
                         if synergies[champ.hookid]:  #check if synergies are available for this champ with hookid
