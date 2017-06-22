@@ -312,8 +312,11 @@ class MCOC(ChampionFactory):
     '''A Cog for Marvel's Contest of Champions'''
     def __init__(self, bot):
         self.bot = bot
-        self.syn_data_dir = 'data/hook/synergies/'
-        self.syn_file = self.syn_data_dir + 'synergies.json'
+        self.syn_data_dir = 'data/hook/synergies/' #directory with JSON for Ranes commands - see line 666
+        self.syn_file = self.syn_data_dir + 'synergies.json' #Json for Ranes commands - see line 666
+        self.hook_en_file = self.syn_data_dir + 'data_en.json' #Json for Ranes commands - see line 666
+        self.effectjson_file = self.syn_data_dir + 'effectids.json' #Json for Ranes commands - see line 666
+        self.effectval_file = self.syn_data_dir + 'effectvalues.json' #Json for Ranes commands - see line 666
         self.settings = {
                 'siglvl': 1,
                 'sigstep': 20,
@@ -662,19 +665,15 @@ class MCOC(ChampionFactory):
 
 ###### RANE'S CODE ###### RANE'S CODE ###### RANE'S CODE ####### RANE'S CODE ###### RANE'S CODE ###### RANE'S CODE #######
 
+#see line 311 for defintions
 
-    @commands.command(pass_context=True,aliases=['syn',])
-    async def champsyn(self,ctx, *, champs : ChampConverterMult):
+#IN PROGRESS
+    @commands.command(pass_context=True,aliases=['findsyn',])
+    async def syn_finder(self,ctx, *, champs : ChampConverterMult):
         """Retrieve outgoing synergies for specific champions"""
-        self.bot.send_typing(ctx.message.channel)
         if os.path.exists(self.syn_file):
             if len(str(champs)) > 0: #check if a champ arg was provided.
                 synergies = dataIO.load_json(self.syn_file)
-                #with open('data/Synergies.json') as syn_load:
-                #with open(self.syn_file) as syn_load:
-                    #synergies = json.load(syn_load)
-                #print(synergies)
-                #pprint(synergies)
                 for champ in champs:
                     try:
                         if synergies[champ.hookid]:  #check if synergies are available for this champ with hookid
@@ -695,7 +694,7 @@ class MCOC(ChampionFactory):
                             title='Synergies for ' + champ.bold_name.upper(),url=link)
                             em.set_thumbnail(url=champ.get_avatar())
                             em.add_field(name='Outgoing\n', value=out_text.replace("_"," "))
-                            em.set_footer(text='hook/champions for Collector', icon_url='https://assets-cdn.github.com/favicon.ico')
+                            em.set_footer(text='hook/champions for Collector', icon_url='http://i.imgur.com/fIEdYpP.jpg') #githug favicon as jpeg
                             await self.bot.say(embed=em)
                         else:
                             await self.bot.say("No synergies found.")
@@ -705,6 +704,46 @@ class MCOC(ChampionFactory):
                 await self.bot.say("No champion provided.")
         else:
             await self.bot.say("No synergy file detected. Reply **[prefix]pull_syn** to create a synergies file from Hook's data.")
+#IN PROGRESS^^^
+
+
+    @commands.command(pass_context=True,aliases=['syn',])
+    async def champsyn(self,ctx, *, champs : ChampConverterMult):
+        """Retrieve outgoing synergies for specific champions"""
+        if not os.path.exists(self.syn_file):
+            await self.bot.say("No synergy file detected. Reply **[prefix]pull_syn** to create a synergies file from Hook's data.")
+        if len(str(champs)) > 0: #check if a champ arg was provided.
+            synergies = dataIO.load_json(self.syn_file)
+            for champ in champs:
+                try:
+                    if synergies[champ.hookid]:  #check if synergies are available for this champ with hookid
+                        tochampions = synergies[champ.hookid][0] #get json block of all outgoing synergies for champ
+                        i = 0
+                        out_text = ''
+                        for tochamp in tochampions: #for each "to" champ in synergy block...
+                            idx = str(i)  #convert index number to string, as its represented in json. ie. "0","1" instead of 0,1
+                            c_name = tochampions[idx][0] #get first item from list (name)
+                            c_syn = tochampions[idx][1] #get second item from list (synergy name)
+                            out_text += '•  {}  -  {} \n'.format(c_name,c_syn) #combine name and synergy onto 1 line, append to prev.
+                            i += 1
+                        if champ.infopage == 'none':
+                            link = 'https://hook.github.io/champions'
+                        else:
+                            link = champ.infopage
+                        em = discord.Embed(color=champ.class_color,
+                        title='Synergies for ' + champ.bold_name.upper(),url=link)
+                        em.set_thumbnail(url=champ.get_avatar())
+                        em.add_field(name='Outgoing\n', value=out_text.replace("_"," "))
+                        em.set_footer(text='hook/champions for Collector', icon_url='http://i.imgur.com/fIEdYpP.jpg') #githug favicon as jpeg
+                        await self.bot.say(embed=em)
+                    else:
+                        await self.bot.say("No synergies found.")
+                except:
+                    raise
+        else:
+            await self.bot.say("No champion provided.")
+    #    else:
+    #        await self.bot.say("No synergy file detected. Reply **[prefix]pull_syn** to create a synergies file from Hook's data.")
 
 
 
