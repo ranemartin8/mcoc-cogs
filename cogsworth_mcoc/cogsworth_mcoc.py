@@ -51,7 +51,7 @@ class anothercog:
         url = 'https://raw.githubusercontent.com/hook/champions/master/src/data/ids/effects.js'
         async with aiohttp.get(url) as response:
             effectids_txt = await response.text()
-            effectids = effectids_txt.split('\n').strip()
+            effectids = effectids_txt.strip().split('\n')
             print(effectids)
             effectid_dict = {}
             for line in effectids:
