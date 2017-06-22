@@ -19,6 +19,13 @@ class anothercog:
         self.syn_data_dir = 'data/hook/synergies/'
         self.syn_file = self.syn_data_dir + 'synergies.json'
         self.hook_en_file = self.syn_data_dir + 'data_en.json'
+        self.effectjson_file = self.syn_data_dir + 'effectids.json'
+
+    def save_effectjson_file(self,data):                  #(step two)
+        if not os.path.exists(self.effectjson_file):       #check if the FILE exists
+            if not os.path.exists(self.syn_data_dir):   #if not, check if the FOLDER exists
+                os.makedirs(self.syn_data_dir)          #if not, MAKE the FOLDER
+            dataIO.save_json(self.effectjson_file, data)       #then save  file in that folder
 
     def save_hookjson_file(self,data):                  #(step two)
         if not os.path.exists(self.hook_en_file):       #check if the FILE exists
@@ -39,6 +46,20 @@ class anothercog:
     def save_syn_data(self, data):                      #(step three)
         dataIO.save_json(self.syn_file, data)           #save the file
 
+    @commands.command(pass_context=True)
+    async def geteffectids(self):
+        url = 'https://raw.githubusercontent.com/hook/champions/master/src/data/ids/effects.js'
+        async with aiohttp.get(url) as response:
+            effectids = await response.text()
+            effectid_dict = {}
+            for line in effectids:
+                effectname = re.search(r'(?<=const\s)(\w+)',line)
+                effectid = re.search(r'(?<=\=\s\')(\w+)',line)
+                effectid_dict.update({effectname:effectid})
+            self.save_effectjson_file(effectid_dict)
+            print('effect json file saved!')
+
+
     @commands.command(pass_context=True,aliases=['hookjson',])
     async def get_hook_json(self,ctx):
         """This command grabs Hook's english data json and stores it"""
@@ -46,6 +67,7 @@ class anothercog:
         async with aiohttp.get(url) as response:
             hookjson = await response.json()
             self.save_hookjson_file(hookjson)
+            print('hook json file saved!')
 
     @commands.command(pass_context=True,aliases=['updatesyn','synjson','pull_syn',])
     async def synergy_json(self,ctx):
