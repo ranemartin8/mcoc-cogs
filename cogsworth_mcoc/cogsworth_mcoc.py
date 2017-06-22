@@ -20,12 +20,13 @@ class anothercog:
         self.syn_file = self.syn_data_dir + 'synergies.json'
         self.hook_en_file = self.syn_data_dir + 'data_en.json'
         self.effectjson_file = self.syn_data_dir + 'effectids.json'
+        self.effectval_file = self.syn_data_dir + 'effectvalues.json'
 
-    def save_effectjson_file(self,data):                  #(step two)
-        if not os.path.exists(self.effectjson_file):       #check if the FILE exists
+    def save_effectjson_file(self,data,path):                  #(step two)
+        if not os.path.exists(self.path):       #check if the FILE exists
             if not os.path.exists(self.syn_data_dir):   #if not, check if the FOLDER exists
                 os.makedirs(self.syn_data_dir)          #if not, MAKE the FOLDER
-            dataIO.save_json(self.effectjson_file, data)       #then save  file in that folder
+            dataIO.save_json(self.path, data)       #then save  file in that folder
 
     def save_hookjson_file(self,data):                  #(step two)
         if not os.path.exists(self.hook_en_file):       #check if the FILE exists
@@ -52,22 +53,39 @@ class anothercog:
         async with aiohttp.get(url) as response:
             effectids_txt = await response.text()
             effectids = effectids_txt.strip().split('\n')
-            print(effectids)
             effectid_dict = {}
             for line in effectids:
                 line = line.strip()
                 effectname_res = re.search(r'(?<=const\s)(\w+)',line)
                 effectid_res = re.search(r'(?<=\=\s\')(\w+)',line)
-                # if effectname_res is None:
-                #     return None
-                # if effectid_res is None:
-                #     return None
                 effectname = effectname_res.group(0).lower()
                 effectid = effectid_res.group(0).lower()
                 effectid_dict.update({effectname:effectid})
                 print(effectid_dict)
-            self.save_effectjson_file(effectid_dict)
+            self.save_effectjson_file(effectid_dict,effectjson_file)
             print('effect json file saved!')
+
+    @commands.command(pass_context=True)
+    async def geteffectvalues(self):
+        url = 'https://raw.githubusercontent.com/hook/champions/master/src/data/effects.js'
+        async with aiohttp.get(url) as response:
+            effectval_txt = await response.text()
+            find_start = effectval_txt.find('EFFECT_STARS_AMOUNT') #finds first occurance of "...fromId"
+            find_end = effectval_txt.find('};')
+            val_lines = effectval_txt[find_start:find_end].strip().split(',')
+            print(val_lines)
+            effectvals_dict = {}
+            for line in val_lines:
+                line = line.strip()
+                effectname_res = re.search(r'(?<=EFFECT\.)(\w+)',line)
+                effectval_res = re.search(r'(\d+),\s(\d+),\s(\d+)',line)
+                effectname = effectname_res.group(0).lower()
+                effectvals = [effectval_res.group(0),effectval_res.group(1),effectval_res.group(2)]
+                effectvals_dict.update({effectname:effectvals})
+                print(effectvals_dict)
+            self.save_effectjson_file(effectid_dict,effectval_file)
+            print('effect value json file saved!')
+
 
 
     @commands.command(pass_context=True,aliases=['hookjson',])
