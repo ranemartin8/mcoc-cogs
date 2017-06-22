@@ -23,7 +23,7 @@ class anothercog:
         if not os.path.exists(self.syn_file):           #check if the FILE exists
             if not os.path.exists(self.syn_data_dir):   #if not, check if the FOLDER exists
                 os.makedirs(self.syn_data_dir)          #if not, MAKE the FOLDER
-            self.save_syn_data()                        #then save an empty file in that folder
+            self.save_syn_data('')                        #then save an empty file in that folder
 
     def load_syn_data(self):                            #(step one)
         self.create_syn_file()                          #call create_syn_file function to check if folder/file exists (& if not, create them)
