@@ -61,7 +61,7 @@ class anothercog:
                 effectname = effectname_res.group(0).lower()
                 effectid = effectid_res.group(0).lower()
                 effectid_dict.update({effectname:effectid})
-            self.save_effectjson_file(effectid_dict,effectjson_file)
+            self.save_effectjson_file(effectid_dict,'effectjson_file')
             print('effect json file saved!')
 
     @commands.command(pass_context=True)
@@ -85,7 +85,7 @@ class anothercog:
                 effectvals = [ef1,ef2,ef3]
                 effectvals_dict.update({effectname:effectvals})
                 print(effectvals_dict)
-            self.save_effectjson_file(effectvals_dict,effectval_file)
+            self.save_effectjson_file(effectvals_dict,'effectval_file')
             print('effect value json file saved!')
 
 
