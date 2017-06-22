@@ -69,8 +69,8 @@ class anothercog:
         url = 'https://raw.githubusercontent.com/hook/champions/master/src/data/effects.js'
         async with aiohttp.get(url) as response:
             effectval_txt = await response.text()
-            find_start = effectval_txt.find('EFFECT_STARS_AMOUNT') #finds first occurance of "...fromId"
-            find_end = effectval_txt.find('};')
+            find_start = effectval_txt.find('EFFECT_STARS_AMOUNT = {') + len('EFFECT_STARS_AMOUNT = {') #finds first occurance of "...fromId"
+            find_end = effectval_txt.find('};') - len('};')
             val_lines = effectval_txt[find_start:find_end].strip().split('\n')
             print(val_lines)
             effectvals_dict = {}
