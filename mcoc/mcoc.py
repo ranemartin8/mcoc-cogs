@@ -668,10 +668,10 @@ class MCOC(ChampionFactory):
         """Retrieve outgoing synergies for specific champions"""
         if os.path.exists(self.syn_file):
             if len(str(champs)) > 0: #check if a champ arg was provided.
-            #    syn_load = dataIO.load_json(self.syn_file)
+                synergies = dataIO.load_json(self.syn_file)
+                #with open('data/Synergies.json') as syn_load:
                 #with open(self.syn_file) as syn_load:
-                with open('data/Synergies.json') as syn_load:
-                    synergies = json.load(syn_load)
+                    #synergies = json.load(syn_load)
                 #print(synergies)
                 #pprint(synergies)
                 for champ in champs:
@@ -694,7 +694,7 @@ class MCOC(ChampionFactory):
                             title='Synergies for ' + champ.bold_name.upper(),url=link)
                             em.set_thumbnail(url=champ.get_avatar())
                             em.add_field(name='Outgoing\n', value=out_text.replace("_"," "))
-                            em.set_footer(text='hook/champions for Collector', icon_url='https://assets-cdn.github.com/favicon.ico')                            
+                            em.set_footer(text='hook/champions for Collector', icon_url='https://assets-cdn.github.com/favicon.ico')
                             await self.bot.say(embed=em)
                         else:
                             await self.bot.say("No synergies found.")
