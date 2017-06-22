@@ -674,7 +674,11 @@ class MCOC(ChampionFactory):
                 print(synergies)
                 for champ in champs:
                     try:
-                        if synergies[champ.hookid]:  #check if synergies are available for this champ with hookid
+                        c_hookid = champ.hookid
+                        print(champ.hookid)
+                        print(c_hookid)
+                        print(synergies.c_hookid)
+                        if synergies.c_hookid:  #check if synergies are available for this champ with hookid
                             tochampions = synergies[champ.hookid][0] #get json block of all outgoing synergies for champ
                             i = 0
                             out_text = ''
