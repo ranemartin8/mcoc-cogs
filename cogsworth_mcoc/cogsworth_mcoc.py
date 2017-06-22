@@ -59,19 +59,19 @@ class anothercog:
                             cnt = 0
                             while cnt < ch_count:
                                 champname = re.findall(r'(?<=CHAMPION\.)\w+',champline)
-                                tochamp = [champname[cnt].lower(),effect.group(0).lower(),stars.group(1),stars.group(2)]
+                                tochamp = [champname[cnt].lower().replace("drvoodoo","brothervoodoo"),effect.group(0).lower(),stars.group(1),stars.group(2)]
                                 synrows.update({"{}".format(i) : tochamp})
                                 cnt += 1
                                 i += 1
                         else:
                             champname = re.search(r'(?<=CHAMPION\.)(\w+)',champline)
-                            tochamp = [champname.group(0).lower(),effect.group(0).lower(),stars.group(1),stars.group(2)]
+                            tochamp = [champname.group(0).lower().replace("drvoodoo","brothervoodoo"),effect.group(0).lower(),stars.group(1),stars.group(2)]
                             synrows.update({"{}".format(i) : tochamp}) #set contains of synergy row
                             i += 1
                     elif pattern_fromchamp.search(champline): #if the line contains "CHAMPION.#####"
                         frmchamp = champline.strip()
                         fchamp = re.search(r'(?<=CHAMPION\.)(\w+)',frmchamp)
-                        fromchamp = fchamp.group(0).lower()
+                        fromchamp = fchamp.group(0).lower().replace("drvoodoo","brothervoodoo")
                         ch_dict.update({fromchamp : [synrows]}) #set contents of champion block with champ name and syn rows
                 c_all.update(ch_dict) #append all champion blocks to final output dictionary
             if find_start > 0:
