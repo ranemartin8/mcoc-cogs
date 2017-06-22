@@ -22,11 +22,17 @@ class anothercog:
         self.effectjson_file = self.syn_data_dir + 'effectids.json'
         self.effectval_file = self.syn_data_dir + 'effectvalues.json'
 
-    def save_effectjson_file(self,data,path):                  #(step two)
-        if not os.path.exists(self.path):       #check if the FILE exists
+    def save_effectjson_file(self,data):                  #(step two)
+        if not os.path.exists(self.effectjson_file):       #check if the FILE exists
             if not os.path.exists(self.syn_data_dir):   #if not, check if the FOLDER exists
                 os.makedirs(self.syn_data_dir)          #if not, MAKE the FOLDER
-            dataIO.save_json(self.path, data)       #then save  file in that folder
+            dataIO.save_json(self.effectjson_file, data)       #then save  file in that folder
+
+    def save_effectval_file(self,data):                  #(step two)
+        if not os.path.exists(self.effectval_file):       #check if the FILE exists
+            if not os.path.exists(self.syn_data_dir):   #if not, check if the FOLDER exists
+                os.makedirs(self.syn_data_dir)          #if not, MAKE the FOLDER
+            dataIO.save_json(self.effectval_file, data)       #then save  file in that folder
 
     def save_hookjson_file(self,data):                  #(step two)
         if not os.path.exists(self.hook_en_file):       #check if the FILE exists
@@ -61,7 +67,7 @@ class anothercog:
                 effectname = effectname_res.group(0).lower()
                 effectid = effectid_res.group(0).lower()
                 effectid_dict.update({effectname:effectid})
-            self.save_effectjson_file(effectid_dict,'effectjson_file')
+            self.save_effectjson_file(effectid_dict)
             print('effect json file saved!')
 
     @commands.command(pass_context=True)
@@ -72,7 +78,6 @@ class anothercog:
             find_start = effectval_txt.find('EFFECT_STARS_AMOUNT = {') + len('EFFECT_STARS_AMOUNT = {') #finds first occurance of "...fromId"
             find_end = effectval_txt.find('};') - len('};')
             val_lines = effectval_txt[find_start:find_end].strip().split('\n')
-            print(val_lines)
             effectvals_dict = {}
             for line in val_lines:
                 line = line.strip()
@@ -84,8 +89,7 @@ class anothercog:
                 ef3 = effectval_res.group(3)
                 effectvals = [ef1,ef2,ef3]
                 effectvals_dict.update({effectname:effectvals})
-                print(effectvals_dict)
-            self.save_effectjson_file(effectvals_dict,'effectval_file')
+            self.save_effectval_file(effectvals_dict)
             print('effect value json file saved!')
 
 
