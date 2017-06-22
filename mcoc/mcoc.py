@@ -18,7 +18,7 @@ from .utils.dataIO import dataIO
 from functools import wraps
 import discord
 from discord.ext import commands
-from .utils.dataIO import dataIO
+from .utils.dataIO import fileIO
 from .utils import chat_formatting as chat
 
 
@@ -670,6 +670,7 @@ class MCOC(ChampionFactory):
                 synergies = dataIO.load_json(self.syn_file)
             #    with open('data/Synergies.json') as data_file:
             #        synergies = json.load(data_file)
+                pprint(synergies)
                 for champ in champs:
                     try:
                         if synergies[champ.hookid]:  #check if synergies are available for this champ with hookid
