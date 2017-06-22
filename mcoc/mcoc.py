@@ -712,6 +712,7 @@ class MCOC(ChampionFactory):
         """Retrieve outgoing synergies for specific champions"""
         if not os.path.exists(self.syn_file):
             await self.bot.say("No synergy file detected. Reply **[prefix]pull_syn** to create a synergies file from Hook's data.")
+            return
         if len(str(champs)) > 0: #check if a champ arg was provided.
             synergies = dataIO.load_json(self.syn_file)
             for champ in champs:
