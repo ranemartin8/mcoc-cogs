@@ -675,25 +675,26 @@ class MCOC(ChampionFactory):
                 pprint(synergies)
                 for champ in champs:
                     try:
-                        if synergies[champ.hookid]:  #check if synergies are available for this champ with hookid
-                            tochampions = synergies[champ.hookid][0] #get json block of all outgoing synergies for champ
-                            i = 0
-                            out_text = ''
-                            for tochamp in tochampions: #for each "to" champ in synergy block...
-                                idx = str(i)  #convert index number to string, as its represented in json. ie. "0","1" instead of 0,1
-                                c_name = tochampions[idx][0] #get first item from list (name)
-                                c_syn = tochampions[idx][1] #get second item from list (synergy name)
-                                out_text += '•  {}  -  Syn: {} \n'.format(c_name.title(),c_syn.title()) #combine name and synergy onto 1 line, append to prev.
-                                i += 1
-                            if champ.infopage == 'none':
-                                link = 'https://hook.github.io/champions'
-                            else:
-                                link = champ.infopage
-                            em = discord.Embed(color=champ.class_color,
-                            title='Synergies for ' + champ.bold_name.upper(),url=link)
-                            em.add_field(name='Outgoing\n', value=out_text.replace("_"," "))
-                            em.set_thumbnail(url=champ.get_avatar())
-                            await self.bot.say(embed=em)
+                        for item in synergies
+                            if item[champ.hookid]:  #check if synergies are available for this champ with hookid
+                                tochampions = item[champ.hookid][0] #get json block of all outgoing synergies for champ
+                                i = 0
+                                out_text = ''
+                                for tochamp in tochampions: #for each "to" champ in synergy block...
+                                    idx = str(i)  #convert index number to string, as its represented in json. ie. "0","1" instead of 0,1
+                                    c_name = tochampions[idx][0] #get first item from list (name)
+                                    c_syn = tochampions[idx][1] #get second item from list (synergy name)
+                                    out_text += '•  {}  -  Syn: {} \n'.format(c_name.title(),c_syn.title()) #combine name and synergy onto 1 line, append to prev.
+                                    i += 1
+                                if champ.infopage == 'none':
+                                    link = 'https://hook.github.io/champions'
+                                else:
+                                    link = champ.infopage
+                                em = discord.Embed(color=champ.class_color,
+                                title='Synergies for ' + champ.bold_name.upper(),url=link)
+                                em.add_field(name='Outgoing\n', value=out_text.replace("_"," "))
+                                em.set_thumbnail(url=champ.get_avatar())
+                                await self.bot.say(embed=em)
                         else:
                             await self.bot.say("No synergies found.")
                     except:
