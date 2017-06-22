@@ -668,9 +668,9 @@ class MCOC(ChampionFactory):
         """Retrieve outgoing synergies for specific champions"""
         if os.path.exists(self.syn_file):
             if len(str(champs)) > 0: #check if a champ arg was provided.
-                synergies = dataIO.load_json(self.syn_file)
+                syn_load = dataIO.load_json(self.syn_file)
             #    with open('data/Synergies.json') as data_file:
-            #        synergies = json.load(data_file)
+                synergies = json.load(syn_load)
                 print(synergies)
                 for champ in champs:
                     try:
