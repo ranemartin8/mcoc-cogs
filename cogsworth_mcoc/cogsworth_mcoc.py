@@ -16,14 +16,14 @@ class anothercog:
 
     def __init__(self, bot):
         self.bot = bot
-        self.syn_data_dir = 'data/hook/synergies'
+        self.syn_data_dir = 'data/hook/synergies/'
         self.syn_file = self.syn_data_dir + 'synergies.json'
 
     def create_syn_file(self):                          #(step two)
         if not os.path.exists(self.syn_file):           #check if the FILE exists
             if not os.path.exists(self.syn_data_dir):   #if not, check if the FOLDER exists
                 os.makedirs(self.syn_data_dir)          #if not, MAKE the FOLDER
-            self.save_syn_data('')                    #then save the file in that folder
+            self.save_syn_data()                        #then save an empty file in that folder
 
     def load_syn_data(self):                            #(step one)
         self.create_syn_file()                          #call create_syn_file function to check if folder/file exists (& if not, create them)
