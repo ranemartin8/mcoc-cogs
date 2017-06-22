@@ -50,21 +50,22 @@ class anothercog:
     async def geteffectids(self):
         url = 'https://raw.githubusercontent.com/hook/champions/master/src/data/ids/effects.js'
         async with aiohttp.get(url) as response:
-            effectids_txt = await response.text()
-            effectids = effectids_txt.split('\n')
+            effectids_txt = await response.text().strip()
+            effectids = effectids_txt.split('\n').strip()
             print(effectids)
             effectid_dict = {}
             for line in effectids:
                 line = line.strip()
                 effectname_res = re.search(r'(?<=const\s)(\w+)',line)
                 effectid_res = re.search(r'(?<=\=\s\')(\w+)',line)
-                if effectname_res is None:
-                    return None
-                if effectid_res is None:
-                    return None
+                # if effectname_res is None:
+                #     return None
+                # if effectid_res is None:
+                #     return None
                 effectname = effectname_res.group(0).lower()
                 effectid = effectid_res.group(0).lower()
                 effectid_dict.update({effectname:effectid})
+                print(effectid_dict)
             self.save_effectjson_file(effectid_dict)
             print('effect json file saved!')
 
