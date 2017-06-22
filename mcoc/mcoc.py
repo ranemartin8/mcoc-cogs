@@ -666,7 +666,7 @@ class MCOC(ChampionFactory):
     @commands.command(pass_context=True,aliases=['syn',])
     async def champsyn(self,ctx, *, champs : ChampConverterMult):
         """Retrieve outgoing synergies for specific champions"""
-        self.bot.send_typing(message.channel)
+        self.bot.send_typing(ctx.message.channel)
         if os.path.exists(self.syn_file):
             if len(str(champs)) > 0: #check if a champ arg was provided.
                 synergies = dataIO.load_json(self.syn_file)
