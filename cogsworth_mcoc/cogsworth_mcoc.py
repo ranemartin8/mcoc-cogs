@@ -50,7 +50,8 @@ class anothercog:
     async def geteffectids(self):
         url = 'https://raw.githubusercontent.com/hook/champions/master/src/data/ids/effects.js'
         async with aiohttp.get(url) as response:
-            effectids = await response.text()
+            effectids_txt = await response.text()
+            effectids = effectids_txt.split(';')
             effectid_dict = {}
             for line in effectids:
                 effectname = re.search(r'(?<=const\s)(\w+)',line)
