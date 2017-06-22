@@ -45,7 +45,7 @@ class anothercog:
         url = 'https://raw.githubusercontent.com/hook/champions/master/src/data/lang/en.json'
         async with aiohttp.get(url) as response:
             hookjson = await response.text()
-            save_hookjson_file(hookjson)
+            self.save_hookjson_file(hookjson)
 
     @commands.command(pass_context=True,aliases=['updatesyn','synjson','pull_syn',])
     async def synergy_json(self,ctx):
