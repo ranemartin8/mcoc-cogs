@@ -71,7 +71,7 @@ class anothercog:
             effectval_txt = await response.text()
             find_start = effectval_txt.find('EFFECT_STARS_AMOUNT') #finds first occurance of "...fromId"
             find_end = effectval_txt.find('};')
-            val_lines = effectval_txt[find_start:find_end].strip().split(',')
+            val_lines = effectval_txt[find_start:find_end].strip().split('\n')
             print(val_lines)
             effectvals_dict = {}
             for line in val_lines:
