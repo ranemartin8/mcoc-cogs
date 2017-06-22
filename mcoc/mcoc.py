@@ -663,7 +663,7 @@ class MCOC(ChampionFactory):
 
 
     @commands.command(aliases=['syn',])
-    async def champsyn(self, *, champ : ChampConverterMult):
+    async def champsyn(self, *, champs : ChampConverterMult):
         """Retrieve outgoing synergies for specific champions"""
         if os.path.exists(self.syn_file):
             if len(str(champs)) > 0: #check if a champ arg was provided.
