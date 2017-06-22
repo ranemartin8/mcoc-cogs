@@ -76,9 +76,9 @@ class anothercog:
                 c_all.update(ch_dict) #append all champion blocks to final output dictionary
             if find_start > 0:
                 try:
-                    str_all = c_all.replace('\'',"\"").replace("drvoodoo","brothervoodoo") #convert to string. and json doesn't like single quotes
+                    #str_all = c_all.replace('\'',"\"").replace("drvoodoo","brothervoodoo") #convert to string. and json doesn't like single quotes
                     self.load_syn_data()
-                    self.save_syn_data(str_all)
+                    self.save_syn_data(c_all)
                     await self.bot.say("Synergies.json - Update Success.")
                     await self.bot.send_file(ctx.message.channel,self.syn_file)
                 #    text_file = open("data/Synergies.json", "w")
