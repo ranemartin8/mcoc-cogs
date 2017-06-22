@@ -44,7 +44,7 @@ class anothercog:
         """This command grabs Hook's english data json and stores it"""
         url = 'https://raw.githubusercontent.com/hook/champions/master/src/data/lang/en.json'
         async with aiohttp.get(url) as response:
-            hookjson = await response.text()
+            hookjson = await response.json()
             self.save_hookjson_file(hookjson)
 
     @commands.command(pass_context=True,aliases=['updatesyn','synjson','pull_syn',])
