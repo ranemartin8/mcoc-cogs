@@ -694,7 +694,7 @@ class MCOC(ChampionFactory):
                             title='Synergies for ' + champ.bold_name.upper(),url=link)
                             em.add_field(name='Outgoing\n', value=out_text.replace("_"," "))
                             em.set_thumbnail(url=champ.get_avatar())
-                            em.set_footer(text='hook/champions for Collector', iconurl='https://assets-cdn.github.com/favicon.ico')
+                            em.set_footer(text='hook/champions for Collector', icon_url='https://assets-cdn.github.com/favicon.ico')
                             await self.bot.say(embed=em)
                         else:
                             await self.bot.say("No synergies found.")
