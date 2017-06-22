@@ -671,8 +671,8 @@ class MCOC(ChampionFactory):
             #    syn_load = dataIO.load_json(self.syn_file)
                 with open(self.syn_file) as syn_load:
                     synergies = json.load(syn_load)
-                print(synergies)
-                pprint(synergies)
+                #print(synergies)
+                #pprint(synergies)
                 for champ in champs:
                     try:
                         for item in synergies
@@ -695,8 +695,8 @@ class MCOC(ChampionFactory):
                                 em.add_field(name='Outgoing\n', value=out_text.replace("_"," "))
                                 em.set_thumbnail(url=champ.get_avatar())
                                 await self.bot.say(embed=em)
-                        else:
-                            await self.bot.say("No synergies found.")
+                            else:
+                                await self.bot.say("No synergies found.")
                     except:
                         raise
             else:
