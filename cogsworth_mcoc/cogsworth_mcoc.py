@@ -55,8 +55,15 @@ class anothercog:
             print(effectids)
             effectid_dict = {}
             for line in effectids:
-                effectname = re.search(r'(?<=const\s)(\w+)',line.strip()).group(0).lower()
-                effectid = re.search(r'(?<=\=\s\')(\w+)',line.strip()).group(0)
+                line = line.strip()
+                effectname_res = re.search(r'(?<=const\s)(\w+)',line)
+                effectid_res = re.search(r'(?<=\=\s\')(\w+)',line)
+                if effectname_res is None:
+                    return None
+                if effectid_res is None:
+                    return None
+                effectname = effectname_res.group(0).lower()
+                effectid = effectid_res.group(0).lower()
                 effectid_dict.update({effectname:effectid})
             self.save_effectjson_file(effectid_dict)
             print('effect json file saved!')
