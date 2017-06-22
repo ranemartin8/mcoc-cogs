@@ -713,36 +713,40 @@ class MCOC(ChampionFactory):
         if not os.path.exists(self.syn_file):
             await self.bot.say("No synergy file detected. Reply **[prefix]pull_syn** to create a synergies file from Hook's data.")
             return
-        if len(str(champs)) > 0: #check if a champ arg was provided.
-            synergies = dataIO.load_json(self.syn_file)
-            for champ in champs:
-                try:
-                    if synergies[champ.hookid]:  #check if synergies are available for this champ with hookid
-                        tochampions = synergies[champ.hookid][0] #get json block of all outgoing synergies for champ
-                        i = 0
-                        out_text = ''
-                        for tochamp in tochampions: #for each "to" champ in synergy block...
-                            idx = str(i)  #convert index number to string, as its represented in json. ie. "0","1" instead of 0,1
-                            c_name = tochampions[idx][0] #get first item from list (name)
-                            c_syn = tochampions[idx][1] #get second item from list (synergy name)
-                            out_text += '•  {}  -  {} \n'.format(c_name,c_syn) #combine name and synergy onto 1 line, append to prev.
-                            i += 1
-                        if champ.infopage == 'none':
-                            link = 'https://hook.github.io/champions'
-                        else:
-                            link = champ.infopage
-                        em = discord.Embed(color=champ.class_color,
-                        title='Synergies for ' + champ.bold_name.upper(),url=link)
-                        em.set_thumbnail(url=champ.get_avatar())
-                        em.add_field(name='Outgoing\n', value=out_text.replace("_"," "))
-                        em.set_footer(text='hook/champions for Collector', icon_url='http://i.imgur.com/fIEdYpP.jpg') #githug favicon as jpeg
-                        await self.bot.say(embed=em)
-                    else:
-                        await self.bot.say("No synergies found.")
-                except:
-                    raise
-        else:
+        if not len(str(champs)) > 0: #check if a champ arg was provided.
             await self.bot.say("No champion provided.")
+            return
+        synergies = dataIO.load_json(self.syn_file)
+        for champ in champs:
+            try:
+                if not synergies[champ.hookid]:  #check if synergies are available for this champ with hookid
+                    await self.bot.say("No synergies found.")
+                    return
+                tochampions = synergies[champ.hookid][0] #get json block of all outgoing synergies for champ
+                i = 0
+                out_text = ''
+                for tochamp in tochampions: #for each "to" champ in synergy block...
+                    idx = str(i)  #convert index number to string, as its represented in json. ie. "0","1" instead of 0,1
+                    c_name = tochampions[idx][0] #get first item from list (name)
+                    c_syn = tochampions[idx][1] #get second item from list (synergy name)
+                    out_text += '•  {}  -  {} \n'.format(c_name,c_syn) #combine name and synergy onto 1 line, append to prev.
+                    i += 1
+                if champ.infopage == 'none':
+                    link = 'https://hook.github.io/champions'
+                else:
+                    link = champ.infopage
+                em = discord.Embed(color=champ.class_color,
+                title='Synergies for ' + champ.bold_name.upper(),url=link)
+                em.set_thumbnail(url=champ.get_avatar())
+                em.add_field(name='Outgoing\n', value=out_text.replace("_"," "))
+                em.set_footer(text='hook/champions for Collector', icon_url='http://i.imgur.com/fIEdYpP.jpg') #githug favicon as jpeg
+                await self.bot.say(embed=em)
+            #    else:
+            #        await self.bot.say("No synergies found.")
+            except:
+                raise
+    #    else:
+    #        await self.bot.say("No champion provided.")
     #    else:
     #        await self.bot.say("No synergy file detected. Reply **[prefix]pull_syn** to create a synergies file from Hook's data.")
 
