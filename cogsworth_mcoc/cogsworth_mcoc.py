@@ -5,7 +5,7 @@ import asyncio
 import logging
 import requests
 import re
-import pprint
+from pprint import pprint
 import json
 import os
 from .utils.dataIO import dataIO
