@@ -670,7 +670,7 @@ class MCOC(ChampionFactory):
             if len(str(champs)) > 0: #check if a champ arg was provided.
             #    syn_load = dataIO.load_json(self.syn_file)
                 with open(self.syn_file) as syn_load:
-                synergies = json.load(syn_load)
+                    synergies = json.load(syn_load)
             #    print(synergies)
                 for champ in champs:
                     try:
