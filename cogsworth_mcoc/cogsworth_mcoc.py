@@ -80,7 +80,7 @@ class anothercog:
                 effectname_res = re.search(r'(?<=EFFECT\.)(\w+)',line)
                 effectval_res = re.search(r'(\d+),\s(\d+),\s(\d+)',line)
                 effectname = effectname_res.group(0).lower()
-                effectvals = [effectval_res.group(0),effectval_res.group(1),effectval_res.group(2)]
+                effectvals = [effectval_res.group(1),effectval_res.group(2),effectval_res.group(3)]
                 effectvals_dict.update({effectname:effectvals})
                 print(effectvals_dict)
             self.save_effectjson_file(effectid_dict,effectval_file)
