@@ -80,14 +80,14 @@ class anothercog:
                     self.load_syn_data()
                     self.save_syn_data(str_all)
                     await self.bot.say("Synergies.json - Update Success.")
+                    await self.bot.send_file(ctx.message.channel,self.syn_file)
                 #    text_file = open("data/Synergies.json", "w")
                 #    text_file.write(str_all) #overwrites existing content
                 #    text_file.close()
-                #    await self.bot.send_file(ctx.message.channel,"data/Synergies.json")
                 except:
                     raise #idk...
             else:
-                await self.bot.say("nada")
+                await self.bot.say("Something went wrong.")
     # @commands.command(pass_context=True)
     # async def git_text(self):
     #     """test github push"""
