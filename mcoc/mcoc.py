@@ -685,7 +685,7 @@ class MCOC(ChampionFactory):
                                 idx = str(i)  #convert index number to string, as its represented in json. ie. "0","1" instead of 0,1
                                 c_name = tochampions[idx][0] #get first item from list (name)
                                 c_syn = tochampions[idx][1] #get second item from list (synergy name)
-                                out_text += '•  {}  -  Syn: {} \n'.format(c_name.title(),c_syn.title()) #combine name and synergy onto 1 line, append to prev.
+                                out_text += '•  {}  -  {} \n'.format(c_name,c_syn) #combine name and synergy onto 1 line, append to prev.
                                 i += 1
                             if champ.infopage == 'none':
                                 link = 'https://hook.github.io/champions'

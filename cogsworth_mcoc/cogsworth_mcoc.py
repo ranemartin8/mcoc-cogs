@@ -18,6 +18,13 @@ class anothercog:
         self.bot = bot
         self.syn_data_dir = 'data/hook/synergies/'
         self.syn_file = self.syn_data_dir + 'synergies.json'
+        self.hook_en_file = self.syn_data_dir + 'data_en.json'
+
+    def save_hookjson_file(self,data):                  #(step two)
+        if not os.path.exists(self.hook_en_file):       #check if the FILE exists
+            if not os.path.exists(self.syn_data_dir):   #if not, check if the FOLDER exists
+                os.makedirs(self.syn_data_dir)          #if not, MAKE the FOLDER
+            dataIO.save_json(self.hook_en_file, data)       #then save  file in that folder
 
     def create_syn_file(self):                          #(step two)
         if not os.path.exists(self.syn_file):           #check if the FILE exists
@@ -32,6 +39,13 @@ class anothercog:
     def save_syn_data(self, data):                      #(step three)
         dataIO.save_json(self.syn_file, data)           #save the file
 
+    @commands.command(pass_context=True,aliases=['hookjson',])
+    async def get_hook_json(self,ctx):
+        """This command grabs Hook's english data json and stores it"""
+        url = 'https://raw.githubusercontent.com/hook/champions/master/src/data/lang/en.json'
+        async with aiohttp.get(url) as response:
+            hookjson = await response.text()
+            save_hookjson_file(hookjson)
 
     @commands.command(pass_context=True,aliases=['updatesyn','synjson','pull_syn',])
     async def synergy_json(self,ctx):
