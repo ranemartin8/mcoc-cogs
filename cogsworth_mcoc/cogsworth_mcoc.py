@@ -12,7 +12,7 @@ from .utils.dataIO import dataIO
 from .utils.dataIO import fileIO
 
 class anothercog:
-    """This is a cog."""
+    """This is a cog named Cogsworth."""
 
     def __init__(self, bot):
         self.bot = bot
@@ -33,7 +33,7 @@ class anothercog:
         dataIO.save_json(self.syn_file, data)           #save the file
 
 
-    @commands.command(pass_context=True,aliases=['updatesyn','synjson',])
+    @commands.command(pass_context=True,aliases=['updatesyn','synjson','pull_syn',])
     async def synergy_json(self,ctx):
         """This command translates Hooks JS synergies file into a readable json file"""
         url = 'https://raw.githubusercontent.com/hook/champions/master/src/data/synergies.js'

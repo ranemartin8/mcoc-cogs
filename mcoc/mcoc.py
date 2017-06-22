@@ -311,7 +311,8 @@ class MCOC(ChampionFactory):
     '''A Cog for Marvel's Contest of Champions'''
     def __init__(self, bot):
         self.bot = bot
-
+        self.syn_data_dir = 'data/hook/synergies/'
+        self.syn_file = self.syn_data_dir + 'synergies.json'
         self.settings = {
                 'siglvl': 1,
                 'sigstep': 20,
@@ -463,7 +464,7 @@ class MCOC(ChampionFactory):
         return remote_check
 
     @commands.command(hidden=True)
-    async def cache_gsheetss(self):
+    async def cache_gsheets(self):
         s = requests.Session()
         #gs = Sheets.from_files('data/mcoc/client_secrets.json')
         for k, v in gsheet_files.items():
@@ -657,6 +658,53 @@ class MCOC(ChampionFactory):
         await self.bot.say(embed=em)
         # await self.bot.say(embed=em2)
 
+
+###### RANE'S CODE ###### RANE'S CODE ###### RANE'S CODE ####### RANE'S CODE ###### RANE'S CODE ###### RANE'S CODE #######
+
+
+    @commands.command(aliases=['syn',])
+    async def champsyn(self, *, champ : ChampConverterMult):
+        """Retrieve outgoing synergies for specific champions"""
+        if os.path.exists(self.syn_file):
+            if len(str(champs)) > 0: #check if a champ arg was provided.
+                synergies = dataIO.load_json(self.syn_file)
+            #    with open('data/Synergies.json') as data_file:
+            #        synergies = json.load(data_file)
+                for champ in champs:
+                    try:
+                        if synergies[champ.hookid]:  #check if synergies are available for this champ with hookid
+                            tochampions = synergies[champ.hookid][0] #get json block of all outgoing synergies for champ
+                            i = 0
+                            out_text = ''
+                            for tochamp in tochampions: #for each "to" champ in synergy block...
+                                idx = str(i)  #convert index number to string, as its represented in json. ie. "0","1" instead of 0,1
+                                c_name = tochampions[idx][0] #get first item from list (name)
+                                c_syn = tochampions[idx][1] #get second item from list (synergy name)
+                                out_text += '•  {}  -  Syn: {} \n'.format(c_name.title(),c_syn.title()) #combine name and synergy onto 1 line, append to prev.
+                                i += 1
+                            if champ.infopage == 'none':
+                                link = 'https://hook.github.io/champions'
+                            else:
+                                link = champ.infopage
+                            em = discord.Embed(color=champ.class_color,
+                            title='Synergies for ' + champ.bold_name.upper(),url=link)
+                            em.add_field(name='Outgoing\n', value=out_text.replace("_"," "))
+                            em.set_thumbnail(url=champ.get_avatar())
+                            await self.bot.say(embed=em)
+                        else:
+                            await self.bot.say("No synergies found.")
+                    except:
+                        raise
+            else:
+                await self.bot.say("No champion provided.")
+        else:
+            await self.bot.say("No synergy file detected. Reply **[prefix]pull_syn** to create a synergies file from Hook's data.")
+
+
+
+###### RANE'S CODE ###### RANE'S CODE ###### RANE'S CODE ####### RANE'S CODE ###### RANE'S CODE ###### RANE'S CODE #######
+
+
     # @commands.command()
     # async def sigarray(self, champ : ChampConverter, dbg=1, *args):
     #     '''Retrieve the Signature Ability of a Champion at multiple levels'''
@@ -675,49 +723,6 @@ class MCOC(ChampionFactory):
     #
     #     em.set_thumbnail(url=champ.get_avatar())
     #     await self.bot.say(embed=em)
-
-###### RANE'S CODE ###### RANE'S CODE ###### RANE'S CODE ####### RANE'S CODE ###### RANE'S CODE ###### RANE'S CODE #######
-
-
-    @commands.command(aliases=['syn',])
-    async def champsyn(self, *, champ : ChampConverter):
-        """Find outgoing synergies for a specific champion"""
-
-        if len(str(champ)) > 0: #check if a champ arg was provided.
-            with open('data/Synergies.json') as data_file:
-                synergies = json.load(data_file)
-            try:
-                if synergies[champ.hookid]:  #check if synergies are available for this champ with hookid
-                    tochampions = synergies[champ.hookid][0] #get json block of all outgoing synergies for champ
-                    i = 0
-                    out_text = ''
-                    for tochamp in tochampions: #for each "to" champ in synergy block...
-                        idx = str(i)  #convert index number to string, as its represented in json. ie. "0","1" instead of 0,1
-                        c_name = tochampions[idx][0] #get first item from list (name)
-                        c_syn = tochampions[idx][1] #get second item from list (synergy name)
-                        out_text += '•  {}  -  Syn: {} \n'.format(c_name.title(),c_syn.title()) #combine name and synergy onto 1 line, append to prev.
-                        i += 1
-                    if champ.infopage == 'none':
-                        link = 'https://hook.github.io/champions'
-                    else:
-                        link = champ.infopage
-                    em = discord.Embed(color=champ.class_color,
-                    title='Synergies for ' + champ.bold_name.upper(),url=link)
-                    em.add_field(name='Outgoing\n', value=out_text.replace("_"," "))
-                    em.set_thumbnail(url=champ.get_avatar())
-                    await self.bot.say(embed=em)
-                else:
-                    await self.bot.say("No synergies found")
-            except:
-                raise
-        else:
-            await self.bot.say("No champion provided.")
-
-
-
-###### RANE'S CODE ###### RANE'S CODE ###### RANE'S CODE ####### RANE'S CODE ###### RANE'S CODE ###### RANE'S CODE #######
-
-
 
 
     @command_arg_help(aliases=('prestige',))
