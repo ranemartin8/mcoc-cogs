@@ -48,6 +48,7 @@ class anothercog:
 
     def load_syn_data(self):                            #(step one)
         self.create_syn_file()                          #call create_syn_file function to check if folder/file exists (& if not, create them)
+        self.save_syn_data('')
         return dataIO.load_json(self.syn_file)          #Load the new or existing file
 
     def save_syn_data(self, data):                      #(step three)
