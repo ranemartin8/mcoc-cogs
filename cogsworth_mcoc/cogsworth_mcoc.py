@@ -70,7 +70,7 @@ class anothercog:
             self.save_effectjson_file(effectid_dict)
             print('effect json file saved!')
 
-    @commands.command(pass_context=True)
+    @commands.command(pass_context=True,hidden=True)
     async def geteffectvalues(self):
         url = 'https://raw.githubusercontent.com/hook/champions/master/src/data/effects.js'
         async with aiohttp.get(url) as response:
@@ -111,7 +111,7 @@ class anothercog:
             hook = await response.text()
             find_start = hook.find('...fromId(') #finds first occurance of "...fromId"
             find_end = hook.find('].map((synergy') #finds first occurance of "].map((synergy"
-            hk_slice = hook[find_start:find_end].split('...fromId') #slice out all syns & split into blocks by "from" champion
+            hk_slice = hook[find_start:find_end].replace("DRVOODOO","BROTHERVOODOO").split('...fromId') #slice out all syns & split into blocks by "from" champion
             c_all = {} #define output dictionary
             for champblock in hk_slice:
                 syn_blk = champblock.split('...fromStars') #separate into rows by "to" champion
@@ -129,19 +129,19 @@ class anothercog:
                             cnt = 0
                             while cnt < ch_count:
                                 champname = re.findall(r'(?<=CHAMPION\.)\w+',champline)
-                                tochamp = [champname[cnt].lower().replace("drvoodoo","brothervoodoo"),effect.group(0).lower(),stars.group(1),stars.group(2)]
+                                tochamp = [champname[cnt].lower(),effect.group(0).lower(),stars.group(1),stars.group(2)]
                                 synrows.update({"{}".format(i) : tochamp})
                                 cnt += 1
                                 i += 1
                         else:
                             champname = re.search(r'(?<=CHAMPION\.)(\w+)',champline)
-                            tochamp = [champname.group(0).lower().replace("drvoodoo","brothervoodoo"),effect.group(0).lower(),stars.group(1),stars.group(2)]
+                            tochamp = [champname.group(0).lower(),effect.group(0).lower(),stars.group(1),stars.group(2)]
                             synrows.update({"{}".format(i) : tochamp}) #set contains of synergy row
                             i += 1
                     elif pattern_fromchamp.search(champline): #if the line contains "CHAMPION.#####"
                         frmchamp = champline.strip()
                         fchamp = re.search(r'(?<=CHAMPION\.)(\w+)',frmchamp)
-                        fromchamp = fchamp.group(0).lower().replace("drvoodoo","brothervoodoo")
+                        fromchamp = fchamp.group(0).lower()
                         ch_dict.update({fromchamp : [synrows]}) #set contents of champion block with champ name and syn rows
                 c_all.update(ch_dict) #append all champion blocks to final output dictionary
             if find_start > 0:
