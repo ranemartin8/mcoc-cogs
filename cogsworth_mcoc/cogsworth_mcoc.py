@@ -62,7 +62,7 @@ class anothercog:
         dataIO.save_json(self.syn_file, data)           #save the file
 
     #@commands.command(pass_context=True)
-    def geteffectids(self):
+    async def geteffectids(self):
         url = 'https://raw.githubusercontent.com/hook/champions/master/src/data/ids/effects.js'
         async with aiohttp.get(url) as response:
             effectids_txt = await response.text()
