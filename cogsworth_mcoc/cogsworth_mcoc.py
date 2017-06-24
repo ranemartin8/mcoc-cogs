@@ -62,10 +62,10 @@ class anothercog:
         dataIO.save_json(self.syn_file, data)           #save the file
 
     #@commands.command(pass_context=True)
-    def geteffectids(self):
+    async def geteffectids(self):
         url = 'https://raw.githubusercontent.com/hook/champions/master/src/data/ids/effects.js'
-        with aiohttp.get(url) as response:
-            effectids_txt = response.text()
+        async with aiohttp.get(url) as response:
+            effectids_txt = await response.text()
             effectids = effectids_txt.strip().split('\n')
             effectid_dict = {}
             for line in effectids:
@@ -75,8 +75,8 @@ class anothercog:
                 effectname = effectname_res.group(0).lower()
                 effectid = effectid_res.group(0).lower()
                 effectid_dict.update({effectname:effectid})
-            self.save_shell_file(effectid_dict,'effectvalues')
-            print('effect json file saved!')
+            await self.save_shell_file(effectid_dict,'effectvalues')
+            await print('effect json file saved!')
 
     @commands.command(pass_context=True,hidden=True)
     async def geteffectvalues(self):
