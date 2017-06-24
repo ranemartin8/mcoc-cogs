@@ -117,7 +117,7 @@ class anothercog:
         url = 'https://raw.githubusercontent.com/hook/champions/master/src/data/synergies.js'
         async with aiohttp.get(url) as response:
             hook = await response.text()
-            self.geteffectids()
+            await self.geteffectids()
             find_start = hook.find('...fromId(') #finds first occurance of "...fromId"
             find_end = hook.find('].map((synergy') #finds first occurance of "].map((synergy"
             hk_slice = hook[find_start:find_end].replace("DRVOODOO","BROTHERVOODOO").split('...fromId') #slice out all syns & split into blocks by "from" champion
