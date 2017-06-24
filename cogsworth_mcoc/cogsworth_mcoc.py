@@ -76,8 +76,8 @@ class anothercog:
                 effectname = effectname_res.group(0).lower()
                 effectid = effectid_res.group(0).lower()
                 effectid_dict.update({effectname:effectid})
-            await self.save_shell_file(effectid_dict,file_name)
-            await print('effect json file saved!')
+            self.save_shell_file(effectid_dict,file_name)
+            #await print('effect json file saved!')
 
     @commands.command(pass_context=True,hidden=True)
     async def geteffectvalues(self):
