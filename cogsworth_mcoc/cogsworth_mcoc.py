@@ -21,7 +21,7 @@ class anothercog:
         self.hook_en_file = self.syn_data_dir + 'data_en.json'
         #self.effectjson_file = self.syn_data_dir + 'effectids.json'
         self.effectval_file = self.syn_data_dir + 'effectvalues.json'
-        self.shell_json = self.syn_data_dir.'{}.json'
+        self.shell_json = self.syn_data_dir + '{}.json'
 
     def save_shell_file(self,data,filename):                  #(step two)
         if not os.path.exists(self.shell_json.format(filename)):       #check if the FILE exists
