@@ -66,6 +66,7 @@ class anothercog:
         url = 'https://raw.githubusercontent.com/hook/champions/master/src/data/ids/effects.js'
         async with aiohttp.get(url) as response:
             effectids_txt = await response.text()
+            file_name = 'effectvalues'
             effectids = effectids_txt.strip().split('\n')
             effectid_dict = {}
             for line in effectids:
@@ -75,7 +76,7 @@ class anothercog:
                 effectname = effectname_res.group(0).lower()
                 effectid = effectid_res.group(0).lower()
                 effectid_dict.update({effectname:effectid})
-            await self.save_shell_file(effectid_dict,'effectvalues')
+            await self.save_shell_file(effectid_dict,file_name)
             await print('effect json file saved!')
 
     @commands.command(pass_context=True,hidden=True)
