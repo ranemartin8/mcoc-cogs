@@ -18,16 +18,16 @@ class anothercog:
         self.bot = bot
         self.syn_data_dir = 'data/hook/synergies/'
         self.syn_file = self.syn_data_dir + 'synergies.json'
-        self.hook_en_file = self.syn_data_dir + 'data_en.json'
+        #self.hook_en_file = self.syn_data_dir + 'data_en.json'
         #self.effectjson_file = self.syn_data_dir + 'effectids.json'
-        self.effectval_file = self.syn_data_dir + 'effectvalues.json'
+        #self.effectval_file = self.syn_data_dir + 'effectvalues.json'
         self.shell_json = self.syn_data_dir + '{}.json'
 
-    def save_shell_file(self,data,filename):                  #(step two)
+    def save_shell_file(self,data,filename):                           #(step two)
         if not os.path.exists(self.shell_json.format(filename)):       #check if the FILE exists
-            if not os.path.exists(self.syn_data_dir):   #if not, check if the FOLDER exists
-                os.makedirs(self.syn_data_dir)          #if not, MAKE the FOLDER
-            dataIO.save_json(self.shell_json.format(filename), data)       #then save  file in that folder
+            if not os.path.exists(self.syn_data_dir):                  #if not, check if the FOLDER exists
+                os.makedirs(self.syn_data_dir)                         #if not, MAKE the FOLDER
+            dataIO.save_json(self.shell_json.format(filename), data)   #then save  file in that folder
 
     # def save_effectjson_file(self,data):                  #(step two)
     #     if not os.path.exists(self.effectjson_file):       #check if the FILE exists
@@ -35,17 +35,17 @@ class anothercog:
     #             os.makedirs(self.syn_data_dir)          #if not, MAKE the FOLDER
     #         dataIO.save_json(self.effectjson_file, data)       #then save  file in that folder
 
-    def save_effectval_file(self,data):                  #(step two)
-        if not os.path.exists(self.effectval_file):       #check if the FILE exists
-            if not os.path.exists(self.syn_data_dir):   #if not, check if the FOLDER exists
-                os.makedirs(self.syn_data_dir)          #if not, MAKE the FOLDER
-            dataIO.save_json(self.effectval_file, data)       #then save  file in that folder
+    # def save_effectval_file(self,data):                  #(step two)
+    #     if not os.path.exists(self.effectval_file):       #check if the FILE exists
+    #         if not os.path.exists(self.syn_data_dir):   #if not, check if the FOLDER exists
+    #             os.makedirs(self.syn_data_dir)          #if not, MAKE the FOLDER
+    #         dataIO.save_json(self.effectval_file, data)       #then save  file in that folder
 
-    def save_hookjson_file(self,data):                  #(step two)
-        if not os.path.exists(self.hook_en_file):       #check if the FILE exists
-            if not os.path.exists(self.syn_data_dir):   #if not, check if the FOLDER exists
-                os.makedirs(self.syn_data_dir)          #if not, MAKE the FOLDER
-            dataIO.save_json(self.hook_en_file, data)       #then save  file in that folder
+    # def save_hookjson_file(self,data):                  #(step two)
+    #     if not os.path.exists(self.hook_en_file):       #check if the FILE exists
+    #         if not os.path.exists(self.syn_data_dir):   #if not, check if the FOLDER exists
+    #             os.makedirs(self.syn_data_dir)          #if not, MAKE the FOLDER
+    #         dataIO.save_json(self.hook_en_file, data)       #then save  file in that folder
 
     def create_syn_file(self):                          #(step two)
         if not os.path.exists(self.syn_file):           #check if the FILE exists
@@ -66,7 +66,7 @@ class anothercog:
         url = 'https://raw.githubusercontent.com/hook/champions/master/src/data/ids/effects.js'
         async with aiohttp.get(url) as response:
             effectids_txt = await response.text()
-            file_name = 'effectvalues'
+            file_name = 'effectids'
             effectids = effectids_txt.strip().split('\n')
             effectid_dict = {}
             for line in effectids:
@@ -77,13 +77,14 @@ class anothercog:
                 effectid = effectid_res.group(0).lower()
                 effectid_dict.update({effectname:effectid})
             self.save_shell_file(effectid_dict,file_name)
-            #await print('effect json file saved!')
+            return print('effect id json file saved!')
 
-    @commands.command(pass_context=True,hidden=True)
+    #@commands.command(pass_context=True,hidden=True)
     async def geteffectvalues(self):
         url = 'https://raw.githubusercontent.com/hook/champions/master/src/data/effects.js'
         async with aiohttp.get(url) as response:
             effectval_txt = await response.text()
+            file_name = 'effectvalues'
             find_start = effectval_txt.find('EFFECT_STARS_AMOUNT = {') + len('EFFECT_STARS_AMOUNT = {') #finds first occurance of "...fromId"
             find_end = effectval_txt.find('};') - len('};')
             val_lines = effectval_txt[find_start:find_end].strip().split('\n')
@@ -98,19 +99,19 @@ class anothercog:
                 ef3 = effectval_res.group(3)
                 effectvals = [ef1,ef2,ef3]
                 effectvals_dict.update({effectname:effectvals})
-            self.save_effectval_file(effectvals_dict)
-            print('effect value json file saved!')
+            self.save_shell_file(effectvals_dict,file_name)
+            return print('effect value json file saved!')
 
 
 
-    @commands.command(pass_context=True,aliases=['hookjson',])
+    #@commands.command(pass_context=True,aliases=['hookjson',])
     async def get_hook_json(self,ctx):
-        """This command grabs Hook's english data json and stores it"""
         url = 'https://raw.githubusercontent.com/hook/champions/master/src/data/lang/en.json'
         async with aiohttp.get(url) as response:
             hookjson = await response.json()
-            self.save_hookjson_file(hookjson)
-            print('hook json file saved!')
+            file_name = 'hook_json'
+            self.save_shell_file(hookjson,file_name)
+            return print('hook json file saved!')
 
     @commands.command(pass_context=True,aliases=['updatesyn','synjson','pull_syn',])
     async def synergy_json(self,ctx):
@@ -119,6 +120,8 @@ class anothercog:
         async with aiohttp.get(url) as response:
             hook = await response.text()
             await self.geteffectids()
+            await self.geteffectvalues()
+            await self.get_hook_json()
             find_start = hook.find('...fromId(') #finds first occurance of "...fromId"
             find_end = hook.find('].map((synergy') #finds first occurance of "].map((synergy"
             hk_slice = hook[find_start:find_end].replace("DRVOODOO","BROTHERVOODOO").split('...fromId') #slice out all syns & split into blocks by "from" champion
