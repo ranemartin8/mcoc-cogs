@@ -105,7 +105,7 @@ class anothercog:
 
 
     #@commands.command(pass_context=True,aliases=['hookjson',])
-    async def get_hook_json(self,ctx):
+    async def get_hook_json(self):
         url = 'https://raw.githubusercontent.com/hook/champions/master/src/data/lang/en.json'
         async with aiohttp.get(url) as response:
             hookjson = await response.json()
