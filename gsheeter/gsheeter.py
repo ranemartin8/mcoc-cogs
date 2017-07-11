@@ -19,6 +19,9 @@ from pprint import pprint
 import os
 from .utils.dataIO import dataIO
 from .utils.dataIO import fileIO
+from datetime import tzinfo, timedelta, datetime
+import pytz
+
 
 class gsheet_cog:
 	"""Just playing around."""
@@ -128,9 +131,17 @@ class gsheet_cog:
 				await self.bot.say("User not found.")
 				return
 			memberInfo = member_json[user_id]
+			if memberInfo['timezone']:
+				get_tz = member_json['timezone']
+				utcmoment_naive = datetime.utcnow()
+				utcmoment = utcmoment_naive.replace(tzinfo=pytz.utc)
+				localFormat = "%I:%M%p"
+				localtime = utcmoment.astimezone(pytz.timezone(get_tz))
+			else:
+				localtime = "not found"
 			em = discord.Embed(color=0xDEADBF)
-			em.set_thumbnail(url=user.default_avatar_url)
-			em.add_field(name='Member Info For ' + memberInfo.get('name','not found').upper(), value='Battlegroup: '+memberInfo.get('bg','not found')+'\nTimezone: '+memberInfo.get('timezone','not found'))
+			em.set_thumbnail(url=user.avatar_url)
+			em.add_field(name='Member Info For ' + memberInfo.get('name','not found').upper(), value='Battlegroup: '+memberInfo.get('bg','not found')+'\Local Time: '+localtime)
 			await self.bot.say(embed=em)
 		except:
 			await self.bot.say("Something went wrong.")
