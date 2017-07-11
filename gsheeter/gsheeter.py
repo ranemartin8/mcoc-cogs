@@ -130,7 +130,7 @@ class gsheet_cog:
 			memberInfo = member_json[user_id]
 			em = discord.Embed(color=0xDEADBF)
 			em.set_thumbnail(url=user.default_avatar_url)
-			em.add_field(name='Member Info For ' + memberInfo.name.upper(), value='Battlegroup: '+memberInfo.bg+'\nTimezone: '+memberInfo.timezone)
+			em.add_field(name='Member Info For ' + memberInfo.get('name','not found').upper(), value='Battlegroup: '+memberInfo.get('bg','not found')+'\nTimezone: '+memberInfo.get('timezone','not found'))
 			await self.bot.say(embed=em)
 		except:
 			await self.bot.say("Something went wrong.")
