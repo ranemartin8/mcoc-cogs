@@ -20,8 +20,8 @@ import os
 from .utils.dataIO import dataIO
 from .utils.dataIO import fileIO
 
-class anothercog:
-    """This is a cog named Cogsworth."""
+class gsheet_cog:
+    """Just playing around."""
 	try:
 		import argparse
 		flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
@@ -114,4 +114,4 @@ class anothercog:
 		return print('done!')
 		
 def setup(bot):
-    bot.add_cog(anothercog(bot))
+    bot.add_cog(gsheet_cog(bot))
