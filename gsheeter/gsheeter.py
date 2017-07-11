@@ -64,7 +64,7 @@ class gsheet_cog:
 			dataIO.save_json(self.shell_json.format(filename), data)   #then save  file in that folder
 		dataIO.save_json(self.shell_json.format(filename), data)
 		
-	def main(self,sheet,range_headers,range_body,groupby_key,file_name):
+	def main(self,sheet,range_headers,range_body,groupby_key,filename):
 		"""Shows basic usage of the Sheets API."""
 		credentials = self.get_credentials()
 		http = credentials.authorize(httplib2.Http())
@@ -88,7 +88,7 @@ class gsheet_cog:
 				dict_zip = dict(zip(header_values[0], row))
 				groupby = row[groupby_value]
 				output_dict.update({groupby:dict_zip})
-			self.save_shell_file(output_dict,file_name)
+			self.save_shell_file(output_dict,filename)
 
 	if __name__ == '__main__':
 		main()
@@ -102,9 +102,9 @@ class gsheet_cog:
 		range_headers = 'ASSGR_members!1:1'
 		range_body = 'ASSGR_members!A2:ab'
 		groupby_key = 'id'
-		file_name = server.id
+		filename = server.id
 		try:
-			self.main(sheet,range_headers,range_body,groupby_key,file_name)
+			self.main(sheet,range_headers,range_body,groupby_key,filename)
 			await self.bot.say("Members - Update Success!")
 		except:
 			await self.bot.say("Something went wrong.")
@@ -115,7 +115,7 @@ class gsheet_cog:
 		"""Get Member Info"""
 		author = ctx.message.author
 		server = ctx.message.server
-		file_name = server.id
+		filename = server.id
 		if not user:
 			user = author
 		user_id = user.id
