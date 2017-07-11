@@ -21,7 +21,7 @@ from .utils.dataIO import dataIO
 from .utils.dataIO import fileIO
 
 class gsheet_cog:
-    """Just playing around."""
+	"""Just playing around."""
 	try:
 		import argparse
 		flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
@@ -39,7 +39,7 @@ class gsheet_cog:
 		if not os.path.exists(credential_dir):
 			os.makedirs(credential_dir)
 		credential_path = os.path.join(credential_dir,
-									   'sheets.googleapis.com-python-quickstart1.json')
+									'sheets.googleapis.com-python-quickstart1.json')
 		store = Storage(credential_path)
 		credentials = store.get()
 		if not credentials or credentials.invalid:
@@ -52,17 +52,17 @@ class gsheet_cog:
 			print('Storing credentials to ' + credential_path)
 		return credentials
 
-    def __init__(self, bot):
-        self.bot = bot
-        self.syn_data_dir = 'data/gsheeter/members/'
-        self.shell_json = self.syn_data_dir + '{}.json'
+	def __init__(self, bot):
+		self.bot = bot
+		self.syn_data_dir = 'data/gsheeter/members/'
+		self.shell_json = self.syn_data_dir + '{}.json'
 
-    def save_shell_file(self,data,filename):                           #(step two)
-        if not os.path.exists(self.shell_json.format(filename)):       #check if the FILE exists
-            if not os.path.exists(self.syn_data_dir):                  #if not, check if the FOLDER exists
-                os.makedirs(self.syn_data_dir)                         #if not, MAKE the FOLDER
-            dataIO.save_json(self.shell_json.format(filename), data)   #then save  file in that folder
-			
+	def save_shell_file(self,data,filename):                           #(step two)
+		if not os.path.exists(self.shell_json.format(filename)):       #check if the FILE exists
+			if not os.path.exists(self.syn_data_dir):                  #if not, check if the FOLDER exists
+				os.makedirs(self.syn_data_dir)                         #if not, MAKE the FOLDER
+			dataIO.save_json(self.shell_json.format(filename), data)   #then save  file in that folder
+
 	def main(self,sheet,range_headers,range_body,groupby_key,file_name):
 		"""Shows basic usage of the Sheets API."""
 		credentials = get_credentials()
@@ -93,14 +93,14 @@ class gsheet_cog:
 				output_dict.update({groupby:dict_zip})
 			self.save_shell_file(json.dumps(output_dict),file_name)
 #			print(json.dumps(output_dict))
-			
+
 	if __name__ == '__main__':
 		main()
 
 	
 	@commands.command(pass_context=True,aliases=['member',])
 	async def members(self, ctx, *, user: discord.Member=None):
-        """Gets member info"""
+		"""Gets member info"""
 		author = ctx.message.author
 		server = ctx.message.server
 		if not user:
@@ -112,6 +112,6 @@ class gsheet_cog:
 		file_name = server.id
 		self.main(sheet,range_headers,range_body,groupby_key,file_name)
 		return print('done!')
-		
+
 def setup(bot):
-    bot.add_cog(gsheet_cog(bot))
+	bot.add_cog(gsheet_cog(bot))
