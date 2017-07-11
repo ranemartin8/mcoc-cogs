@@ -122,11 +122,11 @@ class gsheet_cog:
 			user = author
 		user_id = user.id
 		if not os.path.exists(self.shell_json.format(filename)):
-            await self.bot.say("No synergy file detected. Reply **[prefix]pull_syn** to create a synergies file from Hook's data.")
+            await self.bot.say("No members file detected. Reply **[prefix]updatemembers**.")
             return
         member_json = dataIO.load_json(self.shell_json.format(filename))
 		try:
-			if not member_json[user_id]
+			if not member_json[user_id]:
 				await self.bot.say("User not found.")
 				return
 			memberInfo = member_json[user_id]
