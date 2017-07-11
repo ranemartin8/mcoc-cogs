@@ -35,7 +35,8 @@ class gsheet_cog:
 	SCOPES = 'https://www.googleapis.com/auth/spreadsheets'
 	CLIENT_SECRET_FILE = 'client_secret.json'
 	APPLICATION_NAME = 'Google Sheets API Python Quickstart'
-	def get_credentials():
+	
+	def get_credentials(self):
 		"""https://developers.google.com/sheets/api/quickstart/python
 		"""
 		home_dir = os.path.expanduser('~')
@@ -64,7 +65,7 @@ class gsheet_cog:
 
 	def main(self,sheet,range_headers,range_body,groupby_key,file_name):
 		"""Shows basic usage of the Sheets API."""
-		credentials = get_credentials()
+		credentials = self.get_credentials()
 		http = credentials.authorize(httplib2.Http())
 		discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
 						'version=v4')
