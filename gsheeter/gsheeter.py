@@ -23,9 +23,9 @@ from .utils.dataIO import fileIO
 class gsheet_cog:
 	"""Just playing around."""
 	def __init__(self, bot):
-	self.bot = bot
-	self.syn_data_dir = 'data/gsheeter/members/'
-	self.shell_json = self.syn_data_dir + '{}.json'
+		self.bot = bot
+		self.syn_data_dir = 'data/gsheeter/members/'
+		self.shell_json = self.syn_data_dir + '{}.json'
 	try:
 		import argparse
 		flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
