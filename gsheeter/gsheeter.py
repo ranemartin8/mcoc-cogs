@@ -76,9 +76,9 @@ class gsheet_cog:
 	#		rangeBody = 'ASSGR_members!A2:ab'
 	#		groupby_key = 'id'
 		headers_get = service.spreadsheets().values().get(
-					spreadsheetId=spreadsheetId, range=range_headers).execute()
+					spreadsheetId=sheet, range=range_headers).execute()
 		body_get = service.spreadsheets().values().get(
-				spreadsheetId=spreadsheetId, range=range_body).execute()
+				spreadsheetId=sheet, range=range_body).execute()
 		header_values = headers_get.get('values', [])
 		groupby_value = header_values[0].index(groupby_key)
 		body_values = body_get.get('values', [])
