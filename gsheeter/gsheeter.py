@@ -20,18 +20,21 @@ import os
 from .utils.dataIO import dataIO
 from .utils.dataIO import fileIO
 
-try:
-	import argparse
-	flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
-except ImportError:
-	flags = None
-# If modifying these scopes, delete your previously saved credentialsat ~/.credentials/sheets.googleapis.com-python-quickstart.json
-SCOPES = 'https://www.googleapis.com/auth/spreadsheets'
-CLIENT_SECRET_FILE = 'client_secret.json'
-APPLICATION_NAME = 'Google Sheets API Python Quickstart'
-
 class gsheet_cog:
 	"""Just playing around."""
+	def __init__(self, bot):
+	self.bot = bot
+	self.syn_data_dir = 'data/gsheeter/members/'
+	self.shell_json = self.syn_data_dir + '{}.json'
+	try:
+		import argparse
+		flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
+	except ImportError:
+		flags = None
+	# If modifying these scopes, delete your previously saved credentialsat ~/.credentials/sheets.googleapis.com-python-quickstart.json
+	SCOPES = 'https://www.googleapis.com/auth/spreadsheets'
+	CLIENT_SECRET_FILE = 'client_secret.json'
+	APPLICATION_NAME = 'Google Sheets API Python Quickstart'
 	def get_credentials():
 		"""https://developers.google.com/sheets/api/quickstart/python
 		"""
@@ -52,11 +55,6 @@ class gsheet_cog:
 				credentials = tools.run(flow, store)
 			print('Storing credentials to ' + credential_path)
 		return credentials
-
-	def __init__(self, bot):
-		self.bot = bot
-		self.syn_data_dir = 'data/gsheeter/members/'
-		self.shell_json = self.syn_data_dir + '{}.json'
 
 	def save_shell_file(self,data,filename):                           #(step two)
 		if not os.path.exists(self.shell_json.format(filename)):       #check if the FILE exists
