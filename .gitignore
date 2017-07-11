@@ -4,3 +4,6 @@
 *.py~
 
 *.json~
+
+client_secret.json
+gs.json
