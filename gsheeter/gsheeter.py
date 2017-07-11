@@ -91,7 +91,7 @@ class gsheet_cog:
 				dict_zip = dict(zip(header_values[0], row))
 				groupby = row[groupby_value]
 				output_dict.update({groupby:dict_zip})
-			self.save_shell_file(json.dumps(output_dict),file_name)
+			self.save_shell_file(output_dict,file_name)
 #			print(json.dumps(output_dict))
 
 	if __name__ == '__main__':
