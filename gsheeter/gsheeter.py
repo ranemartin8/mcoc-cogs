@@ -24,8 +24,8 @@ class gsheet_cog:
 	"""Just playing around."""
 	def __init__(self, bot):
 		self.bot = bot
-		self.syn_data_dir = 'data/gsheeter/members/'
-		self.shell_json = self.syn_data_dir + '{}.json'
+		self.data_dir = 'data/gsheeter/members/'
+		self.shell_json = self.data_dir + '{}.json'
 	try:
 		import argparse
 		flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
@@ -59,8 +59,8 @@ class gsheet_cog:
 
 	def save_shell_file(self,data,filename):                           #(step two)
 		if not os.path.exists(self.shell_json.format(filename)):       #check if the FILE exists
-			if not os.path.exists(self.syn_data_dir):                  #if not, check if the FOLDER exists
-				os.makedirs(self.syn_data_dir)                         #if not, MAKE the FOLDER
+			if not os.path.exists(self.data_dir):                  #if not, check if the FOLDER exists
+				os.makedirs(self.data_dir)                         #if not, MAKE the FOLDER
 			dataIO.save_json(self.shell_json.format(filename), data)   #then save  file in that folder
 		dataIO.save_json(self.shell_json.format(filename), data)
 		
@@ -94,10 +94,9 @@ class gsheet_cog:
 		main()
 
 	
-	@commands.command(pass_context=True,aliases=['member',])
-	async def members(self, ctx, *, user: discord.Member=None):
-		"""Gets member info"""
-		author = ctx.message.author
+	@commands.command(pass_context=True,aliases=['updatemembers',], no_pm=True)
+	async def refreshmembers(self, ctx):
+		"""Refreshs members json from google sheet"""
 		server = ctx.message.server
 		if not user:
 			user = author
@@ -106,8 +105,43 @@ class gsheet_cog:
 		range_body = 'ASSGR_members!A2:ab'
 		groupby_key = 'id'
 		file_name = server.id
-		self.main(sheet,range_headers,range_body,groupby_key,file_name)
-		return print('done!')
+		try:
+			self.main(sheet,range_headers,range_body,groupby_key,file_name)
+			await self.bot.say("Members - Update Success!")
+		except:
+			await self.bot.say("Something went wrong.")
+			raise
+			
+	@commands.command(pass_context=True,aliases=['getmember',], no_pm=True)
+	async def member(self, ctx, *, user: discord.Member=None):
+		"""Get Member Info"""
+		author = ctx.message.author
+		server = ctx.message.server
+		file_name = server.id
+		if not user:
+			user = author
+		user_id = user.id
+		if not os.path.exists(self.shell_json.format(filename)):
+            await self.bot.say("No synergy file detected. Reply **[prefix]pull_syn** to create a synergies file from Hook's data.")
+            return
+        member_json = dataIO.load_json(self.shell_json.format(filename))
+		try:
+			if not member_json[user_id]
+				await self.bot.say("User not found.")
+				return
+			memberInfo = member_json[user_id]
+			em = discord.Embed(color=0xDEADBF)
+			em.set_thumbnail(url=user.default_avatar_url)
+			em.add_field(name='Member Info For ' + memberInfo.name.upper(), value='Battlegroup: '+memberInfo.bg+'\nTimezone: '+memberInfo.timezone)
+			await self.bot.say(embed=em)
+#            except:
+#                await self.bot.say("Something went wrong.")
 
+#			self.main(sheet,range_headers,range_body,groupby_key,file_name)
+#			await self.bot.say("Members - Update Success!")
+		except:
+			await self.bot.say("Something went wrong.")
+			raise
+			
 def setup(bot):
 	bot.add_cog(gsheet_cog(bot))
