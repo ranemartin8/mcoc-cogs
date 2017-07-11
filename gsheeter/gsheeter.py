@@ -20,17 +20,18 @@ import os
 from .utils.dataIO import dataIO
 from .utils.dataIO import fileIO
 
+try:
+	import argparse
+	flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
+except ImportError:
+	flags = None
+# If modifying these scopes, delete your previously saved credentialsat ~/.credentials/sheets.googleapis.com-python-quickstart.json
+SCOPES = 'https://www.googleapis.com/auth/spreadsheets'
+CLIENT_SECRET_FILE = 'client_secret.json'
+APPLICATION_NAME = 'Google Sheets API Python Quickstart'
+
 class gsheet_cog:
 	"""Just playing around."""
-	try:
-		import argparse
-		flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
-	except ImportError:
-		flags = None
-	# If modifying these scopes, delete your previously saved credentialsat ~/.credentials/sheets.googleapis.com-python-quickstart.json
-	SCOPES = 'https://www.googleapis.com/auth/spreadsheets'
-	CLIENT_SECRET_FILE = 'client_secret.json'
-	APPLICATION_NAME = 'Google Sheets API Python Quickstart'
 	def get_credentials():
 		"""https://developers.google.com/sheets/api/quickstart/python
 		"""
