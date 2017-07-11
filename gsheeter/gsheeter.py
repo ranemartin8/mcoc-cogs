@@ -136,7 +136,8 @@ class gsheet_cog:
 				utcmoment_naive = datetime.utcnow()
 				utcmoment = utcmoment_naive.replace(tzinfo=pytz.utc)
 				localFormat = "%I:%M%p"
-				localtime = utcmoment.astimezone(pytz.timezone(get_tz))
+				get_time = utcmoment.astimezone(pytz.timezone(get_tz))
+				localtime = get_time.strftime(localFormat)
 			else:
 				localtime = "not found"
 			em = discord.Embed(color=0xDEADBF)
