@@ -122,9 +122,9 @@ class gsheet_cog:
 			user = author
 		user_id = user.id
 		if not os.path.exists(self.shell_json.format(filename)):
-            await self.bot.say("No members file detected. Reply **[prefix]updatemembers**.")
-            return
-        member_json = dataIO.load_json(self.shell_json.format(filename))
+			await self.bot.say("No members file detected. Reply **[prefix]updatemembers**.")
+			return
+		member_json = dataIO.load_json(self.shell_json.format(filename))
 		try:
 			if not member_json[user_id]:
 				await self.bot.say("User not found.")
@@ -134,11 +134,6 @@ class gsheet_cog:
 			em.set_thumbnail(url=user.default_avatar_url)
 			em.add_field(name='Member Info For ' + memberInfo.name.upper(), value='Battlegroup: '+memberInfo.bg+'\nTimezone: '+memberInfo.timezone)
 			await self.bot.say(embed=em)
-#            except:
-#                await self.bot.say("Something went wrong.")
-
-#			self.main(sheet,range_headers,range_body,groupby_key,file_name)
-#			await self.bot.say("Members - Update Success!")
 		except:
 			await self.bot.say("Something went wrong.")
 			raise
