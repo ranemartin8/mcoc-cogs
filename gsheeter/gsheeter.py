@@ -132,7 +132,7 @@ class gsheet_cog:
 				return
 			memberInfo = member_json[user_id]
 			if memberInfo['timezone']:
-				get_tz = member_json['timezone']
+				get_tz = memberInfo['timezone']
 				utcmoment_naive = datetime.utcnow()
 				utcmoment = utcmoment_naive.replace(tzinfo=pytz.utc)
 				localFormat = "%I:%M%p"
