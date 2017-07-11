@@ -62,7 +62,8 @@ class gsheet_cog:
 			if not os.path.exists(self.syn_data_dir):                  #if not, check if the FOLDER exists
 				os.makedirs(self.syn_data_dir)                         #if not, MAKE the FOLDER
 			dataIO.save_json(self.shell_json.format(filename), data)   #then save  file in that folder
-
+		dataIO.save_json(self.shell_json.format(filename), data)
+		
 	def main(self,sheet,range_headers,range_body,groupby_key,file_name):
 		"""Shows basic usage of the Sheets API."""
 		credentials = self.get_credentials()
@@ -71,10 +72,6 @@ class gsheet_cog:
 						'version=v4')
 		service = discovery.build('sheets', 'v4', http=http,
 									discoveryServiceUrl=discoveryUrl)
-	#		spreadsheetId = '1kI0Dzsb6idFdJ6qzLIBYh2oIypB1O4Ko4BdRita-Vvg'
-	#		rangeHeaders = 'ASSGR_members!1:1'
-	#		rangeBody = 'ASSGR_members!A2:ab'
-	#		groupby_key = 'id'
 		headers_get = service.spreadsheets().values().get(
 					spreadsheetId=sheet, range=range_headers).execute()
 		body_get = service.spreadsheets().values().get(
@@ -92,7 +89,6 @@ class gsheet_cog:
 				groupby = row[groupby_value]
 				output_dict.update({groupby:dict_zip})
 			self.save_shell_file(output_dict,file_name)
-#			print(json.dumps(output_dict))
 
 	if __name__ == '__main__':
 		main()
