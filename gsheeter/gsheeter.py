@@ -133,19 +133,22 @@ class gsheet_cog:
 #	@commands.command(pass_context=True, no_pm=True)
 #	async def pytest(self):	
 #		self, ctx, *, user: discord.Member=None
-		
-	async def memberObject(self,ctx,userid):
+#err_msg = "There can only be 1 user argument.  All others should be '#'"
+#                await self.ctx.bot.say(err_msg)
+#                raise commands.BadArgument(err_msg)		
+	async def memberObject(self,userid):
 		#memberObj = memberObject(ctx,user_id)
-		server = ctx.message.server
+		server = self.ctx.message.server
 		user = server.get_member(userid)
 		user_id = user.id
 		foldername = server.id
 		memberInfo = {}
 		if not os.path.exists(self.shell_json.format(foldername,'MemberInfo')):
-			await self.bot.say("No members file detected. Use command **[prefix]savesheet**"
+			err_msg = "No members file detected. Use command **[prefix]savesheet**"
 							   " to save a Google Sheet as Members file. **File Name must be"
-							   " 'MemberInfo'**")
-			return
+							   " 'MemberInfo'**"
+			await self.ctx.bot.say(err_msg)
+			raise commands.BadArgument(err_msg)	
 		member_json = dataIO.load_json(self.shell_json.format(foldername,'MemberInfo'))
 		alliance_json = dataIO.load_json(self.shell_json.format(foldername,'AllianceInfo'))
 		memberjson = member_json[user_id]
@@ -287,7 +290,7 @@ class gsheet_cog:
 #			em.add_field(name=clockemoji + '  ' + memberInfo.get('name','not found'), value='Battlegroup: **'+memberInfo.get('bg','not found')+'**\nLocal Time: **'+localtime+'**')
 #			await self.bot.say(embed=em)
 		try:
-			memberObj = await self.memberObject(ctx,user.id)
+			memberObj = await self.memberObject(user.id)
 			print(memberObj)
 			em = discord.Embed(color=memberObj['color'])
 			em.set_thumbnail(url=user.avatar_url)
