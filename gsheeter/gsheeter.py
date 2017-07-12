@@ -111,10 +111,10 @@ class gsheet_cog:
 		server = ctx.message.server
 		foldername = server.id
 		a1_notation_check = re.compile(r'\'?[\w\d]+\'?![\w\d]+\:[\w\d]+')
-		if not a1_notation_check.fullmatch(header_row)
+		if not a1_notation_check.fullmatch(header_row):
 			await self.bot.say("Use correct A1 Notation for the Header Row (single row only): Ex. Sheet1!A2:Z2 or 'This Sheet'!1:1")
 			return
-		if not a1_notation_check.fullmatch(data_range)
+		if not a1_notation_check.fullmatch(data_range):
 			await self.bot.say("Use correct A1 Notation for the Data Range: Ex. Sheet1!A2:D or 'My Sheet'!B2:Z1000")
 			return
 		try:
