@@ -167,7 +167,7 @@ class gsheet_cog:
 			bg = memberInfo.get('bg','all')
 			colorVal = 0xff9933
 			if alliance_json:
-				color = alliance_json[bg].get('color_dec')
+				color = alliance_json[bg.lower()].get('color_dec')
 			if memberInfo['timezone']:
 				get_tz = memberInfo['timezone']
 				utcmoment_naive = datetime.utcnow()
