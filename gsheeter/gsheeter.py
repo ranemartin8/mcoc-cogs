@@ -22,6 +22,7 @@ from .utils.dataIO import fileIO
 from datetime import tzinfo, timedelta, datetime
 import pytz
 from colour import Color
+
 colors = {
 	'red': discord.Color(0xff3333 ), 'orange': discord.Color(0xcc6600),
 	'yellow': discord.Color(0xffcc33), 'green': discord.Color(0x33cc33),
@@ -32,7 +33,9 @@ colors = {
 	'default': discord.Color(0xcc6600),'while': discord.Color(0xffffff),
 	'grey': discord.Color(0x666666)
 	}
-
+def time_roundup(dt, delta):
+		return dt + (datetime.min - dt) % delta	
+	
 class gsheet_cog:
 	"""Just playing around."""
 	def __init__(self, bot):
@@ -113,8 +116,7 @@ class gsheet_cog:
 #        """Retrieves pictures from imgur"""
 #        if ctx.invoked_subcommand is None:
 #            await self.bot.send_cmd_help(ctx)
-	def time_roundup(dt, delta):
-		return dt + (datetime.min - dt) % delta		
+		
 	
 	@commands.command(pass_context=True,aliases=['loadsheet',], no_pm=True)
 	async def savesheet(self, ctx, header_row: str, data_range: str, groupRowsBy: str,filename: str,sheet_id: str):
