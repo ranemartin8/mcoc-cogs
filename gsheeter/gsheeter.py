@@ -128,19 +128,25 @@ class gsheet_cog:
 			await self.bot.say("Something went wrong.")
 			raise
 			
-	@commands.command(pass_context=True,aliases=['updatemembers',], no_pm=True)
+	@commands.command(pass_context=True,aliases=['updateinfo',], no_pm=True)
 	async def refreshmembers(self, ctx):
 		"""Refreshs members json from google sheet"""
 		server = ctx.message.server
+		command = ctx.message.split(" ")[0]
 		sheet = '1kI0Dzsb6idFdJ6qzLIBYh2oIypB1O4Ko4BdRita-Vvg'
 		range_headers = 'ASSGR_members!1:1'
 		range_body = 'ASSGR_members!A2:ab'
 		groupby_key = 'id'
+		filename = 'AllianceInfo'
+		if command == 'updateinfo'
+			range_headers = 'ASSGR_info!1:1'
+			range_body = 'ASSGR_info!A2:ab'
+			groupby_key = 'group'
+			filename = 'MemberInfo'
 		foldername = server.id
-		filename = 'MemberInfo'
 		try:
 			self.main(sheet,range_headers,range_body,groupby_key,foldername,filename)
-			await self.bot.say("Members File - Update Success!")
+			await self.bot.say("Success! File has been updated!")
 		except:
 			await self.bot.say("Something went wrong.")
 			raise
