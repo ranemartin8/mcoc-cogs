@@ -33,6 +33,12 @@ colors = {
 	'default': discord.Color(0xcc6600),'while': discord.Color(0xffffff),
 	'grey': discord.Color(0x666666)
 	}
+maps = {
+'map5a':'http://i.imgur.com/hAAQ3Az.jpg',
+'map5b':'http://i.imgur.com/C4q8TaG.jpg',
+'map5c':'http://i.imgur.com/xTCQ6WE.jpg',
+'aw':'https://i.imgur.com/6jkgZXj.png'
+}
 def time_roundup(dt, delta):
 		return dt + (datetime.min - dt) % delta	
 	
@@ -124,14 +130,53 @@ class gsheet_cog:
 
 	if __name__ == '__main__':
 		main()
-
-#    @commands.group(name="imgur", no_pm=True, pass_context=True)
-#    async def _imgur(self, ctx):
-#        """Retrieves pictures from imgur"""
-#        if ctx.invoked_subcommand is None:
-#            await self.bot.send_cmd_help(ctx)
 		
-	
+	def memberObject(self,ctx,user)
+		#memberObj = memberObject(ctx,user_id)
+		user_id = user.id
+		foldername = ctx.message.server.id
+		if not os.path.exists(self.shell_json.format(foldername,'MemberInfo')):
+			await self.bot.say("No members file detected. Use command **[prefix]savesheet**"
+							   " to save a Google Sheet as Members file. **File Name must be"
+							   " 'MemberInfo'**")
+			return
+		member_json = dataIO.load_json(self.shell_json.format(foldername,'MemberInfo'))
+		alliance_json = dataIO.load_json(self.shell_json.format(foldername,'AllianceInfo'))
+		memberInfo = member_json[user_id]
+		if not memberInfo:
+			await self.bot.say("User info not found in spreadsheet data.")
+			return
+		memberInfo['bg'] = memberInfo.get('bg','all') #replace empty bg entries with "all"
+	# SET DEFAULTS FOR MISSING VALUES
+		clockemoji = ':alarm_clock:'	 
+		localtime = 'not known'			 
+		map5a_img = maps['map5a']
+		map5b_img = maps['map5b']
+		map5c_img = maps['map5c']
+		aw_img = maps['aw']
+		colorVal = colors['default']
+		color_dec = 0xcc6600
+		color_hex = '#cc6600'
+		if memberInfo['timezone']:
+			get_tz = memberInfo['timezone']
+			utcmoment_naive = datetime.utcnow()
+			get_time = getLocalTime(utcmoment_naive,get_tz)
+			localtime = get_time.strftime("%I:%M").lstrip('0') + ' ' + get_time.strftime("%p").lower()
+			clockemoji = clock_emoji(get_time)			# CUSTOM CLOCK EMOJI
+		if alliance_json:
+			bgSettings = alliance_json[memberInfo.get('bg','all').lower()]
+			if bgSettings:
+				colorVal = colors[bgSettings.get('color_py','default')]
+				color_dec = bgSettings.get('color_dec',0xcc6600)
+				color_hex = bgSettings.get('color_hex','cc6600')
+				map5a_img = bgSettings.get('map5a',maps['map5a'])
+				map5b_img = bgSettings.get('map5b',maps['map5b']) 
+				map5c_img = bgSettings.get('map5c',maps['map5c']) 
+				aw_img = bgSettings.get('aw',maps['aw']) 
+		memberInfo.update({color:colorVal, localtime:localtime, clockemoji:clockemoji, map5a_img:map5a_img, map5b_img:map5b_img, map5c_img:map5c_img, aw_img:aw_img,localtime_raw:get_time}) #update member dictionary
+		return memberInfo
+
+				
 	@commands.command(pass_context=True,aliases=['loadsheet',], no_pm=True)
 	async def savesheet(self, ctx, header_row: str, data_range: str, groupRowsBy: str,filename: str,sheet_id: str):
 		"""Save a Google Sheet as JSON or refresh an existing JSON. 
@@ -145,7 +190,8 @@ class gsheet_cog:
 		foldername = server.id
 		a1_notation_check = re.compile(r'\'?[\w\d]+\'?![\w\d]+\:[\w\d]+')
 		if not a1_notation_check.fullmatch(header_row):
-			await self.bot.say("Use correct A1 Notation for the Header Row (single row only): Ex. Sheet1!A2:Z2 or 'This Sheet'!1:1")
+			await self.bot.say("Use correct A1 Notation for the Header Row"
+							   "(single row only): Ex. Sheet1!A2:Z2 or 'This Sheet'!1:1")
 			return
 		if not a1_notation_check.fullmatch(data_range):
 			await self.bot.say("Use correct A1 Notation for the Data Range: Ex. Sheet1!A2:D or 'My Sheet'!B2:Z1000")
@@ -188,6 +234,54 @@ class gsheet_cog:
 		foldername = server.id
 		if not user:
 			user = author
+		memberInfo = self.memberObject(ctx,user)
+		
+#		if not os.path.exists(self.shell_json.format(foldername,'MemberInfo')):
+#			await self.bot.say("No members file detected. Use command **[prefix]savesheet** to save a Google Sheet as Members file. **File Name must be 'MemberInfo'**")
+#			return
+#		member_json = dataIO.load_json(self.shell_json.format(foldername,'MemberInfo'))
+#		alliance_json = dataIO.load_json(self.shell_json.format(foldername,'AllianceInfo'))
+#		try:
+#			if not member_json[user_id]:
+#				await self.bot.say("User info not found in spreadsheet data.")
+#				return
+#			memberInfo = member_json[user_id]
+#			bg = memberInfo.get('bg','all')
+#			colorVal = colors[alliance_json[bg.lower()].get('color_py','default')]
+#			clockemoji = ':alarm_clock:'
+#			if memberInfo['timezone']:
+#				get_tz = memberInfo['timezone']
+#				utcmoment_naive = datetime.utcnow()
+#				get_time = getLocalTime(utcmoment_naive,get_tz)
+#				localtime = get_time.strftime("%I:%M").lstrip('0') + ' ' + get_time.strftime("%p").lower()
+#				# CUSTOM CLOCK EMOJI
+#				clockemoji = clock_emoji(get_time)
+#			else:
+#				localtime = "not found"
+#			em = discord.Embed(color=colorVal)
+#			em.set_thumbnail(url=user.avatar_url)
+#			em.add_field(name=clockemoji + '  ' + memberInfo.get('name','not found'), value='Battlegroup: **'+memberInfo.get('bg','not found')+'**\nLocal Time: **'+localtime+'**')
+#			await self.bot.say(embed=em)
+			em = discord.Embed(color=memberInfo.colorVal)
+			em.set_thumbnail(url=user.avatar_url)
+			em.add_field(name=memberInfo.clockemoji + '  ' + memberInfo.get('name','not found'), value='Battlegroup: **'+memberInfo.get('bg','not found')+'**\nLocal Time: **'+localtime+'**')
+			await self.bot.say(embed=em)			
+		except:
+			await self.bot.say("Something went wrong.")
+			raise
+			
+	@commands.command(pass_context=True,aliases=['localtime',], no_pm=True)
+	async def time(self, ctx, *, user: discord.Member=None):
+		"""Get the local time of an Alliance Member.
+		This command requires a Google Sheet containing Alliance member info. Set up command coming soon.
+		* = Required
+		Columns Name: | id* (discord.user.id) | bg | timezone |
+		"""
+		author = ctx.message.author
+		server = ctx.message.server
+		foldername = server.id
+		if not user:
+			user = author
 		user_id = user.id
 		if not os.path.exists(self.shell_json.format(foldername,'MemberInfo')):
 			await self.bot.say("No members file detected. Use command **[prefix]savesheet** to save a Google Sheet as Members file. **File Name must be 'MemberInfo'**")
@@ -196,22 +290,19 @@ class gsheet_cog:
 		alliance_json = dataIO.load_json(self.shell_json.format(foldername,'AllianceInfo'))
 		try:
 			if not member_json[user_id]:
-				await self.bot.say("User not found.")
+				await self.bot.say("User info not found in spreadsheet data.")
 				return
 			memberInfo = member_json[user_id]
 			bg = memberInfo.get('bg','all')
 			colorVal = colors[alliance_json[bg.lower()].get('color_py','default')]
+			clockemoji = ':alarm_clock:'
 			if memberInfo['timezone']:
 				get_tz = memberInfo['timezone']
 				utcmoment_naive = datetime.utcnow()
 				get_time = getLocalTime(utcmoment_naive,get_tz)
 				localtime = get_time.strftime("%I:%M").lstrip('0') + ' ' + get_time.strftime("%p").lower()
-				# CLOCK EMOJI
+				# CUSTOM CLOCK EMOJI
 				clockemoji = clock_emoji(get_time)
-#				clock_time = time_roundup(utcmoment_naive, timedelta(minutes=30))
-#				timezone.make_aware(rounded_dt.replace(tzinfo=None)).strftime("%I%M").lstrip('0')
-#				getLocalTime(year,month,day,hour,minute)
-				print(clockemoji)
 			else:
 				localtime = "not found"
 			em = discord.Embed(color=colorVal)
@@ -221,6 +312,7 @@ class gsheet_cog:
 		except:
 			await self.bot.say("Something went wrong.")
 			raise
+					
 			
 def setup(bot):
 	bot.add_cog(gsheet_cog(bot))
