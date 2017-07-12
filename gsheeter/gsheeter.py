@@ -133,6 +133,7 @@ class gsheet_cog:
 		
 	async def memberObject(self,ctx,user):
 		#memberObj = memberObject(ctx,user_id)
+		memberInfo = {}
 		user_id = user.id
 		foldername = ctx.message.server.id
 		if not os.path.exists(self.shell_json.format(foldername,'MemberInfo')):
@@ -142,10 +143,12 @@ class gsheet_cog:
 			return
 		member_json = dataIO.load_json(self.shell_json.format(foldername,'MemberInfo'))
 		alliance_json = dataIO.load_json(self.shell_json.format(foldername,'AllianceInfo'))
-		memberInfo = member_json[user_id]
+		memberjson = member_json[user_id]
+		
 		if not memberInfo:
 			await self.bot.say("User info not found in spreadsheet data.")
 			return
+		memberInfo.update(memberjson)
 		memberInfo['bg'] = memberInfo.get('bg','all') #replace empty bg entries with "all"
 		memberInfo['name'] = memberInfo.get('name',user.name) #replace empty name entries with username
 	# BUILD ROSTER ARRAYS
@@ -191,8 +194,8 @@ class gsheet_cog:
 				map5b_img = bgSettings.get('map5b',maps['map5b']) 
 				map5c_img = bgSettings.get('map5c',maps['map5c']) 
 				aw_img = bgSettings.get('aw',maps['aw']) 
-		memberObject = memberInfo.update({'color':colorVal, 'localtime':localtime, 'clockemoji':clockemoji, 'map5a_img':map5a_img, 'map5b_img':map5b_img, 'map5c_img':map5c_img, 'aw_img':aw_img, 'localtime_raw':get_time, 'a_team':a_team, 'b_team':b_team, 'defense':defense, 'paths':path_str}) #update member dictionary
-		return memberObject
+		memberInfo.update({'color':colorVal, 'localtime':localtime, 'clockemoji':clockemoji, 'map5a_img':map5a_img, 'map5b_img':map5b_img, 'map5c_img':map5c_img, 'aw_img':aw_img, 'localtime_raw':get_time, 'a_team':a_team, 'b_team':b_team, 'defense':defense, 'paths':path_str}) #update member dictionary
+		return memberInfo
 
 				
 	@commands.command(pass_context=True,aliases=['loadsheet',], no_pm=True)
