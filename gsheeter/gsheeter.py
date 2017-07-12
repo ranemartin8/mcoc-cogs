@@ -45,7 +45,8 @@ def clock_emoji(datetime_obj):
 	time_int = int(datetime_obj.strftime("%I%M").lstrip('0'))
 	clock_times = [1200, 1230, 100, 130, 200, 230, 300, 330, 400, 430, 500, 530, 600, 630, 700, 730, 800, 830, 900, 930, 1000, 1030, 1100, 1130]
 	closest_time = min(clock_times, key=lambda x:abs(x-time_int))
-	clock_time = re.sub(r'0{2}','',closest_time)
+	removezeroes = re.compile(r'0{2}')
+	clock_time = removezeroes.sub('',closest_time)
 	return ':clock' + clock_time + ':'
 
 
