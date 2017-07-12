@@ -65,7 +65,7 @@ class gsheet_cog:
 			if not os.path.exists(self.data_dir.format(foldername)):                  #if not, check if the FOLDER exists
 				os.makedirs(self.data_dir.format(foldername))                         #if not, MAKE the FOLDER
 			dataIO.save_json(self.shell_json.format(foldername,filename), data)   #then save  file in that folder
-		dataIO.save_json(self.shell_json.format(,foldernamefilename), data)
+		dataIO.save_json(self.shell_json.format(foldername,filename), data)
 		
 	def main(self,sheet,range_headers,range_body,groupby_key,foldername,filename):
 		"""Shows basic usage of the Sheets API."""
