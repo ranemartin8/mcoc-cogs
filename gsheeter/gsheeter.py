@@ -147,6 +147,24 @@ class gsheet_cog:
 			await self.bot.say("User info not found in spreadsheet data.")
 			return
 		memberInfo['bg'] = memberInfo.get('bg','all') #replace empty bg entries with "all"
+		memberInfo['name'] = memberInfo.get('name',user.username) #replace empty name entries with username
+	# BUILD ROSTER ARRAYS
+		defense = [memberInfo.get('awd_1'),memberInfo.get('awd_2'),memberInfo.get('awd_3'),memberInfo.get('awd_4'),memberInfo.get('awd_5')]
+		defense[:] = [x for x in defense if x != None]
+		a_team = [memberInfo.get('a_team_1'),memberInfo.get('a_team_2'),memberInfo.get('a_team_3')]
+		a_team[:] = [x for x in a_team if x != None]
+		b_team = [memberInfo.get('b_team_1'),memberInfo.get('b_team_2'),memberInfo.get('b_team_3')]
+		b_team[:] = [x for x in b_team if x != None]
+	# BUILD PATH STRING
+		path_list = []
+		if memberInfo['map5a']: path_str.append('Map 5a:  '+memberInfo['map5a'])
+		if memberInfo['map5b']: path_str.append('Map 5b:  '+memberInfo['map5b'])
+		if memberInfo['map5c']: path_str.append('Map 5c:  '+memberInfo['map5c'])
+		if memberInfo['aw']: path_str.append('Alliance War:  '+memberInfo['aw'])
+		if len(path_list) == 0:
+			path_str == 'No paths found'
+		else: 
+			path_str = '\n'.join(path_list)
 	# SET DEFAULTS FOR MISSING VALUES
 		clockemoji = ':alarm_clock:'	 
 		localtime = 'not known'			 
@@ -173,8 +191,8 @@ class gsheet_cog:
 				map5b_img = bgSettings.get('map5b',maps['map5b']) 
 				map5c_img = bgSettings.get('map5c',maps['map5c']) 
 				aw_img = bgSettings.get('aw',maps['aw']) 
-		memberInfo.update({color:colorVal, localtime:localtime, clockemoji:clockemoji, map5a_img:map5a_img, map5b_img:map5b_img, map5c_img:map5c_img, aw_img:aw_img,localtime_raw:get_time}) #update member dictionary
-		return memberInfo
+		memberObject = memberInfo.update({color:colorVal, localtime:localtime, clockemoji:clockemoji, map5a_img:map5a_img, map5b_img:map5b_img, map5c_img:map5c_img, aw_img:aw_img,localtime_raw:get_time,a_team:a_team,b_team:b_team,defense:defense,paths:path_str}) #update member dictionary
+		return memberObject
 
 				
 	@commands.command(pass_context=True,aliases=['loadsheet',], no_pm=True)
@@ -234,7 +252,7 @@ class gsheet_cog:
 		foldername = server.id
 		if not user:
 			user = author
-		memberInfo = self.memberObject(ctx,user)
+		memberObj = self.memberObject(ctx,user)
 		
 #		if not os.path.exists(self.shell_json.format(foldername,'MemberInfo')):
 #			await self.bot.say("No members file detected. Use command **[prefix]savesheet** to save a Google Sheet as Members file. **File Name must be 'MemberInfo'**")
@@ -263,10 +281,15 @@ class gsheet_cog:
 #			em.add_field(name=clockemoji + '  ' + memberInfo.get('name','not found'), value='Battlegroup: **'+memberInfo.get('bg','not found')+'**\nLocal Time: **'+localtime+'**')
 #			await self.bot.say(embed=em)
 		try:
-			em = discord.Embed(color=memberInfo.colorVal)
+			em = discord.Embed(color=memberObj['color'])
 			em.set_thumbnail(url=user.avatar_url)
-			em.add_field(name=memberInfo.clockemoji + '  ' + memberInfo.get('name','not found'),
-						 value='Battlegroup: **'+memberInfo.get('bg','not found')+'**\nLocal Time: **'+localtime+'**')
+			em.add_field(name=memberObj['name'],value='Battlegroup: **'+memberObj['bg']+'**\n'
+						 'Local Time: **'+memberObj['localtime']+'**  '+memberObj['clockemoji'])
+			if memberObj['a_team']: em.add_field(name='A-Team',value='\n'.join(memberObj['a_team']))
+			if memberObj['b_team']: em.add_field(name='B-Team',value='\n'.join(memberObj['b_team']))
+			if memberObj['defense']: em.add_field(name='AW Defense',value='\n'.join(memberObj['defense']))
+			if memberObj['paths']: em.add_field(name='Paths',value=memberObj['paths'])
+#			em.add_field(name=,value=)
 			await self.bot.say(embed=em)			
 		except:
 			await self.bot.say("Something went wrong.")
