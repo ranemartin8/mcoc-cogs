@@ -113,7 +113,9 @@ class gsheet_cog:
 #        """Retrieves pictures from imgur"""
 #        if ctx.invoked_subcommand is None:
 #            await self.bot.send_cmd_help(ctx)
-			
+	def time_roundup(dt, delta):
+		return dt + (datetime.min - dt) % delta		
+	
 	@commands.command(pass_context=True,aliases=['loadsheet',], no_pm=True)
 	async def savesheet(self, ctx, header_row: str, data_range: str, groupRowsBy: str,filename: str,sheet_id: str):
 		"""Save a Google Sheet as JSON or refresh an existing JSON. 
@@ -187,14 +189,15 @@ class gsheet_cog:
 				get_tz = memberInfo['timezone']
 				utcmoment_naive = datetime.utcnow()
 				utcmoment = utcmoment_naive.replace(tzinfo=pytz.utc)
-				localFormat = "%I:%M%p"
 				get_time = utcmoment.astimezone(pytz.timezone(get_tz))
-				localtime = get_time.strftime(localFormat)
+				localtime = get_time.strftime("%I:%M").lstrip('0') + get_time.strftime("%p").lower()
+				clock_time = time_roundup(get_time, timedelta(minutes=30)).strftime("%I%M").lstrip('0')
+				print(clock_time)
 			else:
 				localtime = "not found"
 			em = discord.Embed(color=colorVal)
 			em.set_thumbnail(url=user.avatar_url)
-			em.add_field(name='Member Info For ' + memberInfo.get('name','not found').upper(), value='Battlegroup: '+memberInfo.get('bg','not found')+'\nLocal Time: '+localtime)
+			em.add_field(name='Member Info For ' + memberInfo.get('name','not found'), value='Battlegroup: **'+memberInfo.get('bg','not found')+'**\nLocal Time: **'+localtime+'**')
 			await self.bot.say(embed=em)
 		except:
 			await self.bot.say("Something went wrong.")
