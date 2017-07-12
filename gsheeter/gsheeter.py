@@ -191,7 +191,7 @@ class gsheet_cog:
 				map5b_img = bgSettings.get('map5b',maps['map5b']) 
 				map5c_img = bgSettings.get('map5c',maps['map5c']) 
 				aw_img = bgSettings.get('aw',maps['aw']) 
-		memberObject = memberInfo.update({color:colorVal, localtime:localtime, clockemoji:clockemoji, map5a_img:map5a_img, map5b_img:map5b_img, map5c_img:map5c_img, aw_img:aw_img,localtime_raw:get_time,a_team:a_team,b_team:b_team,defense:defense,paths:path_str}) #update member dictionary
+		memberObject = memberInfo.update({'color':colorVal, 'localtime':localtime, 'clockemoji':clockemoji, 'map5a_img':map5a_img, 'map5b_img':map5b_img, 'map5c_img':map5c_img, 'aw_img':aw_img, 'localtime_raw':get_time, 'a_team':a_team, 'b_team':b_team, 'defense':defense, 'paths':path_str}) #update member dictionary
 		return memberObject
 
 				
