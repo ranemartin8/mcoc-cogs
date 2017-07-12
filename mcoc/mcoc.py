@@ -668,7 +668,7 @@ class MCOC(ChampionFactory):
 #see line 311 for defintions
 
 #IN PROGRESS
-    @commands.command(pass_context=True,aliases=['findsyn',])
+    @commands.command(pass_context=True,aliases=['findsyn',],hidden=True)
     async def syn_finder(self,ctx, *, champs : ChampConverterMult):
         """Retrieve outgoing synergies for specific champions"""
         if not os.path.exists(self.syn_file):

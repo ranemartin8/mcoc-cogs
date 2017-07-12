@@ -130,12 +130,17 @@ class gsheet_cog:
 
 	if __name__ == '__main__':
 		main()
+#	@commands.command(pass_context=True, no_pm=True)
+#	async def pytest(self):	
+#		self, ctx, *, user: discord.Member=None
 		
-	async def memberObject(self,ctx,user):
+	async def memberObject(self,ctx,userid):
 		#memberObj = memberObject(ctx,user_id)
-		memberInfo = {}
+		server = ctx.message.server
+		user = server.get_member(userid)
 		user_id = user.id
-		foldername = ctx.message.server.id
+		foldername = server.id
+		memberInfo = {}
 		if not os.path.exists(self.shell_json.format(foldername,'MemberInfo')):
 			await self.bot.say("No members file detected. Use command **[prefix]savesheet**"
 							   " to save a Google Sheet as Members file. **File Name must be"
@@ -196,7 +201,7 @@ class gsheet_cog:
 				aw_img = bgSettings.get('aw',maps['aw']) 
 		memberInfo.update({'color':colorVal, 'localtime':localtime, 'clockemoji':clockemoji, 'map5a_img':map5a_img, 'map5b_img':map5b_img, 'map5c_img':map5c_img, 'aw_img':aw_img, 'localtime_raw':get_time, 'a_team':a_team, 'b_team':b_team, 'defense':defense, 'paths':path_str}) #update member dictionary
 		return memberInfo
-
+#raise KeyError('Cannot find Champion {} in data files'.format(self.full_name))
 				
 	@commands.command(pass_context=True,aliases=['loadsheet',], no_pm=True)
 	async def savesheet(self, ctx, header_row: str, data_range: str, groupRowsBy: str,filename: str,sheet_id: str):
@@ -255,7 +260,7 @@ class gsheet_cog:
 		foldername = server.id
 		if not user:
 			user = author
-		memberObj = await self.memberObject(ctx,user)
+		memberObj = await self.memberObject(ctx,user.id)
 		
 #		if not os.path.exists(self.shell_json.format(foldername,'MemberInfo')):
 #			await self.bot.say("No members file detected. Use command **[prefix]savesheet** to save a Google Sheet as Members file. **File Name must be 'MemberInfo'**")
