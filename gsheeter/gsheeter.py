@@ -149,6 +149,7 @@ class gsheet_cog:
 			raise commands.BadArgument(err_msg)	
 		member_json = dataIO.load_json(self.shell_json.format(foldername,'MemberInfo'))
 		alliance_json = dataIO.load_json(self.shell_json.format(foldername,'AllianceInfo'))
+		print(user_id)
 		memberjson = member_json[user_id]
 		
 		if not memberInfo:
@@ -261,6 +262,7 @@ class gsheet_cog:
 		server = ctx.message.server
 		if not user:
 			user = author
+		user_id = user.id
 #		if not os.path.exists(self.shell_json.format(foldername,'MemberInfo')):
 #			await self.bot.say("No members file detected. Use command **[prefix]savesheet** to save a Google Sheet as Members file. **File Name must be 'MemberInfo'**")
 #			return
@@ -288,7 +290,7 @@ class gsheet_cog:
 #			em.add_field(name=clockemoji + '  ' + memberInfo.get('name','not found'), value='Battlegroup: **'+memberInfo.get('bg','not found')+'**\nLocal Time: **'+localtime+'**')
 #			await self.bot.say(embed=em)
 		try:
-			memberObj = await self.memberObject(ctx.message,user.id)
+			memberObj = await self.memberObject(ctx.message,user_id)
 			print(memberObj)
 			em = discord.Embed(color=memberObj['color'])
 			em.set_thumbnail(url=user.avatar_url)
