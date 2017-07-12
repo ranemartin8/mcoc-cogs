@@ -27,8 +27,8 @@ class gsheet_cog:
 	"""Just playing around."""
 	def __init__(self, bot):
 		self.bot = bot
-		self.data_dir = 'data/gsheeter/'
-		self.shell_json = self.data_dir + '{}/{}.json'
+		self.data_dir = 'data/gsheeter/{}/'
+		self.shell_json = self.data_dir + '{}.json'
 	try:
 		import argparse
 		flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
@@ -61,11 +61,11 @@ class gsheet_cog:
 		return credentials
 
 	def save_shell_file(self,data,foldername,filename):                           #(step two)
-		if not os.path.exists(self.shell_json.format(foldername,filename)):       #check if the FILE exists
-			if not os.path.exists(self.data_dir):                  #if not, check if the FOLDER exists
-				os.makedirs(self.data_dir)                         #if not, MAKE the FOLDER
+		if not os.path.exists(self.shell_json.format(foldername,filename)):       				#check if the FILE exists
+			if not os.path.exists(self.data_dir.format(foldername)):                  #if not, check if the FOLDER exists
+				os.makedirs(self.data_dir.format(foldername))                         #if not, MAKE the FOLDER
 			dataIO.save_json(self.shell_json.format(foldername,filename), data)   #then save  file in that folder
-		dataIO.save_json(self.shell_json.format(foldername,filename), data)
+		dataIO.save_json(self.shell_json.format(,foldernamefilename), data)
 		
 	def main(self,sheet,range_headers,range_body,groupby_key,foldername,filename):
 		"""Shows basic usage of the Sheets API."""
@@ -132,9 +132,10 @@ class gsheet_cog:
 		range_headers = 'ASSGR_members!1:1'
 		range_body = 'ASSGR_members!A2:ab'
 		groupby_key = 'id'
-		filename = server.id
+		foldername = server.id
+		filename = 'MemberInfo'
 		try:
-			self.main(sheet,range_headers,range_body,groupby_key,filename)
+			self.main(sheet,range_headers,range_body,groupby_key,foldername,filename)
 			await self.bot.say("Members File - Update Success!")
 		except:
 			await self.bot.say("Something went wrong.")
