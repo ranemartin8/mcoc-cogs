@@ -132,7 +132,7 @@ class gsheet_cog:
 	async def refreshmembers(self, ctx):
 		"""Refreshs members json from google sheet"""
 		server = ctx.message.server
-		command = ctx.message.split(" ")[0]
+		command = ctx.message.content.split(" ")[0]
 		sheet = '1kI0Dzsb6idFdJ6qzLIBYh2oIypB1O4Ko4BdRita-Vvg'
 		range_headers = 'ASSGR_members!1:1'
 		range_body = 'ASSGR_members!A2:ab'
