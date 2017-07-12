@@ -144,9 +144,7 @@ class gsheet_cog:
 		foldername = server.id
 		memberInfo = {}
 		if not os.path.exists(self.shell_json.format(foldername,'MemberInfo')):
-			err_msg = "No members file detected. Use command **[prefix]savesheet**"
-							   " to save a Google Sheet as Members file. **File Name must be"
-							   " 'MemberInfo'**"
+			err_msg = "No members file detected. Use command **[prefix]savesheet** to save a Google Sheet as Members file. **File Name must be 'MemberInfo'**"
 			await self.ctx.bot.say(err_msg)
 			raise commands.BadArgument(err_msg)	
 		member_json = dataIO.load_json(self.shell_json.format(foldername,'MemberInfo'))
