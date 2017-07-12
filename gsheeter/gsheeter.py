@@ -158,11 +158,16 @@ class gsheet_cog:
 			await self.bot.say("No members file detected. Use command **[prefix]savesheet** to save a Google Sheet as Members file. **File Name must be 'MemberInfo'**")
 			return
 		member_json = dataIO.load_json(self.shell_json.format(foldername,'MemberInfo'))
+		alliance_json = dataIO.load_json(self.shell_json.format(foldername,'AllianceInfo'))
 		try:
 			if not member_json[user_id]:
 				await self.bot.say("User not found.")
 				return
 			memberInfo = member_json[user_id]
+			bg = memberInfo.get('bg','all')
+			colorVal = 0xff9933
+			if alliance_json:
+				color = alliance_json[bg].get('color_dec')
 			if memberInfo['timezone']:
 				get_tz = memberInfo['timezone']
 				utcmoment_naive = datetime.utcnow()
@@ -172,7 +177,7 @@ class gsheet_cog:
 				localtime = get_time.strftime(localFormat)
 			else:
 				localtime = "not found"
-			em = discord.Embed(color=0xDEADBF)
+			em = discord.Embed(color=colorVal)
 			em.set_thumbnail(url=user.avatar_url)
 			em.add_field(name='Member Info For ' + memberInfo.get('name','not found').upper(), value='Battlegroup: '+memberInfo.get('bg','not found')+'\nLocal Time: '+localtime)
 			await self.bot.say(embed=em)
