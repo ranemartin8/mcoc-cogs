@@ -22,7 +22,16 @@ from .utils.dataIO import fileIO
 from datetime import tzinfo, timedelta, datetime
 import pytz
 from colour import Color
-
+colors = {
+	'red': discord.Color(0xff3333 ), 'orange': discord.Color(0xcc6600),
+	'yellow': discord.Color(0xffcc33), 'green': discord.Color(0x33cc33),
+	'blue': discord.Color(0x3399ff), 'purple': discord.Color(0x663399),
+	'dark_blue': discord.Color(0x333399), 'teal': discord.Color(0x339999),
+	'light_green': discord.Color(0x33ff99), 'pink': discord.Color(0xcc3366),
+	'salmon': discord.Color(0xcc6666), 'dark_red': discord.Color(0x660000),
+	'default': discord.Color(0xcc6600),'while': discord.Color(0xffffff),
+	'grey': discord.Color(0x666666)
+	}
 
 class gsheet_cog:
 	"""Just playing around."""
@@ -39,16 +48,7 @@ class gsheet_cog:
 	SCOPES = 'https://www.googleapis.com/auth/spreadsheets'
 	CLIENT_SECRET_FILE = 'client_secret.json'
 	APPLICATION_NAME = 'Google Sheets API Python Quickstart'
-	colors = {
-        'red': discord.Color(0xff3333 ), 'orange': discord.Color(0xcc6600),
-        'yellow': discord.Color(0xffcc33), 'green': discord.Color(0x33cc33),
-        'blue': discord.Color(0x3399ff), 'purple': discord.Color(0x663399),
-        'dark_blue': discord.Color(0x333399), 'teal': discord.Color(0x339999),
-		'light_green': discord.Color(0x33ff99), 'pink': discord.Color(0xcc3366),
-		'salmon': discord.Color(0xcc6666), 'dark_red': discord.Color(0x660000),
-		'default': discord.Color(0xcc6600),'while': discord.Color(0xffffff),
-		'grey': discord.Color(0x666666)
-        }
+
 
 	def get_credentials(self):
 		"""https://developers.google.com/sheets/api/quickstart/python
@@ -182,11 +182,7 @@ class gsheet_cog:
 				return
 			memberInfo = member_json[user_id]
 			bg = memberInfo.get('bg','all')
-#			colorVal = 0xff9933
 			colorVal = colors[alliance_json[bg.lower()].get('color_py','default')]
-
-#			if alliance_json:
-#				colorVal = alliance_json[bg.lower()].get('color_dec')
 			if memberInfo['timezone']:
 				get_tz = memberInfo['timezone']
 				utcmoment_naive = datetime.utcnow()
