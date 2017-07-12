@@ -138,7 +138,7 @@ class gsheet_cog:
 		range_body = 'ASSGR_members!A2:ab'
 		groupby_key = 'id'
 		filename = 'AllianceInfo'
-		if command == 'updateinfo'
+		if command == '-updateinfo':
 			range_headers = 'ASSGR_info!1:1'
 			range_body = 'ASSGR_info!A2:ab'
 			groupby_key = 'group'
