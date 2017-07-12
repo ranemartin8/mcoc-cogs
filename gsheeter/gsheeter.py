@@ -36,8 +36,23 @@ colors = {
 def time_roundup(dt, delta):
 		return dt + (datetime.min - dt) % delta	
 	
+def getLocalTime(datetime_obj,timezone):
+	utcmoment = datetime_obj.replace(tzinfo=pytz.utc)
+	get_time = utcmoment.astimezone(pytz.timezone(timezone))
+	return get_time
+
+def clock_emoji(datetime_obj):
+	time_int = int(datetime_obj.strftime("%I%M").lstrip('0'))
+	clock_times = [1200, 1230, 100, 130, 200, 230, 300, 330, 400, 430, 500, 530, 600, 630, 700, 730, 800, 830, 900, 930, 1000, 1030, 1100, 1130]
+	closest_time = min(clock_times, key=lambda x:abs(x-time_int))
+	clock_time = re.sub(r'0{2}','',closest_time)
+	return ':clock' + clock_time + ':'
+
+
+
+print(closest_time)
 class gsheet_cog:
-	"""Just playing around."""
+	"""[in progress]. This cog contains commands that interact with Google Sheets."""
 	def __init__(self, bot):
 		self.bot = bot
 		self.data_dir = 'data/gsheeter/{}/'
@@ -190,16 +205,19 @@ class gsheet_cog:
 			if memberInfo['timezone']:
 				get_tz = memberInfo['timezone']
 				utcmoment_naive = datetime.utcnow()
-				utcmoment = utcmoment_naive.replace(tzinfo=pytz.utc)
-				get_time = utcmoment.astimezone(pytz.timezone(get_tz))
-				localtime = get_time.strftime("%I:%M").lstrip('0') + get_time.strftime("%p").lower()
-				clock_time = time_roundup(get_time, timedelta(minutes=30)).strftime("%I%M").lstrip('0')
-				print(clock_time)
+				get_time = getLocalTime(utcmoment_naive,get_tz)
+				localtime = get_time.strftime("%I:%M").lstrip('0') + ' ' + get_time.strftime("%p").lower()
+				# CLOCK EMOJI
+				clockemoji = clock_emoji(get_time)
+#				clock_time = time_roundup(utcmoment_naive, timedelta(minutes=30))
+#				timezone.make_aware(rounded_dt.replace(tzinfo=None)).strftime("%I%M").lstrip('0')
+#				getLocalTime(year,month,day,hour,minute)
+				print(clockemoji)
 			else:
 				localtime = "not found"
 			em = discord.Embed(color=colorVal)
 			em.set_thumbnail(url=user.avatar_url)
-			em.add_field(name='Member Info For ' + memberInfo.get('name','not found'), value='Battlegroup: **'+memberInfo.get('bg','not found')+'**\nLocal Time: **'+localtime+'**')
+			em.add_field(name=clockemoji + '  ' + memberInfo.get('name','not found'), value='Battlegroup: **'+memberInfo.get('bg','not found')+'**\nLocal Time: **'+localtime+'**')
 			await self.bot.say(embed=em)
 		except:
 			await self.bot.say("Something went wrong.")
@@ -207,3 +225,4 @@ class gsheet_cog:
 			
 def setup(bot):
 	bot.add_cog(gsheet_cog(bot))
+	
