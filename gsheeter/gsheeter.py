@@ -200,6 +200,7 @@ class gsheet_cog:
 				map5c_img = bgSettings.get('map5c',maps['map5c']) 
 				aw_img = bgSettings.get('aw',maps['aw']) 
 		memberInfo.update({'color':colorVal, 'localtime':localtime, 'clockemoji':clockemoji, 'map5a_img':map5a_img, 'map5b_img':map5b_img, 'map5c_img':map5c_img, 'aw_img':aw_img, 'localtime_raw':get_time, 'a_team':a_team, 'b_team':b_team, 'defense':defense, 'paths':path_str}) #update member dictionary
+		print(memberInfo)
 		return memberInfo
 #raise KeyError('Cannot find Champion {} in data files'.format(self.full_name))
 				
@@ -257,11 +258,8 @@ class gsheet_cog:
 		"""Get Member Info"""
 		author = ctx.message.author
 		server = ctx.message.server
-		foldername = server.id
 		if not user:
 			user = author
-		memberObj = await self.memberObject(ctx,user.id)
-		
 #		if not os.path.exists(self.shell_json.format(foldername,'MemberInfo')):
 #			await self.bot.say("No members file detected. Use command **[prefix]savesheet** to save a Google Sheet as Members file. **File Name must be 'MemberInfo'**")
 #			return
@@ -289,6 +287,8 @@ class gsheet_cog:
 #			em.add_field(name=clockemoji + '  ' + memberInfo.get('name','not found'), value='Battlegroup: **'+memberInfo.get('bg','not found')+'**\nLocal Time: **'+localtime+'**')
 #			await self.bot.say(embed=em)
 		try:
+			memberObj = await self.memberObject(ctx,user.id)
+			print(memberObj)
 			em = discord.Embed(color=memberObj['color'])
 			em.set_thumbnail(url=user.avatar_url)
 			em.add_field(name=memberObj['name'],value='Battlegroup: **'+memberObj['bg']+'**\n'
