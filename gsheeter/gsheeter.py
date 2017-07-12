@@ -186,7 +186,7 @@ class gsheet_cog:
 				localtime = get_time.strftime(localFormat)
 			else:
 				localtime = "not found"
-			em = discord.Embed(color=discord.Color(colorVal))
+			em = discord.Embed(color=discord.Color(int(colorVal)))
 			em.set_thumbnail(url=user.avatar_url)
 			em.add_field(name='Member Info For ' + memberInfo.get('name','not found').upper(), value='Battlegroup: '+memberInfo.get('bg','not found')+'\nLocal Time: '+localtime)
 			await self.bot.say(embed=em)
