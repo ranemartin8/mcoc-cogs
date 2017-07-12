@@ -157,12 +157,12 @@ class gsheet_cog:
 		b_team[:] = [x for x in b_team if x != None]
 	# BUILD PATH STRING
 		path_list = []
-		if memberInfo['map5a']: path_str.append('Map 5a:  '+memberInfo['map5a'])
-		if memberInfo['map5b']: path_str.append('Map 5b:  '+memberInfo['map5b'])
-		if memberInfo['map5c']: path_str.append('Map 5c:  '+memberInfo['map5c'])
-		if memberInfo['aw']: path_str.append('Alliance War:  '+memberInfo['aw'])
+		if memberInfo['map5a']: path_list.append('Map 5a:  '+memberInfo['map5a'])
+		if memberInfo['map5b']: path_list.append('Map 5b:  '+memberInfo['map5b'])
+		if memberInfo['map5c']: path_list.append('Map 5c:  '+memberInfo['map5c'])
+		if memberInfo['aw']: path_list.append('Alliance War:  '+memberInfo['aw'])
 		if len(path_list) == 0:
-			path_str == 'No paths found'
+			path_str = 'No paths found'
 		else: 
 			path_str = '\n'.join(path_list)
 	# SET DEFAULTS FOR MISSING VALUES
