@@ -105,8 +105,12 @@ class gsheet_cog:
 			
 	@commands.command(pass_context=True,aliases=['loadsheet',], no_pm=True)
 	async def savesheet(self, ctx, header_row: str, data_range: str, groupRowsBy: str,filename: str,sheet_id: str):
-		"""Save a Google Sheet as JSON or refresh an existing JSON. File Location: data/gsheeter/[server-id]
-		Example: !savesheet Sheet1!1:1 Sheet1!A2:D FirstName MembersData 1kI0Dzsb6idFdJ6qzLIBYh2oIypB1O4Ko4BdRita-Vvg
+		"""Save a Google Sheet as JSON or refresh an existing JSON. 
+		
+		File Location: data/gsheeter/[server-id]
+		
+		Example:
+		!savesheet Sheet1!1:1 Sheet1!A2:D FirstName MembersData 1kI0Dzsb6idFdJ6qzLIBYh2oIypB1O4Ko4BdRita-Vvg
 		"""
 		server = ctx.message.server
 		foldername = server.id
@@ -150,10 +154,10 @@ class gsheet_cog:
 		if not user:
 			user = author
 		user_id = user.id
-		if not os.path.exists(self.shell_json.format(filename)):
+		if not os.path.exists(self.shell_json.format(foldername,filename)):
 			await self.bot.say("No members file detected. Reply **[prefix]updatemembers**.")
 			return
-		member_json = dataIO.load_json(self.shell_json.format(filename))
+		member_json = dataIO.load_json(self.shell_json.format(foldername,filename))
 		try:
 			if not member_json[user_id]:
 				await self.bot.say("User not found.")
