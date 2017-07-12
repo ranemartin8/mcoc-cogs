@@ -134,7 +134,6 @@ class gsheet_cog:
 	async def memberObject(self,ctx,user):
 		#memberObj = memberObject(ctx,user_id)
 		user_id = user.id
-		user_name = user.username
 		foldername = ctx.message.server.id
 		if not os.path.exists(self.shell_json.format(foldername,'MemberInfo')):
 			await self.bot.say("No members file detected. Use command **[prefix]savesheet**"
@@ -148,7 +147,7 @@ class gsheet_cog:
 			await self.bot.say("User info not found in spreadsheet data.")
 			return
 		memberInfo['bg'] = memberInfo.get('bg','all') #replace empty bg entries with "all"
-		memberInfo['name'] = memberInfo.get('name',user_name) #replace empty name entries with username
+		memberInfo['name'] = memberInfo.get('name',user.name) #replace empty name entries with username
 	# BUILD ROSTER ARRAYS
 		defense = [memberInfo.get('awd_1'),memberInfo.get('awd_2'),memberInfo.get('awd_3'),memberInfo.get('awd_4'),memberInfo.get('awd_5')]
 		defense[:] = [x for x in defense if x != None]
