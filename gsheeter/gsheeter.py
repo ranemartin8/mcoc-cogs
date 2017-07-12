@@ -137,12 +137,12 @@ class gsheet_cog:
 		range_headers = 'ASSGR_members!1:1'
 		range_body = 'ASSGR_members!A2:ab'
 		groupby_key = 'id'
-		filename = 'AllianceInfo'
+		filename = 'MemberInfo'
 		if command == '-updateinfo':
 			range_headers = 'ASSGR_info!1:1'
 			range_body = 'ASSGR_info!A2:ab'
 			groupby_key = 'group'
-			filename = 'MemberInfo'
+			filename = 'AllianceInfo'
 		foldername = server.id
 		try:
 			self.main(sheet,range_headers,range_body,groupby_key,foldername,filename)
