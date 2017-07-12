@@ -136,11 +136,11 @@ class gsheet_cog:
 #err_msg = "There can only be 1 user argument.  All others should be '#'"
 #                await self.ctx.bot.say(err_msg)
 #                raise commands.BadArgument(err_msg)		
-	async def memberObject(self,userid):
+	async def memberObject(self,message,user_id):
 		#memberObj = memberObject(ctx,user_id)
-		server = self.ctx.message.server
-		user = server.get_member(userid)
-		user_id = user.id
+		server = message.server
+		user = server.get_member(user_id)
+#		user_id = user.id
 		foldername = server.id
 		memberInfo = {}
 		if not os.path.exists(self.shell_json.format(foldername,'MemberInfo')):
@@ -288,7 +288,7 @@ class gsheet_cog:
 #			em.add_field(name=clockemoji + '  ' + memberInfo.get('name','not found'), value='Battlegroup: **'+memberInfo.get('bg','not found')+'**\nLocal Time: **'+localtime+'**')
 #			await self.bot.say(embed=em)
 		try:
-			memberObj = await self.memberObject(user.id)
+			memberObj = await self.memberObject(ctx.message,user.id)
 			print(memberObj)
 			em = discord.Embed(color=memberObj['color'])
 			em.set_thumbnail(url=user.avatar_url)
