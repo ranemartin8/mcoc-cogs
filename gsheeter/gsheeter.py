@@ -150,14 +150,14 @@ class gsheet_cog:
 		"""Get Member Info"""
 		author = ctx.message.author
 		server = ctx.message.server
-		filename = server.id
+		foldername = server.id
 		if not user:
 			user = author
 		user_id = user.id
 		if not os.path.exists(self.shell_json.format(foldername,filename)):
-			await self.bot.say("No members file detected. Reply **[prefix]updatemembers**.")
+			await self.bot.say("No members file detected. Use command **[prefix]savesheet** to save a Google Sheet as Members file. **File Name must be 'MemberInfo'**")
 			return
-		member_json = dataIO.load_json(self.shell_json.format(foldername,filename))
+		member_json = dataIO.load_json(self.shell_json.format(foldername,'MemberInfo'))
 		try:
 			if not member_json[user_id]:
 				await self.bot.say("User not found.")
