@@ -131,7 +131,7 @@ class gsheet_cog:
 	if __name__ == '__main__':
 		main()
 		
-	def memberObject(self,ctx,user):
+	async def memberObject(self,ctx,user):
 		#memberObj = memberObject(ctx,user_id)
 		user_id = user.id
 		foldername = ctx.message.server.id
