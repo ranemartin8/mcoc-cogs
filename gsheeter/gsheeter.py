@@ -49,8 +49,6 @@ def clock_emoji(datetime_obj):
 	return ':clock' + clock_time + ':'
 
 
-
-print(closest_time)
 class gsheet_cog:
 	"""[in progress]. This cog contains commands that interact with Google Sheets."""
 	def __init__(self, bot):
