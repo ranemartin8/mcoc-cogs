@@ -27,8 +27,8 @@ class gsheet_cog:
 	"""Just playing around."""
 	def __init__(self, bot):
 		self.bot = bot
-		self.data_dir = 'data/gsheeter/members/'
-		self.shell_json = self.data_dir + '{}.json'
+		self.data_dir = 'data/gsheeter/'
+		self.shell_json = self.data_dir + '{}/{}.json'
 	try:
 		import argparse
 		flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
@@ -60,14 +60,14 @@ class gsheet_cog:
 			print('Storing credentials to ' + credential_path)
 		return credentials
 
-	def save_shell_file(self,data,filename):                           #(step two)
-		if not os.path.exists(self.shell_json.format(filename)):       #check if the FILE exists
+	def save_shell_file(self,data,foldername,filename):                           #(step two)
+		if not os.path.exists(self.shell_json.format(foldername,filename)):       #check if the FILE exists
 			if not os.path.exists(self.data_dir):                  #if not, check if the FOLDER exists
 				os.makedirs(self.data_dir)                         #if not, MAKE the FOLDER
-			dataIO.save_json(self.shell_json.format(filename), data)   #then save  file in that folder
-		dataIO.save_json(self.shell_json.format(filename), data)
+			dataIO.save_json(self.shell_json.format(foldername,filename), data)   #then save  file in that folder
+		dataIO.save_json(self.shell_json.format(foldername,filename), data)
 		
-	def main(self,sheet,range_headers,range_body,groupby_key,filename):
+	def main(self,sheet,range_headers,range_body,groupby_key,foldername,filename):
 		"""Shows basic usage of the Sheets API."""
 		credentials = self.get_credentials()
 		http = credentials.authorize(httplib2.Http())
@@ -85,18 +85,45 @@ class gsheet_cog:
 		output_dict = {}
 		if not body_values:
 			print('No data found.')
+			return
 		else:
 			output_dict = {}
 			for row in body_values:
 				dict_zip = dict(zip(header_values[0], row))
 				groupby = row[groupby_value]
 				output_dict.update({groupby:dict_zip})
-			self.save_shell_file(output_dict,filename)
+			self.save_shell_file(output_dict,foldername,filename)
 
 	if __name__ == '__main__':
 		main()
 
-	
+#    @commands.group(name="imgur", no_pm=True, pass_context=True)
+#    async def _imgur(self, ctx):
+#        """Retrieves pictures from imgur"""
+#        if ctx.invoked_subcommand is None:
+#            await self.bot.send_cmd_help(ctx)
+			
+	@commands.command(pass_context=True,aliases=['loadsheet',], no_pm=True)
+	async def savesheet(self, ctx, header_row: str, data_range: str, groupRowsBy: str,filename: str,sheet_id: str):
+		"""Save a Google Sheet as JSON or refresh an existing JSON. File Location: data/gsheeter/[server-id]
+		Example: !savesheet Sheet1!1:1 Sheet1!A2:D FirstName MembersData 1kI0Dzsb6idFdJ6qzLIBYh2oIypB1O4Ko4BdRita-Vvg
+		"""
+		server = ctx.message.server
+		foldername = server.id
+		a1_notation_check = re.compile(r'\'?[\w\d]+\'?![\w\d]+\:[\w\d]+')
+		if not a1_notation_check.fullmatch(header_row)
+			await self.bot.say("Use correct A1 Notation for the Header Row (single row only): Ex. Sheet1!A2:Z2 or 'This Sheet'!1:1")
+			return
+		if not a1_notation_check.fullmatch(data_range)
+			await self.bot.say("Use correct A1 Notation for the Data Range: Ex. Sheet1!A2:D or 'My Sheet'!B2:Z1000")
+			return
+		try:
+			self.main(sheet_id,header_row,data_range,groupRowsBy,foldername,filename)
+			await self.bot.say("This file has been saved!")
+		except:
+			await self.bot.say("Something went wrong.")
+			raise
+			
 	@commands.command(pass_context=True,aliases=['updatemembers',], no_pm=True)
 	async def refreshmembers(self, ctx):
 		"""Refreshs members json from google sheet"""
@@ -108,7 +135,7 @@ class gsheet_cog:
 		filename = server.id
 		try:
 			self.main(sheet,range_headers,range_body,groupby_key,filename)
-			await self.bot.say("Members - Update Success!")
+			await self.bot.say("Members File - Update Success!")
 		except:
 			await self.bot.say("Something went wrong.")
 			raise
@@ -142,7 +169,7 @@ class gsheet_cog:
 				localtime = "not found"
 			em = discord.Embed(color=0xDEADBF)
 			em.set_thumbnail(url=user.avatar_url)
-			em.add_field(name='Member Info For ' + memberInfo.get('name','not found').upper(), value='Battlegroup: '+memberInfo.get('bg','not found')+'\Local Time: '+localtime)
+			em.add_field(name='Member Info For ' + memberInfo.get('name','not found').upper(), value='Battlegroup: '+memberInfo.get('bg','not found')+'\nLocal Time: '+localtime)
 			await self.bot.say(embed=em)
 		except:
 			await self.bot.say("Something went wrong.")
