@@ -252,7 +252,7 @@ class gsheet_cog:
 		foldername = server.id
 		if not user:
 			user = author
-		memberObj = self.memberObject(ctx,user)
+		memberObj = await self.memberObject(ctx,user)
 		
 #		if not os.path.exists(self.shell_json.format(foldername,'MemberInfo')):
 #			await self.bot.say("No members file detected. Use command **[prefix]savesheet** to save a Google Sheet as Members file. **File Name must be 'MemberInfo'**")
