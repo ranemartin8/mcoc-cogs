@@ -21,6 +21,7 @@ from .utils.dataIO import dataIO
 from .utils.dataIO import fileIO
 from datetime import tzinfo, timedelta, datetime
 import pytz
+from colour import Color
 
 
 class gsheet_cog:
@@ -171,9 +172,11 @@ class gsheet_cog:
 				return
 			memberInfo = member_json[user_id]
 			bg = memberInfo.get('bg','all')
-			colorVal = 0xff9933
-			if alliance_json:
-				colorVal = alliance_json[bg.lower()].get('color_dec')
+#			colorVal = 0xff9933
+			colorVal = alliance_json[bg.lower()].get('color_dec') if alliance_json[bg.lower()]['color_dec'] else 0xff9933
+
+#			if alliance_json:
+#				colorVal = alliance_json[bg.lower()].get('color_dec')
 			if memberInfo['timezone']:
 				get_tz = memberInfo['timezone']
 				utcmoment_naive = datetime.utcnow()
@@ -183,7 +186,7 @@ class gsheet_cog:
 				localtime = get_time.strftime(localFormat)
 			else:
 				localtime = "not found"
-			em = discord.Embed(color=int(colorVal))
+			em = discord.Embed(color=discord.Color(int(colorVal)))
 			em.set_thumbnail(url=user.avatar_url)
 			em.add_field(name='Member Info For ' + memberInfo.get('name','not found').upper(), value='Battlegroup: '+memberInfo.get('bg','not found')+'\nLocal Time: '+localtime)
 			await self.bot.say(embed=em)
