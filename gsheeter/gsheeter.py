@@ -39,7 +39,17 @@ class gsheet_cog:
 	SCOPES = 'https://www.googleapis.com/auth/spreadsheets'
 	CLIENT_SECRET_FILE = 'client_secret.json'
 	APPLICATION_NAME = 'Google Sheets API Python Quickstart'
-	
+	colors = {
+        'red': discord.Color(0xff3333 ), 'orange': discord.Color(0xcc6600),
+        'yellow': discord.Color(0xffcc33), 'green': discord.Color(0x33cc33),
+        'blue': discord.Color(0x3399ff), 'purple': discord.Color(0x663399),
+        'dark_blue': discord.Color(0x333399), 'teal': discord.Color(0x339999),
+		'light_green': discord.Color(0x33ff99), 'pink': discord.Color(0xcc3366),
+		'salmon': discord.Color(0xcc6666), 'dark_red': discord.Color(0x660000),
+		'default': discord.Color(0xcc6600),'while': discord.Color(0xffffff),
+		'grey': discord.Color(0x666666)
+        }
+
 	def get_credentials(self):
 		"""https://developers.google.com/sheets/api/quickstart/python
 		"""
@@ -173,7 +183,7 @@ class gsheet_cog:
 			memberInfo = member_json[user_id]
 			bg = memberInfo.get('bg','all')
 #			colorVal = 0xff9933
-			colorVal = alliance_json[bg.lower()].get('color_dec') if alliance_json[bg.lower()]['color_dec'] else 0xff9933
+			colorVal = colors[alliance_json[bg.lower()].get('color_py','default')]
 
 #			if alliance_json:
 #				colorVal = alliance_json[bg.lower()].get('color_dec')
@@ -186,7 +196,7 @@ class gsheet_cog:
 				localtime = get_time.strftime(localFormat)
 			else:
 				localtime = "not found"
-			em = discord.Embed(color=discord.Color(int(colorVal)))
+			em = discord.Embed(color=colorVal)
 			em.set_thumbnail(url=user.avatar_url)
 			em.add_field(name='Member Info For ' + memberInfo.get('name','not found').upper(), value='Battlegroup: '+memberInfo.get('bg','not found')+'\nLocal Time: '+localtime)
 			await self.bot.say(embed=em)
