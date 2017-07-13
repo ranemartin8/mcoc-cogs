@@ -68,7 +68,7 @@ class MemberFinder(commands.Converter):
 	async def convert(self):
 		message = self.ctx.message
 		user_string = self.argument
-		server = message.server
+		server = self.ctx.message.server
 		user = None
 		if message.mentions:
 			user = message.mentions[0]
@@ -76,9 +76,9 @@ class MemberFinder(commands.Converter):
 			user = server.get_member_named(str(user_string))
 		else:
 			mem_dict = {}
-
 			for member in server.members:
 				mem_dict.update({member.display_name:member.id})
+			print(mem_dict)
 			matches = difflib.get_close_matches(user_string,mem_dict.keys(), n=3, cutoff=0.05)
 			print('matches: '+matches)
 			if matches:
@@ -95,9 +95,8 @@ class MemberFinder(commands.Converter):
 			else:
 				err_msg = "No user matches found. Try again."
 				await self.ctx.bot.say(err_msg)
-				raise commands.BadArgument(err_msg)
-			print(mem_dict)
-			print(mem_dict.keys())
+#				raise commands.BadArgument(err_msg)
+
 		return user
 	
 class gsheet_cog:
