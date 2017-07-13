@@ -76,6 +76,8 @@ class MemberFinder(commands.Converter):
 			user = server.get_member_named(str(user_string))
 		else:
 			mem_dict = {}
+			print(mem_dict)
+			print(mem_dict.keys())
 			for member in server.members:
 				mem_dict.update({member.name:member})
 			matches = difflib.get_close_matches(user_string,mem_dict.keys())
@@ -192,7 +194,6 @@ class gsheet_cog:
 		a_team[:] = [x for x in a_team if x != 'None']
 		b_team = [memberInfo.get('b_team_1','None'),memberInfo.get('b_team_2','None'),memberInfo.get('b_team_3','None')]
 		b_team[:] = [x for x in b_team if x != 'None']
-		print(b_team)
 	# BUILD PATH STRING
 		path_list = []
 		if memberInfo['map5a']: path_list.append('Map 5a:  '+memberInfo['map5a'])
@@ -284,18 +285,18 @@ class gsheet_cog:
 			
 	@commands.command(pass_context=True,aliases=['getmember',], no_pm=True)
 #	async def member(self, ctx, *, user: discord.Member=None):
-	async def member(self, ctx, *, user: str=None):
+	async def member(self, ctx, *, user_string: str=None):
 		"""Get Member Info"""
 		search_msg = await self.bot.say('Searching...')
 		type = await self.bot.type()
 		author = ctx.message.author
 		server = ctx.message.server
-		if not user:
+		if not user_string:
 			user = author
 		else:
-			user = await MemberFinder(ctx, user).convert()
+			user = await MemberFinder(ctx, user_string).convert()
 		if not user:
-			await self.bot.say("No user matching found. Try again.")
+			await self.bot.say("No user matches found. Try again.")
 			await self.bot.delete_message(search_msg)
 			return
 		user_id = user.id
