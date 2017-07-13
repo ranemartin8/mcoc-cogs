@@ -318,16 +318,13 @@ class gsheet_cog:
 					else:
 						try:
 							bg_json = alliance_json[memberInfo.get('bg','all').lower()] 					#GET BG DICT()
-							if bg_json: 							#if group is found
-								for key,value in bgSettings.items():
-									if not value: 					#if value is blank
-										try:
-											value = bg_defaults[key]
-										except KeyError:
-											value = 'unknown'
-									bg_dict.update({key:value})
-							else: 									#if group NOT found
-								bg_dict = bg_defaults
+							for key,value in bg_json.items():
+								if not value: 					#if value is blank
+									try:
+										value = bg_defaults[key]
+									except KeyError:
+										value = 'unknown'
+								bg_dict.update({key:value})
 							try:									#check if valid color
 								colorVal = colors[bg_dict['color_py']] 
 							except KeyError:
