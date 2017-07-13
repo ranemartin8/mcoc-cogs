@@ -96,7 +96,7 @@ class MemberFinder(commands.Converter):
 				results_count = len(results)
 				firstfour = ', '.join(results[0:5])
 				user = 'error'
-				await self.ctx.bot.say("Too many possible matches found ({} in total): {}. Please be more specific and try again.".format(result_count,firstfour+'...'))
+				await self.ctx.bot.say("Too many possible matches found ({} in total): {}. Please be more specific and try again.".format(results_count,firstfour+'...'))
 			elif results:
 				firstresult = results[0]
 				user = server.get_member(firstresult)
