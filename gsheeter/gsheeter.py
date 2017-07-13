@@ -98,7 +98,7 @@ class MemberFinder(commands.Converter):
 						ser_mem = server.get_member(mem_id)
 						result_names.append(ser_mem.display_name)
 					firstfour = ', '.join(result_names[0:4])
-					user = 'error'
+					user = 'user_error'
 					await self.ctx.bot.say("Too many possible matches found: ```{} and {} others.``` \n\nPlease be more specific and try again.".format(firstfour,results_count))
 				#Less than 4 results
 				else:
@@ -111,24 +111,6 @@ class MemberFinder(commands.Converter):
 							result_names.append(ser_mem.display_name)
 						await self.ctx.bot.say("Multiple possible matches found: {}\n\n"
 											   "So, I just went with first match: **{}**".format(', '.join(result_names),user.display_name))
-#			if len(results) > 4:
-#				results_count = len(results)
-#				for mem_id in results:
-#						ser_mem = server.get_member(mem_id)
-#				firstfour = ', '.join(results[0:5])
-#				user = 'error'
-#				await self.ctx.bot.say("Too many possible matches found ({} in total): {}. Please be more specific and try again.".format(results_count,firstfour+'...'))
-#			elif results:
-#				
-#				firstresult = results[0]
-#				user = server.get_member(firstresult)
-#				find_method = 'User found by partial string matching'
-#				if len(results) > 1: 
-#					for mem_id in results:
-#						ser_mem = server.get_member(mem_id)
-#						result_names.append(ser_mem.display_name)
-#					await self.ctx.bot.say("Multiple possible matches found: {}\n\n"
-#										   "So, I just went with first match: **{}**".format(', '.join(result_names),user.display_name))	
 			else:
 				matches = difflib.get_close_matches(user_string,mem_dict.keys(), n=3, cutoff=0.5)
 				if matches:
