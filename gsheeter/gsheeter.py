@@ -264,7 +264,9 @@ class gsheet_cog:
 	@commands.command(pass_context=True,aliases=['getmember',], no_pm=True)
 	async def member(self, ctx, *, user: discord.Member=None):
 		"""Get Member Info"""
-		search_msg = self.bot.say('Searching...')
+		search_msg = await self.bot.say('Searching...')
+		look_msg = await self.bot.say('Looking...')
+#		self.bot.send_message(msg.channel, text)
 		author = ctx.message.author
 		server = ctx.message.server
 		if not user: user = author
@@ -284,8 +286,9 @@ class gsheet_cog:
 			if memberObj['defense'][0]:
 				em.add_field(name='**AW Defense**',value='\n'.join(memberObj['defense']))
 			if memberObj['paths']: em.add_field(name='**Paths**',value=memberObj['paths'],inline=False)
+			
+			await self.bot.say(embed=em)
 			await self.bot.delete_message(search_msg)
-			await self.bot.say(embed=em)		
 		except:
 			await self.bot.say("Something went wrong.")
 			raise
@@ -333,7 +336,22 @@ class gsheet_cog:
 		except:
 			await self.bot.say("Something went wrong.")
 			raise
-					
+
+	async def _robust_edit(self, msg, text):
+		try:
+			msg = await self.bot.edit_message(msg, text)
+		except discord.errors.NotFound:
+			msg = await self.bot.send_message(msg.channel, text)
+		except:
+			raise
+		return msg
+	async def _robust_delete(self, msg):
+		try:
+			msg = await self.bot.delete_message(msg)
+		except:
+			raise
+		return msg
+
 			
 def setup(bot):
 	bot.add_cog(gsheet_cog(bot))
