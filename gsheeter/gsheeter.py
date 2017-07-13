@@ -185,7 +185,7 @@ class gsheet_cog:
 			memberjson = member_json[user_id]
 		except KeyError:
 			await self.bot.say("User info not found in spreadsheet data.")
-			return
+			return 'error'
 		memberInfo.update(memberjson)
 		memberInfo['bg'] = memberInfo.get('bg','all') #replace empty bg entries with "all"
 		memberInfo['name'] = memberInfo.get('name',user.display_name) #replace empty name entries with username
@@ -306,6 +306,8 @@ class gsheet_cog:
 		if not avatar: avatar = user.default_avatar_url 
 		try:
 			memberObj = await self.memberObject(ctx.message,user_id)
+			if memberObj == 'error':
+				return
 			joined_at = user.joined_at
 			since_joined = (ctx.message.timestamp - joined_at).days
 			user_joined = joined_at.strftime("%b %e %Y")
