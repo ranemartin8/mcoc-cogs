@@ -335,7 +335,7 @@ class gsheet_cog:
 		avatar = user.avatar_url
 		if not avatar: avatar = user.default_avatar_url 
 		try:
-			memberObj = await self.memberObject(ctx.message,user_id,user.name)
+			memberObj = await self.memberObject(ctx.message,user_id,user.display_name)
 			if memberObj == 'error':
 				await self.bot.delete_message(search_msg)
 				return
