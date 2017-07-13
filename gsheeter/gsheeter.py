@@ -71,6 +71,8 @@ class MemberFinder(commands.Converter):
 		server = self.ctx.message.server
 		user = None
 		find_method = None
+		result_names = []
+		matches = []
 		if message.mentions:
 			user = message.mentions[0]
 			find_method = 'User found by mention.'
@@ -96,7 +98,6 @@ class MemberFinder(commands.Converter):
 				user = server.get_member(firstresult)
 				find_method = 'User found by partial string matching'
 				if len(results) > 1: 
-					result_names = []
 					for mem_id in results:
 						if mem_dict[mem_id]:
 							result_names.append(mem_dict[mem_id])
