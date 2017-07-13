@@ -266,8 +266,10 @@ class gsheet_cog:
 			user = author
 		elif ctx.message.mentions[0]:
 			user = ctx.message.mentions[0]
-		else:
+		elif server.get_member_named(str(user)):
 			user = server.get_member_named(str(user))
+		else:
+			user = find(lambda m: m.name.find(user) != -1, server.members)
 		if not user:
 			await self.bot.say("No user matching found. Try again.")
 			await self.bot.delete_message(search_msg)
