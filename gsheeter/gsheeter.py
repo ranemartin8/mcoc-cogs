@@ -268,8 +268,7 @@ class gsheet_cog:
 		if not avatar: avatar = user.default_avatar_url 
 		try:
 			memberObj = await self.memberObject(ctx.message,user_id)
-			joined_at = self.fetch_joined_at(user, server)
-			since_joined = (ctx.message.timestamp - joined_at).days
+			since_joined = (ctx.message.timestamp - user.joined_at).days
 			user_joined = joined_at.strftime("%b %e %Y")
 			joined_on = "Joined {} on {}, {} days ago".format(server.name,user_joined, since_joined)
 			status = "Current Status: **{}**".format(user.status)
