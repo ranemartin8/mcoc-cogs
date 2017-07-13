@@ -81,7 +81,7 @@ class MemberFinder(commands.Converter):
 			mem_dict = {}
 			for member in server.members:
 				mem_dict.update({member.display_name:member.id})
-			results = []	
+			results = []
 			for key,value in mem_dict.items():
 				checkfor_str = key.find(user_string)
 				if checkfor_str != -1:
@@ -98,8 +98,10 @@ class MemberFinder(commands.Converter):
 				if len(results) > 1: 
 					result_names = []
 					for mem_id in results:
-						result_names.append(mem_dict[mem_id])
-					await self.ctx.bot.say("Multiple possible matches found: {}\n\nSo, I just went with first match: **{}**".format(', '.join(result_names),user.display_name))		
+						if mem_dict[mem_id]:
+							result_names.append(mem_dict[mem_id])
+					await self.ctx.bot.say("Multiple possible matches found: {}\n\n"
+										   "So, I just went with first match: **{}**".format(', '.join(result_names),user.display_name))	
 			else:
 				matches = difflib.get_close_matches(user_string,mem_dict.keys(), n=3, cutoff=0.5)
 				if matches:
@@ -108,7 +110,8 @@ class MemberFinder(commands.Converter):
 					user = server.get_member(match_id)
 					find_method = 'User found by fuzzy matching'
 					if len(matches) > 1:
-						await self.ctx.bot.say("Multiple fuzzy matches found: {}\n\nSo, I just went with best match: **{}**".format(', '.join(matches),user.display_name))				
+						await self.ctx.bot.say("Multiple fuzzy matches found: {}\n\n"
+											   "So, I just went with best match: **{}**".format(', '.join(matches),user.display_name))
 				else:
 					user = 'user_error'
 		print(find_method)
