@@ -259,7 +259,7 @@ class gsheet_cog:
 			else:
 				memberInfo = {}
 				set_color = user.color
-				if set_color == Colour.default(): set_color = colors['default']
+				if set_color == discord.Color.default(): set_color = colors['default']
 				memberInfo = {
 					'color':set_color, 'localtime':'unknown', 'clockemoji':':alarm_clock:', 'map5a_img': maps['map5a'],
 					'map5b_img': maps['map5b'], 'map5c_img': maps['map5c'], 'aw_img': maps['aw'], 'localtime_raw':'unknown',
