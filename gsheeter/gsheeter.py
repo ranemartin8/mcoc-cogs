@@ -264,7 +264,7 @@ class gsheet_cog:
 		server = ctx.message.server
 		if not user:
 			user = author
-		elif ctx.message.mentions[0]:
+		elif ctx.message.mentions:
 			user = ctx.message.mentions[0]
 		elif server.get_member_named(str(user)):
 			user = server.get_member_named(str(user))
