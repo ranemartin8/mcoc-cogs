@@ -98,7 +98,7 @@ class MemberFinder(commands.Converter):
 						ser_mem = server.get_member(mem_id)
 						result_names.append(ser_mem.display_name)
 					firstfour = ', '.join(result_names[0:4])
-					user = 'user_error'
+					user = 'user_toomany'
 					await self.ctx.bot.say("Too many possible matches found: ```{} and {} others.``` \n\nPlease be more specific and try again.".format(firstfour,results_count))
 				#Less than 4 results
 				else:
@@ -331,6 +331,9 @@ class gsheet_cog:
 			user = author
 		else:
 			user = await MemberFinder(ctx, user_string).convert()
+		if user == 'user_toomany':
+			await self.bot.delete_message(search_msg)
+				return
 		if user == 'user_error':
 			await self.bot.delete_message(search_msg)
 			await self.bot.say("No users found matching: `{}`. Please try again.".format(user_string))
