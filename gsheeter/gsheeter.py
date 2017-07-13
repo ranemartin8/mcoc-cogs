@@ -85,7 +85,7 @@ class MemberFinder(commands.Converter):
 					bestmatch = matches[0]
 					match_id = mem_dict[bestmatch]
 					user = server.get_member(match_id)
-					await self.ctx.bot.say("Multiple matches found: {}\n\nBest match:".format(', '.join(matches)))
+					await self.ctx.bot.say("Multiple matches found: {}\n\nBest match: **{}**".format(', '.join(matches),user.display_name))
 				else:
 					singlematch = matches[0]
 					match_id = mem_dict[singlematch]
