@@ -279,7 +279,7 @@ class gsheet_cog:
 			if memberObj['paths']: em.add_field(name='**Paths**',value=memberObj['paths'],inline=False)
 #			em.add_field(name=,value=)
 			print(em.to_dict())
-#			await self.bot.say(embed=em)		
+			await self.bot.say(embed=em)		
 		except:
 			await self.bot.say("Something went wrong.")
 			raise
