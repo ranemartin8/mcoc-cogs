@@ -318,8 +318,8 @@ class gsheet_cog:
 			em = discord.Embed(color=colorVal)
 			em.set_thumbnail(url=user.avatar_url)
 			em.add_field(name=clockemoji + '  ' + memberInfo.get('name','not found'), value='Battlegroup: **'+memberInfo.get('bg','not found')+'**\nLocal Time: **'+localtime+'**')
-			await self.bot.say(embed=em)
 			print(em.to_dict())
+#			await self.bot.say(embed=em)
 		except:
 			await self.bot.say("Something went wrong.")
 			raise
