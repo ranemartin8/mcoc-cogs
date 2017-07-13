@@ -269,7 +269,7 @@ class gsheet_cog:
 		elif server.get_member_named(str(user)):
 			user = server.get_member_named(str(user))
 		else:
-			user = find(lambda m: m.name.find(user) != -1, server.members)
+			user = find(lambda m: str(m.name).find(user) != -1, server.members)
 		if not user:
 			await self.bot.say("No user matching found. Try again.")
 			await self.bot.delete_message(search_msg)
