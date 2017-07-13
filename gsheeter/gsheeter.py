@@ -70,10 +70,13 @@ class MemberFinder(commands.Converter):
 		user_string = self.argument
 		server = self.ctx.message.server
 		user = None
+		find_method = None
 		if message.mentions:
 			user = message.mentions[0]
+			find_method = 'User found by mention.'
 		elif server.get_member_named(str(user_string)):
 			user = server.get_member_named(str(user_string))
+			find_method = 'User found by "get_member_named"'
 		else:
 			mem_dict = {}
 			for member in server.members:
@@ -83,9 +86,15 @@ class MemberFinder(commands.Converter):
 				checkfor_str = key.find(user_string)
 				if checkfor_str != -1:
 					results.append(value)
-			if results:
+			if len(results) > 4:
+				results_count = len(results)
+				firstfour = ', '.join(results[0:4])
+				await self.ctx.bot.say("Too many possible matches found ({} in total): {}. Please be more specific and try again.".format(result_count,firstfour+'...'))
+				user = 'error'
+			elif results:
 				firstresult = results[0]
 				user = server.get_member(firstresult)
+				find_method = 'User found by partial string matching'
 				if len(results) > 1: 
 					result_names = []
 					for mem_id in results:
@@ -97,10 +106,14 @@ class MemberFinder(commands.Converter):
 					bestmatch = matches[0]
 					match_id = mem_dict[bestmatch]
 					user = server.get_member(match_id)
+					find_method = 'User found by fuzzy matching'
 					if len(matches) > 1:
 						await self.ctx.bot.say("Multiple fuzzy matches found: {}\n\nSo, I just went with best match: **{}**".format(', '.join(matches),user.display_name))				
 				else:
 					user = 'user_error'
+		print(find_method)
+		if len(result_names) > 0: print('Result(s): '+', '.join(result_names))
+		if len(matches) > 0: print('Match(es): '+', '.join(matches))
 		return user
 	
 class gsheet_cog:
