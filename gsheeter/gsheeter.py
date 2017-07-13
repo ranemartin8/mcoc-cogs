@@ -89,8 +89,10 @@ class MemberFinder(commands.Converter):
 				checkfor_str = key.find(user_string)
 				if checkfor_str != -1:
 					results.append(str(value))
-			if results: print('Result(s): '+', '.join(results)
-			if len(results) > 4: #if there are 5 or more possible results
+#			if results: 
+#				print('Result(s): '+', '.join(results)
+			#if there are 5 or more possible results
+			if len(results) > 4:
 				results_count = len(results)
 				firstfour = ', '.join(results[0:5])
 				user = 'error'
