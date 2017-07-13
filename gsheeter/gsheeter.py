@@ -79,7 +79,7 @@ class MemberFinder(commands.Converter):
 			for member in server.members:
 				mem_dict.update({member.display_name:member.id})
 			print(mem_dict)
-			matches = difflib.get_close_matches(user_string,mem_dict.keys(), n=3, cutoff=0.05)
+			matches = difflib.get_close_matches(user_string,mem_dict.keys(), n=3, cutoff=0.5)
 			print('matches: '+', '.join(matches))
 			if matches:
 				if matches[1] != None: 
