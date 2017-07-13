@@ -78,7 +78,6 @@ class MemberFinder(commands.Converter):
 			mem_dict = {}
 			for member in server.members:
 				mem_dict.update({member.display_name:member.id})
-			print(mem_dict)
 			matches = difflib.get_close_matches(user_string,mem_dict.keys(), n=3, cutoff=0.3)
 			print('matches: '+', '.join(matches))
 			if matches:
@@ -93,10 +92,7 @@ class MemberFinder(commands.Converter):
 					user = server.get_member(match_id)					
 				
 			else:
-				err_msg = "No user matches found. Try again."
-				await self.ctx.bot.say(err_msg)
-#				raise commands.BadArgument(err_msg)
-
+				user = 'user_error'
 		return user
 	
 class gsheet_cog:
@@ -302,9 +298,9 @@ class gsheet_cog:
 			user = author
 		else:
 			user = await MemberFinder(ctx, user_string).convert()
-		if not user:
-			await self.bot.say("No user matches found. Try again.")
+		if user == 'user_error':
 			await self.bot.delete_message(search_msg)
+			await self.bot.say("No users found matching: `{}`. Please try again.".format(user_string))
 			return
 		user_id = user.id
 		avatar = user.avatar_url
@@ -334,9 +330,9 @@ class gsheet_cog:
 			if memberObj['defense'][0]:
 				em.add_field(name='**AW Defense**',value='\n'.join(memberObj['defense']))
 			if memberObj['paths']: em.add_field(name='**Paths**',value=memberObj['paths'],inline=False)
-			
-			await self.bot.say(embed=em)
 			await self.bot.delete_message(search_msg)
+			await self.bot.say(embed=em)
+			
 		except:
 			await self.bot.say("Something went wrong.")
 			raise
