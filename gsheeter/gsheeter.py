@@ -99,7 +99,7 @@ class MemberFinder(commands.Converter):
 						result_names.append(ser_mem.display_name)
 					firstfour = ', '.join(result_names[0:4])
 					user = 'error'
-					await self.ctx.bot.say("Too many possible matches found: ```{} and {} others. \n\nPlease be more specific and try again.".format(firstfour,results_count))
+					await self.ctx.bot.say("Too many possible matches found: ```{} and {} others.``` \n\nPlease be more specific and try again.".format(firstfour,results_count))
 				#Less than 4 results
 				else:
 					firstresult = results[0]
