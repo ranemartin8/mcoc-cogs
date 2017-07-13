@@ -264,6 +264,7 @@ class gsheet_cog:
 	@commands.command(pass_context=True,aliases=['getmember',], no_pm=True)
 	async def member(self, ctx, *, user: discord.Member=None):
 		"""Get Member Info"""
+		search_msg = await self.bot.say('Searching...')
 		author = ctx.message.author
 		server = ctx.message.server
 		if not user:
@@ -284,8 +285,7 @@ class gsheet_cog:
 			if memberObj['defense'][0]:
 				em.add_field(name='**AW Defense**',value='\n'.join(memberObj['defense']))
 			if memberObj['paths']: em.add_field(name='**Paths**',value=memberObj['paths'],inline=False)
-#			em.add_field(name=,value=)
-			print(em.to_dict())
+			await self.bot.delete_message(search_msg)
 			await self.bot.say(embed=em)		
 		except:
 			await self.bot.say("Something went wrong.")
