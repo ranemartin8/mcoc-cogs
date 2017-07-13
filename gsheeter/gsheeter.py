@@ -271,7 +271,7 @@ class gsheet_cog:
 			user = server.get_member_named(str(user))
 		else:
 			mem_names = []
-			for member in server.members
+			for member in server.members:
 				mem_names.append(member.name)
 			difflib.get_close_matches(user, mem_names)
 			await self.bot.say("Multiple matches found: {}\n\nBest match:").format(', '.join(difflib))
