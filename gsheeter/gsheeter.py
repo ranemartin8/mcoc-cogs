@@ -264,11 +264,10 @@ class gsheet_cog:
 	@commands.command(pass_context=True,aliases=['getmember',], no_pm=True)
 	async def member(self, ctx, *, user: discord.Member=None):
 		"""Get Member Info"""
-		search_msg = await self.bot.say('Searching...')
+		search_msg = self.bot.say('Searching...')
 		author = ctx.message.author
 		server = ctx.message.server
-		if not user:
-			user = author
+		if not user: user = author
 		user_id = user.id
 		avatar = user.avatar_url
 		if not avatar: avatar = user.default_avatar_url 
