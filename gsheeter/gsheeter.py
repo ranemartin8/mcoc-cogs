@@ -89,7 +89,7 @@ class MemberFinder(commands.Converter):
 				if len(results) > 1: 
 					result_names = []
 					for mem_id in results:
-					result_names.append(mem_dict[mem_id])
+						result_names.append(mem_dict[mem_id])
 					await self.ctx.bot.say("Multiple possible matches found: {}\n\nSo, I just went with first match: **{}**".format(', '.join(result_names),user.display_name))		
 			else:
 				matches = difflib.get_close_matches(user_string,mem_dict.keys(), n=3, cutoff=0.5)
