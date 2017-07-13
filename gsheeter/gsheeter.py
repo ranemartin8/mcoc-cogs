@@ -274,7 +274,7 @@ class gsheet_cog:
 			for member in server.members:
 				mem_names.append(member.name)
 			difflib.get_close_matches(user, mem_names)
-			await self.bot.say("Multiple matches found: {}\n\nBest match:").format(', '.join(difflib))
+			await self.bot.say("Multiple matches found: {}\n\nBest match:".format(', '.join(difflib)))
 		if not user:
 			await self.bot.say("No user matching found. Try again.")
 			await self.bot.delete_message(search_msg)
