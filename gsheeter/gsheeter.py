@@ -170,7 +170,7 @@ class gsheet_cog:
 	if __name__ == '__main__':
 		main()
 	
-	async def memberObject(self,message,user_id): #memberObj = memberObject(ctx,user_id)
+	async def memberObject(self,message,user_id,name): #memberObj = memberObject(ctx,user_id)
 		server = message.server
 		user = server.get_member(user_id)
 		foldername = server.id
@@ -178,13 +178,13 @@ class gsheet_cog:
 		if not os.path.exists(self.shell_json.format(foldername,'MemberInfo')):
 			err_msg = "No members file detected. Use command **[prefix]savesheet** to save a Google Sheet as Members file. **File Name must be 'MemberInfo'**"
 			await self.ctx.bot.say(err_msg)
-			raise commands.BadArgument(err_msg)	
+			return
 		member_json = dataIO.load_json(self.shell_json.format(foldername,'MemberInfo'))
 		alliance_json = dataIO.load_json(self.shell_json.format(foldername,'AllianceInfo'))
 		try:
 			memberjson = member_json[user_id]
 		except KeyError:
-			await self.bot.say("User info not found in spreadsheet data.")
+			await self.bot.say("User info for **{}** not found in spreadsheet data.".format(name))
 			return 'error'
 		memberInfo.update(memberjson)
 		memberInfo['bg'] = memberInfo.get('bg','all') #replace empty bg entries with "all"
@@ -305,8 +305,9 @@ class gsheet_cog:
 		avatar = user.avatar_url
 		if not avatar: avatar = user.default_avatar_url 
 		try:
-			memberObj = await self.memberObject(ctx.message,user_id)
+			memberObj = await self.memberObject(ctx.message,user_id,user.name)
 			if memberObj == 'error':
+				await self.bot.delete_message(search_msg)
 				return
 			joined_at = user.joined_at
 			since_joined = (ctx.message.timestamp - joined_at).days
