@@ -78,21 +78,29 @@ class MemberFinder(commands.Converter):
 			mem_dict = {}
 			for member in server.members:
 				mem_dict.update({member.display_name:member.id})
-			matches = difflib.get_close_matches(user_string,mem_dict.keys(), n=3, cutoff=0.4)
-#			print('matches: '+', '.join(matches))
-			if matches:
-				if len(matches) > 1: 
+			results = []	
+			for key,value in mem_dict.items():
+				checkfor_str = key.find(user_string)
+				if checkfor_str != -1:
+					results.append(value)
+			if results:
+				firstresult = results[0]
+				user = server.get_member(firstresult)
+				if len(results) > 1: 
+					result_names = []
+					for mem_id in results:
+					result_names.append(mem_dict[mem_id])
+					await self.ctx.bot.say("Multiple possible matches found: {}\n\nSo, I just went with first match: **{}**".format(', '.join(result_names),user.display_name))		
+			else:
+				matches = difflib.get_close_matches(user_string,mem_dict.keys(), n=3, cutoff=0.5)
+				if matches:
 					bestmatch = matches[0]
 					match_id = mem_dict[bestmatch]
 					user = server.get_member(match_id)
-					await self.ctx.bot.say("Multiple matches found: {}\n\nBest match: **{}**".format(', '.join(matches),user.display_name))
+					if len(matches) > 1:
+						await self.ctx.bot.say("Multiple fuzzy matches found: {}\n\nSo, I just went with best match: **{}**".format(', '.join(matches),user.display_name))				
 				else:
-					singlematch = matches[0]
-					match_id = mem_dict[singlematch]
-					user = server.get_member(match_id)					
-				
-			else:
-				user = 'user_error'
+					user = 'user_error'
 		return user
 	
 class gsheet_cog:
