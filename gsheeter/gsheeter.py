@@ -110,7 +110,7 @@ class MemberFinder(commands.Converter):
 			else:
 				matches = difflib.get_close_matches(user_string,mem_dict.keys(), n=3, cutoff=0.5)
 				if matches:
-					print('Match(es): '+', '.join(matches)
+#					print('Match(es): '+', '.join(matches)
 					bestmatch = matches[0]
 					match_id = mem_dict[bestmatch]
 					user = server.get_member(match_id)
