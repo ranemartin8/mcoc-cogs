@@ -79,9 +79,10 @@ class MemberFinder(commands.Converter):
 
 			for member in server.members:
 				mem_dict.update({member.display_name:member.id})
-			matches = difflib.get_close_matches(user_string,mem_dict.keys())
+			matches = difflib.get_close_matches(user_string,mem_dict.keys(), n=3, cutoff=0.05)
+			print('matches: '+matches)
 			if matches:
-				if matches[1]: 
+				if matches[1] != None: 
 					bestmatch = matches[0]
 					match_id = mem_dict[bestmatch]
 					user = server.get_member(match_id)
@@ -90,7 +91,7 @@ class MemberFinder(commands.Converter):
 					singlematch = matches[0]
 					match_id = mem_dict[singlematch]
 					user = server.get_member(match_id)					
-				print(matches)
+				
 			else:
 				err_msg = "No user matches found. Try again."
 				await self.ctx.bot.say(err_msg)
