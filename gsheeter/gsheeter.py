@@ -88,24 +88,27 @@ class MemberFinder(commands.Converter):
 				checkfor_str = key.find(user_string)
 				if checkfor_str != -1:
 					results.append(value)
-			if len(results) > 4:
+			if results: print('Result(s): '+', '.join(results)
+			if len(results) > 4: #if there are 5 or more possible results
 				results_count = len(results)
-				firstfour = ', '.join(results[0:4])
-				await self.ctx.bot.say("Too many possible matches found ({} in total): {}. Please be more specific and try again.".format(result_count,firstfour+'...'))
+				firstfour = ', '.join(results[0:5])
 				user = 'error'
+				await self.ctx.bot.say("Too many possible matches found ({} in total): {}. Please be more specific and try again.".format(result_count,firstfour+'...'))
 			elif results:
 				firstresult = results[0]
 				user = server.get_member(firstresult)
 				find_method = 'User found by partial string matching'
 				if len(results) > 1: 
 					for mem_id in results:
-						if mem_dict[mem_id]:
+						get_mem = mem_dict[mem_id]
+						if get_mem:
 							result_names.append(mem_dict[mem_id])
 					await self.ctx.bot.say("Multiple possible matches found: {}\n\n"
 										   "So, I just went with first match: **{}**".format(', '.join(result_names),user.display_name))	
 			else:
 				matches = difflib.get_close_matches(user_string,mem_dict.keys(), n=3, cutoff=0.5)
 				if matches:
+					print('Match(es): '+', '.join(matches)
 					bestmatch = matches[0]
 					match_id = mem_dict[bestmatch]
 					user = server.get_member(match_id)
@@ -115,7 +118,7 @@ class MemberFinder(commands.Converter):
 											   "So, I just went with best match: **{}**".format(', '.join(matches),user.display_name))
 				else:
 					user = 'user_error'
-		print(find_method)
+		print('Search Method: '+find_method)
 		if len(result_names) > 0: print('Result(s): '+', '.join(result_names))
 		if len(matches) > 0: print('Match(es): '+', '.join(matches))
 		return user
