@@ -63,8 +63,61 @@ def clock_emoji(datetime_obj):
 		return ':clock' + clock_time + ':'
 	else:
 		return ':alarm_clock:'
-
-
+#
+#class MemberFinder(commands.Converter):
+#	async def _memberFinder(self):
+#		bot = self.ctx.bot
+#    '''Argument Parsing class that geneartes Champion objects from user input'''
+#		if not user:
+#			user = author
+#		elif ctx.message.mentions:
+#			user = ctx.message.mentions[0]
+#		elif server.get_member_named(str(user)):
+#			user = server.get_member_named(str(user))
+#		else:
+#			mem_dict = {}
+#			for member in server.members:
+#				mem_dict.update({member.name:member})
+#			matches = difflib.get_close_matches(user,mem_dict.keys())
+#			print(matches)
+#			if matches: 
+#				firstmatch = matches[0]
+#				user = mem_dict[firstmatch]
+#				await self.bot.say("Multiple matches found: {}\n\nBest match:".format(', '.join(matches)))
+#		if not user:
+#			await self.bot.say("No user matching found. Try again.")
+#			await self.bot.delete_message(search_msg)
+#			return
+#
+#    arg_help = '''
+#    Specify a single champion with optional parameters of star, rank, or sig.
+#    Champion names can be a number of aliases or partial aliases if no conflicts are found.
+#    Examples:
+#        4* yj r4 s30  ->  4 star Yellowjacket rank 4/40 sig 30
+#        r35*im        ->  5 star Ironman rank 3/45 sig 99
+#        '''
+#
+#	async def convert(self):
+#        bot = self.ctx.bot
+#        attrs = {}
+#        if self._bare_arg:
+#            args = self.argument.rsplit(' ', maxsplit=1)
+#            if len(args) > 1 and args[-1].isdecimal():
+#                attrs[self._bare_arg] = int(args[-1])
+#                self.argument = args[0]
+#        arg = ''.join(self.argument.lower().split(' '))
+#        for m in self.parse_re.finditer(arg):
+#            attrs[m.lastgroup] = int(m.group(m.lastgroup))
+#        token = self.parse_re.sub('', arg)
+#        if not token:
+#            err_str = "No Champion remains from arg '{}'".format(self.argument)
+#            await bot.say(err_str)
+#            raise commands.BadArgument(err_str)
+#        return (await self.get_champion(bot, token, attrs))
+#
+#	
+#	
+	
 class gsheet_cog:
 	"""[in progress]. This cog contains commands that interact with Google Sheets."""
 	def __init__(self, bot):
@@ -262,22 +315,27 @@ class gsheet_cog:
 	async def member(self, ctx, *, user: str=None):
 		"""Get Member Info"""
 		search_msg = await self.bot.say('Searching...')
+		type = await self.bot.type()
 		author = ctx.message.author
 		server = ctx.message.server
 		if not user:
 			user = author
-		elif ctx.message.mentions:
-			user = ctx.message.mentions[0]
-		elif server.get_member_named(str(user)):
-			user = server.get_member_named(str(user))
 		else:
-			mem_names = []
-			for member in server.members:
-				mem_names.append(member.name)
-			matches = difflib.get_close_matches(user, mem_names)
-			print(matches)
-			if matches: user = matches[0]
-			await self.bot.say("Multiple matches found: {}\n\nBest match:".format(', '.join(matches)))
+			user = commands.UserConverter(ctx,user).convert()
+#		elif ctx.message.mentions:
+#			user = ctx.message.mentions[0]
+#		elif server.get_member_named(str(user)):
+#			user = server.get_member_named(str(user))
+#		else:
+#			mem_dict = {}
+#			for member in server.members:
+#				mem_dict.update({member.name:member})
+#			matches = difflib.get_close_matches(user,mem_dict.keys())
+#			print(matches)
+#			if matches: 
+#				firstmatch = matches[0]
+#				user = mem_dict[firstmatch]
+#				await self.bot.say("Multiple matches found: {}\n\nBest match:".format(', '.join(matches)))
 		if not user:
 			await self.bot.say("No user matching found. Try again.")
 			await self.bot.delete_message(search_msg)
