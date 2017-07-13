@@ -165,9 +165,10 @@ class gsheet_cog:
 		a_team[:] = [x for x in a_team if x != 'None']
 		b_team = [memberInfo.get('b_team_1','None'),memberInfo.get('b_team_2','None'),memberInfo.get('b_team_3','None')]
 		b_team[:] = [x for x in b_team if x != 'None']
-		a_team = a_team if len(a_team) > 0 else 'none'
-		b_team = b_team if len(b_team) > 0 else 'none'
-		defense = defense if len(defense) > 0 else 'none'
+		if len(a_team) = 0: a_team = 'none'
+		if len(b_team) = 0: b_team = 'none'
+		if len(defense) = 0: defense = 'none'
+
 	# BUILD PATH STRING
 		path_list = []
 		if memberInfo['map5a']: path_list.append('Map 5a:  '+memberInfo['map5a'])
