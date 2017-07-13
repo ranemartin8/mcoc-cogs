@@ -92,13 +92,14 @@ class MemberFinder(commands.Converter):
 			if results:
 				#TOO MANY: if there are 5 or more possible results
 				if len(results) > 4: 
-					results_count = len(results)
+					results_count = len(results) - 4
+#					results_remain = results_count 
 					for mem_id in results:
 						ser_mem = server.get_member(mem_id)
 						result_names.append(ser_mem.display_name)
-					firstfour = ', '.join(result_names[0:5])
+					firstfour = ', '.join(result_names[0:4])
 					user = 'error'
-					await self.ctx.bot.say("Too many possible matches found ({} in total): {}\n\nPlease be more specific and try again.".format(results_count,firstfour+'...'))
+					await self.ctx.bot.say("Too many possible matches found: ```{} and {} others. \n\nPlease be more specific and try again.".format(firstfour,results_count))
 				#Less than 4 results
 				else:
 					firstresult = results[0]
@@ -141,7 +142,7 @@ class MemberFinder(commands.Converter):
 											   "So, I just went with best match: **{}**".format(', '.join(matches),user.display_name))
 				else:
 					user = 'user_error'
-		print('Search Method: '+find_method)
+		if find_method: print('Search Method: '+find_method)
 		if len(result_names) > 0: print('Result(s): '+', '.join(result_names))
 		if len(matches) > 0: print('Match(es): '+', '.join(matches))
 		return user
