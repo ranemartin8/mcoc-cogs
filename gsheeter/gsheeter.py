@@ -99,7 +99,7 @@ class MemberFinder(commands.Converter):
 						result_names.append(ser_mem.display_name)
 					firstfour = ', '.join(result_names[0:4])
 					user = 'user_toomany'
-					await self.ctx.bot.say("Too many possible matches found: ```{} and {} others.``` \n\nPlease be more specific and try again.".format(firstfour,results_count))
+					await self.ctx.bot.say("Too many possible matches found: ```{} and {} others.```\nPlease be more specific and try again.".format(firstfour,results_count))
 				#Less than 4 results
 				else:
 					firstresult = results[0]
@@ -369,9 +369,8 @@ class gsheet_cog:
 			if memberObj['defense'][0]:
 				em.add_field(name='**AW Defense**',value='\n'.join(memberObj['defense']))
 			if memberObj['paths']: em.add_field(name='**Paths**',value=memberObj['paths'],inline=False)
-			await self.bot.delete_message(search_msg)
 			await self.bot.say(embed=em)
-			
+			await self.bot.delete_message(search_msg)
 		except:
 			await self.bot.say("Something went wrong.")
 			raise
