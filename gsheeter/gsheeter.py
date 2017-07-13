@@ -80,7 +80,7 @@ class MemberFinder(commands.Converter):
 				mem_dict.update({member.display_name:member.id})
 			print(mem_dict)
 			matches = difflib.get_close_matches(user_string,mem_dict.keys(), n=3, cutoff=0.05)
-			print('matches: '+matches)
+			print('matches: '+', '.join(matches))
 			if matches:
 				if matches[1] != None: 
 					bestmatch = matches[0]
