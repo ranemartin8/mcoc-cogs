@@ -69,6 +69,7 @@ class MemberFinder(commands.Converter):
 		message = self.ctx.message
 		user_string = self.argument.replace(' ','')
 		server = message.server
+		user = None
 		if message.mentions:
 			user = message.mentions[0]
 		elif server.get_member_named(str(user_string)):
@@ -83,10 +84,10 @@ class MemberFinder(commands.Converter):
 				bestmatch = matches[0]
 				user = mem_dict[bestmatch]
 				await self.ctx.bot.say("Multiple matches found: {}\n\nBest match:".format(', '.join(matches)))
-		if not user:
-			err_msg = "No user matches found. Try again."
-			await self.ctx.bot.say(err_msg)
-			raise commands.BadArgument(err_msg)
+			else:
+				err_msg = "No user matches found. Try again."
+				await self.ctx.bot.say(err_msg)
+				raise commands.BadArgument(err_msg)
 		return user
 	
 class gsheet_cog:
