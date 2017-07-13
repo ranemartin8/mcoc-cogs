@@ -284,7 +284,6 @@ class gsheet_cog:
 			em.add_field(name='**'+memberObj['name']+'**',value='Battlegroup: **'+memberObj['bg']+'**'
 						 '\n'+status+'\n'+joined_on
 						 'Local Time: **'+memberObj['localtime']+'**  '+memberObj['clockemoji'],inline=False)
-			em..add_field(name=
 			if memberObj['a_team'][0]:
 				em.add_field(name='**A-Team**',value='\n'.join(memberObj['a_team']))
 			if memberObj['b_team'][0]:
