@@ -282,7 +282,7 @@ class gsheet_cog:
 			em = discord.Embed(color=memberObj['color'])
 			em.set_thumbnail(url=user.avatar_url)
 			em.add_field(name='**'+memberObj['name']+'**',value='Battlegroup: **'+memberObj['bg']+'**'
-						 '\n'+status+'\n'+joined_on
+						 '\n'+status+'\n'+joined_on+''
 						 'Local Time: **'+memberObj['localtime']+'**  '+memberObj['clockemoji'],inline=False)
 			if memberObj['a_team'][0]:
 				em.add_field(name='**A-Team**',value='\n'.join(memberObj['a_team']))
