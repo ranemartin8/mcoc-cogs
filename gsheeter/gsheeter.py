@@ -157,7 +157,7 @@ class gsheet_cog:
 			raise commands.BadArgument(err_msg)	
 		memberInfo.update(memberjson)
 		memberInfo['bg'] = memberInfo.get('bg','all') #replace empty bg entries with "all"
-		memberInfo['name'] = memberInfo.get('name',user.name) #replace empty name entries with username
+		memberInfo['name'] = memberInfo.get('name',user.display_name) #replace empty name entries with username
 	# BUILD ROSTER ARRAYS
 		defense = [memberInfo.get('awd_1','None'), memberInfo.get('awd_2','None'), memberInfo.get('awd_3','None'), memberInfo.get('awd_4','None'), memberInfo.get('awd_5','None')]
 		defense[:] = [x for x in defense if x != 'None']
@@ -165,12 +165,6 @@ class gsheet_cog:
 		a_team[:] = [x for x in a_team if x != 'None']
 		b_team = [memberInfo.get('b_team_1','None'),memberInfo.get('b_team_2','None'),memberInfo.get('b_team_3','None')]
 		b_team[:] = [x for x in b_team if x != 'None']
-#		if len(a_team) == 0: 
-#			a_team = 'none'
-#		if len(b_team) == 0:
-#			b_team = 'none'
-#		if len(defense) == 0:
-#			defense = 'none'
 		print(b_team)
 	# BUILD PATH STRING
 		path_list = []
@@ -274,10 +268,23 @@ class gsheet_cog:
 		if not avatar: avatar = user.default_avatar_url 
 		try:
 			memberObj = await self.memberObject(ctx.message,user_id)
+			joined_at = self.fetch_joined_at(user, server)
+			since_joined = (ctx.message.timestamp - joined_at).days
+			user_joined = joined_at.strftime("%b %e %Y")
+			joined_on = "Joined {} on {}, {} days ago".format(server.name,user_joined, since_joined)
+			status = "Current Status: **{}**".format(user.status)
+			roles = [x.name for x in user.roles if x.name != "@everyone"]
+			if roles:
+				roles = sorted(roles, key=[x.name for x in server.role_hierarchy if x.name != "@everyone"].index)
+				roles = ", ".join(roles)
+			else:
+				roles = "None"				
 			em = discord.Embed(color=memberObj['color'])
 			em.set_thumbnail(url=user.avatar_url)
-			em.add_field(name='**'+memberObj['name']+'**',value='Battlegroup: **'+memberObj['bg']+'**\n'
+			em.add_field(name='**'+memberObj['name']+'**',value='Battlegroup: **'+memberObj['bg']+'**'
+						 '\n'+status+'\n'+joined_on
 						 'Local Time: **'+memberObj['localtime']+'**  '+memberObj['clockemoji'],inline=False)
+			em..add_field(name=
 			if memberObj['a_team'][0]:
 				em.add_field(name='**A-Team**',value='\n'.join(memberObj['a_team']))
 			if memberObj['b_team'][0]:
@@ -291,6 +298,9 @@ class gsheet_cog:
 		except:
 			await self.bot.say("Something went wrong.")
 			raise
+
+		
+        
 			
 	@commands.command(pass_context=True,aliases=['localtime',], no_pm=True)
 	async def time(self, ctx, *, user: discord.Member=None):
@@ -322,8 +332,8 @@ class gsheet_cog:
 				get_tz = memberInfo['timezone']
 				utcmoment_naive = datetime.utcnow()
 				get_time = getLocalTime(utcmoment_naive,get_tz)
-				localtime = get_time.strftime("%I:%M").lstrip('0') + ' ' + get_time.strftime("%p").lower()
-				# CUSTOM CLOCK EMOJI
+				localtime = get_time.strftime("%I:%M").lstrip('0') + ' ' + get_time.strftime("%P")
+				# CUSTOM CLOCK EMOJI.lower()
 				clockemoji = clock_emoji(get_time)
 			else:
 				localtime = "not found"
