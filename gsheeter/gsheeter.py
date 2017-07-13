@@ -333,7 +333,7 @@ class gsheet_cog:
 			user = await MemberFinder(ctx, user_string).convert()
 		if user == 'user_toomany':
 			await self.bot.delete_message(search_msg)
-				return
+			return
 		if user == 'user_error':
 			await self.bot.delete_message(search_msg)
 			await self.bot.say("No users found matching: `{}`. Please try again.".format(user_string))
