@@ -265,9 +265,10 @@ class gsheet_cog:
 		if not user:
 			user = author
 		else:
-			user = server.get_member_named(user)
+			user = server.get_member_named(str(user))
 		if not user:
 			await self.bot.say("No user matching found. Try again.")
+			await self.bot.delete_message(search_msg)
 			return
 		user_id = user.id
 		avatar = user.avatar_url
@@ -277,7 +278,7 @@ class gsheet_cog:
 			joined_at = user.joined_at
 			since_joined = (ctx.message.timestamp - joined_at).days
 			user_joined = joined_at.strftime("%b %e %Y")
-			joined_on = "Joined: **{}** ({} days ago)".format(server.name,user_joined, since_joined)
+			joined_on = "Joined: **{}** ({} days ago)".format(user_joined, since_joined)
 			status = "Current Status: **{}**".format(user.status)
 			roles = [x.name for x in user.roles if x.name != "@everyone"]
 			if roles:
@@ -288,7 +289,7 @@ class gsheet_cog:
 			em = discord.Embed(color=memberObj['color'])
 			em.set_thumbnail(url=user.avatar_url)
 			em.add_field(name='**'+memberObj['name']+'**',value='\n'+status+'\n'+joined_on+'\n\n'
-						 'Battlegroup: **'+memberObj['bg']+'**'
+						 'Battlegroup: **'+memberObj['bg']+'**\n'
 						 'Local Time: **'+memberObj['localtime']+'**  '+memberObj['clockemoji'],inline=False)
 			if memberObj['a_team'][0]:
 				em.add_field(name='**A-Team**',value='\n'.join(memberObj['a_team']))
