@@ -265,7 +265,6 @@ class gsheet_cog:
 	async def member(self, ctx, *, user: discord.Member=None):
 		"""Get Member Info"""
 		search_msg = await self.bot.say('Searching...')
-		look_msg = await self.bot.say('Looking...')
 #		self.bot.send_message(msg.channel, text)
 		author = ctx.message.author
 		server = ctx.message.server
