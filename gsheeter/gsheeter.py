@@ -149,12 +149,14 @@ class gsheet_cog:
 			raise commands.BadArgument(err_msg)	
 		member_json = dataIO.load_json(self.shell_json.format(foldername,'MemberInfo'))
 		alliance_json = dataIO.load_json(self.shell_json.format(foldername,'AllianceInfo'))
-		print(user_id)
+#		print(user_id)
+#		print(foldername)
+#		
 		memberjson = member_json[user_id]
-		
-		if not memberInfo:
+		if not memberjson:
 			await self.bot.say("User info not found in spreadsheet data.")
-			return
+			await self.ctx.bot.say(err_msg)
+			raise commands.BadArgument(err_msg)	
 		memberInfo.update(memberjson)
 		memberInfo['bg'] = memberInfo.get('bg','all') #replace empty bg entries with "all"
 		memberInfo['name'] = memberInfo.get('name',user.name) #replace empty name entries with username
