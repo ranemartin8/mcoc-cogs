@@ -165,13 +165,13 @@ class gsheet_cog:
 		a_team[:] = [x for x in a_team if x != 'None']
 		b_team = [memberInfo.get('b_team_1','None'),memberInfo.get('b_team_2','None'),memberInfo.get('b_team_3','None')]
 		b_team[:] = [x for x in b_team if x != 'None']
-		if len(a_team) == 0: 
-			a_team = 'none'
-		if len(b_team) == 0:
-			b_team = 'none'
-		if len(defense) == 0:
-			defense = 'none'
-
+#		if len(a_team) == 0: 
+#			a_team = 'none'
+#		if len(b_team) == 0:
+#			b_team = 'none'
+#		if len(defense) == 0:
+#			defense = 'none'
+		print(b_team)
 	# BUILD PATH STRING
 		path_list = []
 		if memberInfo['map5a']: path_list.append('Map 5a:  '+memberInfo['map5a'])
@@ -277,11 +277,11 @@ class gsheet_cog:
 			em.set_thumbnail(url=user.avatar_url)
 			em.add_field(name='**'+memberObj['name']+'**',value='Battlegroup: **'+memberObj['bg']+'**\n'
 						 'Local Time: **'+memberObj['localtime']+'**  '+memberObj['clockemoji'],inline=False)
-			if memberObj['a_team'] != 'none':
+			if memberObj['a_team'][0]:
 				em.add_field(name='**A-Team**',value='\n'.join(memberObj['a_team']))
-			if memberObj['b_team'] != 'none':
+			if memberObj['b_team'][0]:
 				em.add_field(name='**B-Team**',value='\n'.join(memberObj['b_team']))
-			if memberObj['defense'] != 'none':
+			if memberObj['defense'][0]:
 				em.add_field(name='**AW Defense**',value='\n'.join(memberObj['defense']))
 			if memberObj['paths']: em.add_field(name='**Paths**',value=memberObj['paths'],inline=False)
 #			em.add_field(name=,value=)
