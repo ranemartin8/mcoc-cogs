@@ -67,7 +67,7 @@ def clock_emoji(datetime_obj):
 class MemberFinder(commands.Converter):
 	async def convert(self):
 		message = self.ctx.message
-		user_string = self.argument.replace(' ','')
+		user_string = self.argument
 		server = message.server
 		user = None
 		if message.mentions:
@@ -76,20 +76,24 @@ class MemberFinder(commands.Converter):
 			user = server.get_member_named(str(user_string))
 		else:
 			mem_dict = {}
-			print(mem_dict)
-			print(mem_dict.keys())
+
 			for member in server.members:
 				mem_dict.update({member.name:member})
 			matches = difflib.get_close_matches(user_string,mem_dict.keys())
-			print(matches)
-			if matches: 
+			if matches[1]: 
 				bestmatch = matches[0]
 				user = mem_dict[bestmatch]
 				await self.ctx.bot.say("Multiple matches found: {}\n\nBest match:".format(', '.join(matches)))
+			elif matches[0]:
+				singlematch = matches[0]
+				user = mem_dict[singlematch]
 			else:
 				err_msg = "No user matches found. Try again."
 				await self.ctx.bot.say(err_msg)
 				raise commands.BadArgument(err_msg)
+			print(matches)
+			print(mem_dict)
+			print(mem_dict.keys())
 		return user
 	
 class gsheet_cog:
