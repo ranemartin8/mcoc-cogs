@@ -22,6 +22,7 @@ from .utils.dataIO import fileIO
 from datetime import tzinfo, timedelta, datetime
 import pytz
 from colour import Color
+import difflib
 
 colors = {
 	'red': discord.Color(0xff3333 ), 'orange': discord.Color(0xcc6600),
@@ -269,7 +270,11 @@ class gsheet_cog:
 		elif server.get_member_named(str(user)):
 			user = server.get_member_named(str(user))
 		else:
-			user = find(lambda m: str(m.name).find(user) != -1, server.members)
+			mem_names = []
+			for member in server.members
+				mem_names.append(member.name)
+			difflib.get_close_matches(user, mem_names)
+			await self.bot.say("Multiple matches found: {}\n\nBest match:").format(', '.join(difflib))
 		if not user:
 			await self.bot.say("No user matching found. Try again.")
 			await self.bot.delete_message(search_msg)
