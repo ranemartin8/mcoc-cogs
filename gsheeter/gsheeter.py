@@ -23,7 +23,7 @@ from datetime import tzinfo, timedelta, datetime
 import pytz
 from colour import Color
 import difflib
-from difflib_data import *
+#from difflib_data import *
 
 colors = {
 	'red': discord.Color(0xff3333 ), 'orange': discord.Color(0xcc6600),
@@ -275,6 +275,7 @@ class gsheet_cog:
 			for member in server.members:
 				mem_names.append(member.name)
 			matches = difflib.get_close_matches(user, mem_names)
+			print(matches)
 			if matches: user = matches[0]
 			await self.bot.say("Multiple matches found: {}\n\nBest match:".format(', '.join(matches)))
 		if not user:
