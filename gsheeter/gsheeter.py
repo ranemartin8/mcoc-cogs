@@ -39,6 +39,9 @@ maps = {
 'map5c':'http://i.imgur.com/xTCQ6WE.jpg',
 'aw':'https://i.imgur.com/6jkgZXj.png'
 }
+c_times = {
+'1260':'1','100':'1','960':'10','1000':'10','1030':'1030','1060':'11','1100':'11','1130':'1130','1160':'12','1200':'12','1230':'1230','130':'130','160':'2','200':'2','230':'230','260':'3','300':'3','330':'330','360':'4','400':'4','430':'430','460':'5','500':'5','530':'530','560':'6','600':'6','630':'630','660':'7','700':'7','730':'730','760':'8','800':'8','830':'830','860':'9','900':'9','930':'930'
+}
 def time_roundup(dt, delta):
 		return dt + (datetime.min - dt) % delta	
 	
@@ -49,11 +52,15 @@ def getLocalTime(datetime_obj,timezone):
 
 def clock_emoji(datetime_obj):
 	time_int = int(datetime_obj.strftime("%I%M").lstrip('0'))
-	clock_times = [1200, 1230, 100, 130, 200, 230, 300, 330, 400, 430, 500, 530, 600, 630, 700, 730, 800, 830, 900, 930, 1000, 1030, 1100, 1130]
+	clock_times = [1260, 100, 960, 1000, 1030, 1060, 1100, 1130, 1160, 1200, 1230, 130, 160, 200, 230, 260, 300, 330, 360, 400, 430, 460, 500, 530, 560, 600, 630, 660, 700, 730, 760, 800, 830, 860, 900, 930]
 	closest_time = min(clock_times, key=lambda x:abs(x-time_int))
-	removezeroes = re.compile(r'0{2}')
-	clock_time = removezeroes.sub('',str(closest_time))
-	return ':clock' + clock_time + ':'
+#	removezeroes = re.compile(r'0{2}')
+	clock_time = c_times[str(closest_time)]
+#	clock_time = removezeroes.sub('',str(closest_time))
+	if clock_time:
+		return ':clock' + clock_time + ':'
+	else:
+		return ':alarm_clock:'
 
 
 class gsheet_cog:
@@ -265,43 +272,19 @@ class gsheet_cog:
 		if not user:
 			user = author
 		user_id = user.id
-#		if not os.path.exists(self.shell_json.format(foldername,'MemberInfo')):
-#			await self.bot.say("No members file detected. Use command **[prefix]savesheet** to save a Google Sheet as Members file. **File Name must be 'MemberInfo'**")
-#			return
-#		member_json = dataIO.load_json(self.shell_json.format(foldername,'MemberInfo'))
-#		alliance_json = dataIO.load_json(self.shell_json.format(foldername,'AllianceInfo'))
-#		try:
-#			if not member_json[user_id]:
-#				await self.bot.say("User info not found in spreadsheet data.")
-#				return
-#			memberInfo = member_json[user_id]
-#			bg = memberInfo.get('bg','all')
-#			colorVal = colors[alliance_json[bg.lower()].get('color_py','default')]
-#			clockemoji = ':alarm_clock:'
-#			if memberInfo['timezone']:
-#				get_tz = memberInfo['timezone']
-#				utcmoment_naive = datetime.utcnow()
-#				get_time = getLocalTime(utcmoment_naive,get_tz)
-#				localtime = get_time.strftime("%I:%M").lstrip('0') + ' ' + get_time.strftime("%p").lower()
-#				# CUSTOM CLOCK EMOJI
-#				clockemoji = clock_emoji(get_time)
-#			else:
-#				localtime = "not found"
-#			em = discord.Embed(color=colorVal)
-#			em.set_thumbnail(url=user.avatar_url)
-#			em.add_field(name=clockemoji + '  ' + memberInfo.get('name','not found'), value='Battlegroup: **'+memberInfo.get('bg','not found')+'**\nLocal Time: **'+localtime+'**')
-#			await self.bot.say(embed=em)
+		avatar = user.avatar_url
+		if not avatar: avatar = user.default_avatar_url 
 		try:
 			memberObj = await self.memberObject(ctx.message,user_id)
 			print(memberObj)
 			em = discord.Embed(color=memberObj['color'])
 			em.set_thumbnail(url=user.avatar_url)
-			em.add_field(name=memberObj['name'],value='Battlegroup: **'+memberObj['bg']+'**\n'
-						 'Local Time: **'+memberObj['localtime']+'**  '+memberObj['clockemoji'])
-			if memberObj['a_team']: em.add_field(name='A-Team',value='\n'.join(memberObj['a_team']))
-			if memberObj['b_team']: em.add_field(name='B-Team',value='\n'.join(memberObj['b_team']))
-			if memberObj['defense']: em.add_field(name='AW Defense',value='\n'.join(memberObj['defense']))
-			if memberObj['paths']: em.add_field(name='Paths',value=memberObj['paths'])
+			em.add_field(name='**'+memberObj['name']+'**',value='Battlegroup: **'+memberObj['bg']+'**\n'
+						 'Local Time: **'+memberObj['localtime']+'**  '+memberObj['clockemoji'],inline=False)
+			if memberObj['a_team']: em.add_field(name='**A-Team**',value='\n'.join(memberObj['a_team']))
+			if memberObj['b_team']: em.add_field(name='**B-Team**',value='\n'.join(memberObj['b_team']))
+			if memberObj['defense']: em.add_field(name='**AW Defense**',value='\n'.join(memberObj['defense']))
+			if memberObj['paths']: em.add_field(name='**Paths**',value=memberObj['paths'],inline=False)
 #			em.add_field(name=,value=)
 			await self.bot.say(embed=em)			
 		except:
