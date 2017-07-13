@@ -63,28 +63,9 @@ def clock_emoji(datetime_obj):
 		return ':clock' + clock_time + ':'
 	else:
 		return ':alarm_clock:'
-class MemberFinder(commands.Converter):
-    async def convert(self):
-		self.argument.replace(' ','')
-		
-        tags = set()
-        user = None
-        for arg in self.argument.split():
-            if arg.startswith('#'):
-                tags.add(arg.lower())
-            elif user is None:
-                user = commands.UserConverter(self.ctx, arg).convert()
-            else:
-                err_msg = "There can only be 1 user argument.  All others should be '#'"
-                await self.ctx.bot.say(err_msg)
-                raise commands.BadArgument(err_msg)
-        if user is None:
-            user = self.ctx.message.author
-        return {'tags': tags, 'user': user}
-	
 	
 class MemberFinder(commands.Converter):
-    async def convert(self):
+	async def convert(self):
 		message = self.ctx.message
 		user_string = self.argument.replace(' ','')
 		server = message.server
@@ -105,9 +86,8 @@ class MemberFinder(commands.Converter):
 		if not user:
 			err_msg = "No user matches found. Try again."
 			await self.ctx.bot.say(err_msg)
-			raise commands.BadArgument(err_msg)		
+			raise commands.BadArgument(err_msg)
 		return user
-
 	
 class gsheet_cog:
 	"""[in progress]. This cog contains commands that interact with Google Sheets."""
