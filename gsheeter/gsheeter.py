@@ -203,72 +203,144 @@ class gsheet_cog:
 
 	if __name__ == '__main__':
 		main()
-	
+#			objectUpdate = {'fileexists':'true'}
+		
+#		fileExists,err_type,err_msg = "false","error","unknown" #Declare default output values				
+#			err_msg = "No members file detected. Use command **[prefix]savesheet** to save a"
+#						"Google Sheet as Members file. **File Name must be 'MemberInfo'**"
+#			await self.ctx.bot.say(err_msg)
+#			return
+#			err_msg = "No members file detected. Use command **[prefix]savesheet** to save a"
+#						"Google Sheet as Members file. **File Name must be 'MemberInfo'**"
+#
+#			# >> UPDATE memberInfo	
+#						memberInfo = {**memberInfo, **{'colorVal':colorVal, 'color_dec':color_dec, 'color_hex':color_hex,
+#													   'map5a_img':map5a_img, 'map5b_img':map5b_img, 'map5c_img':map5c_img, 'aw_img':aw_img}}						
+#					
+#				memberInfo.update({'color':colorVal, 'localtime':localtime, 'clockemoji':clockemoji, 'map5a_img':map5a_img,
+#								   'map5b_img':map5b_img, 'map5c_img':map5c_img, 'aw_img':aw_img, 'localtime_raw':get_time,
+#								   'a_team':a_team, 'b_team':b_team, 'defense':defense, 'paths':path_str}) #update member dictionary
+
+
+
+#CREATE MEMBER OBJECT
 	async def memberObject(self,message,user_id,name): #memberObj = memberObject(ctx,user_id)
+
+		memberObject = {'fileExists':'false','dataExists':'false','obj':'','err_type':'unknown','err_msg':'unknown'} #EMPTY SHELL
 		server = message.server
 		user = server.get_member(user_id)
 		foldername = server.id
-		memberInfo = {}
-		if not os.path.exists(self.shell_json.format(foldername,'MemberInfo')):
-			err_msg = "No members file detected. Use command **[prefix]savesheet** to save a Google Sheet as Members file. **File Name must be 'MemberInfo'**"
-			await self.ctx.bot.say(err_msg)
-			return
-		member_json = dataIO.load_json(self.shell_json.format(foldername,'MemberInfo'))
-		alliance_json = dataIO.load_json(self.shell_json.format(foldername,'AllianceInfo'))
-		try:
-			memberjson = member_json[user_id]
-		except KeyError:
-			await self.bot.say("User info for **{}** not found in spreadsheet data.".format(name))
-			return 'error'
-		memberInfo.update(memberjson)
-		memberInfo['bg'] = memberInfo.get('bg','all') #replace empty bg entries with "all"
-		memberInfo['name'] = memberInfo.get('name',user.display_name) #replace empty name entries with username
-	# BUILD ROSTER ARRAYS
-		defense = [memberInfo.get('awd_1','None'), memberInfo.get('awd_2','None'), memberInfo.get('awd_3','None'), memberInfo.get('awd_4','None'), memberInfo.get('awd_5','None')]
-		defense[:] = [x for x in defense if x != 'None']
-		a_team = [memberInfo.get('a_team_1','None'),memberInfo.get('a_team_2','None'),memberInfo.get('a_team_3','None')]
-		a_team[:] = [x for x in a_team if x != 'None']
-		b_team = [memberInfo.get('b_team_1','None'),memberInfo.get('b_team_2','None'),memberInfo.get('b_team_3','None')]
-		b_team[:] = [x for x in b_team if x != 'None']
-	# BUILD PATH STRING
-		path_list = []
-		if memberInfo['map5a']: path_list.append('Map 5a:  '+memberInfo['map5a'])
-		if memberInfo['map5b']: path_list.append('Map 5b:  '+memberInfo['map5b'])
-		if memberInfo['map5c']: path_list.append('Map 5c:  '+memberInfo['map5c'])
-		if memberInfo['aw']: path_list.append('Alliance War:  '+memberInfo['aw'])
-		if len(path_list) == 0:
-			path_str = 'No paths found'
-		else: 
-			path_str = '\n'.join(path_list)
-	# SET DEFAULTS FOR MISSING VALUES
-		clockemoji = ':alarm_clock:'	 
-		localtime = 'not known'			 
-		map5a_img = maps['map5a']
-		map5b_img = maps['map5b']
-		map5c_img = maps['map5c']
-		aw_img = maps['aw']
-		colorVal = colors['default']
-		color_dec = 0xcc6600
-		color_hex = '#cc6600'
-		if memberInfo['timezone']:
-			get_tz = memberInfo['timezone']
-			utcmoment_naive = datetime.utcnow()
-			get_time = getLocalTime(utcmoment_naive,get_tz)
-			localtime = get_time.strftime("%I:%M").lstrip('0') + ' ' + get_time.strftime("%p").lower()
-			clockemoji = clock_emoji(get_time)			# CUSTOM CLOCK EMOJI
-		if alliance_json:
-			bgSettings = alliance_json[memberInfo.get('bg','all').lower()]
-			if bgSettings:
-				colorVal = colors[bgSettings.get('color_py','default')]
-				color_dec = bgSettings.get('color_dec',0xcc6600)
-				color_hex = bgSettings.get('color_hex','cc6600')
-				map5a_img = bgSettings.get('map5a',maps['map5a'])
-				map5b_img = bgSettings.get('map5b',maps['map5b']) 
-				map5c_img = bgSettings.get('map5c',maps['map5c']) 
-				aw_img = bgSettings.get('aw',maps['aw']) 
-		memberInfo.update({'color':colorVal, 'localtime':localtime, 'clockemoji':clockemoji, 'map5a_img':map5a_img, 'map5b_img':map5b_img, 'map5c_img':map5c_img, 'aw_img':aw_img, 'localtime_raw':get_time, 'a_team':a_team, 'b_team':b_team, 'defense':defense, 'paths':path_str}) #update member dictionary
-		return memberInfo
-#raise KeyError('Cannot find Champion {} in data files'.format(self.full_name))
+		
+	#CHECK FOR FILE! Update 'fileexists' to 'true' if found
+		if os.path.exists(self.shell_json.format(foldername,'MemberInfo')):
+			memberObject = {**memberObject, **{'fileExists':'true'}}
+
+	#NO FILE! Return memberObject with empty 'obj'
+		if memberObject['fileExists'] == 'false':
+			err_msg = "No members file detected."
+			memberObject = {**memberObject, **{'err_type':'no_file','err_msg':err_msg}}
+			return memberObject
+	#FILE FOUND!
+		else:
+			member_json = dataIO.load_json(self.shell_json.format(foldername,'MemberInfo'))
+			try:
+				memberjson = member_json[user_id]
+				dataExists = 'true'
+			except KeyError:
+				dataExists = 'false'
+			memberObject = {**memberObject, **{'dataExists':dataExists}}
+			
+	#NO DATA! Return memberObject with empty 'obj'
+			if memberObject['dataExists'] == 'false':
+				err_msg = "User info for **{}** not found in spreadsheet data.".format(name)
+				memberObject = {**memberObject, **{'err_type':'no_user','err_msg':err_msg}}
+				return memberObject
+	#DATA FOUND!
+			else:
+				memberInfo = {}
+				set_color = user.color
+				if set_color == Colour.default(): set_color = colors['default']
+				memberInfo = {
+					'color':set_color, 'localtime':'unknown', 'clockemoji':':alarm_clock:', 'map5a_img': maps['map5a'],
+					'map5b_img': maps['map5b'], 'map5c_img': maps['map5c'], 'aw_img': maps['aw'], 'localtime_raw':'unknown',
+					'a_team':'', 'b_team':'', 'defense':'', 'paths':''
+					}
+				memberInfo.update(memberjson)
+				
+#				memberInfo['bg'] = memberInfo.get('bg','all') #replace empty bg entries with "all"
+				memberInfo['name'] = memberInfo.get('name',user.display_name) #replace empty name entries with username
+				
+		# BUILD ROSTER ARRAYS
+				defense = [memberInfo.get('awd_1','None'), memberInfo.get('awd_2','None'), memberInfo.get('awd_3','None'), memberInfo.get('awd_4','None'), memberInfo.get('awd_5','None')]
+				a_team = [memberInfo.get('a_team_1','None'),memberInfo.get('a_team_2','None'),memberInfo.get('a_team_3','None')]
+				b_team = [memberInfo.get('b_team_1','None'),memberInfo.get('b_team_2','None'),memberInfo.get('b_team_3','None')]
+				defense[:] = [x for x in defense if x != 'None']
+				a_team[:] = [x for x in a_team if x != 'None']
+				b_team[:] = [x for x in b_team if x != 'None']
+			# >> UPDATE memberInfo	
+				memberInfo = {**memberInfo, **{'defense':defense,'a_team':a_team,'b_team':b_team}}
+				
+		# BUILD PATH STRING
+				path_list = []
+				if memberInfo['map5a']: path_list.append('Map 5a:  '+memberInfo['map5a'])
+				if memberInfo['map5b']: path_list.append('Map 5b:  '+memberInfo['map5b'])
+				if memberInfo['map5c']: path_list.append('Map 5c:  '+memberInfo['map5c'])
+				if memberInfo['aw']: path_list.append('Alliance War:  '+memberInfo['aw'])
+				if len(path_list) == 0:
+					path_str = 'No paths found'
+				else: 
+					path_str = '\n'.join(path_list)
+			# >> UPDATE memberInfo	
+				memberInfo = {**memberInfo, **{'path_str':path_str}}
+				
+		# SET TIMEZONE & CLOCK EMOJI
+				if memberInfo['timezone']:
+					get_tz = memberInfo['timezone']
+					utcmoment_naive = datetime.utcnow()
+					get_time = getLocalTime(utcmoment_naive,get_tz)
+					localtime = get_time.strftime("%I:%M").lstrip('0') + ' ' + get_time.strftime("%p").lower()
+					clockemoji = clock_emoji(get_time)			# CUSTOM CLOCK EMOJI
+			# >> UPDATE memberInfo	
+					memberInfo = {**memberInfo, **{'clockemoji':clockemoji,'localtime':localtime}}
+				
+		# GET ALLIANCE JSON	 (bg colors and map images)
+				bg_defaults = {
+					'colorVal':colors['default'],'color_py':colors['default'],'color_dec':0xcc6600,'color_hex':'#cc6600',
+					'map5a':maps['map5a'],'map5b':maps['map5b'],'map5c':maps['map5c'],'aw':maps['aw']
+					}
+				bg_dict = {}
+				if not dataIO.is_valid_json(self.shell_json.format(foldername,'AllianceInfo')): 		#No file
+					bg_dict = bg_defaults
+				else:
+					alliance_json = dataIO.load_json(self.shell_json.format(foldername,'AllianceInfo'))
+					if not alliance_json: 																#No data in file
+						bg_dict = bg_defaults
+					else:
+					try:
+						bg_json = alliance_json[memberInfo.get('bg','all').lower()] 					#GET BG DICT()
+						if bg_json: 							#if group is found
+							for key,value in bgSettings.items():
+								if not value: 					#if value is blank
+									try:
+										value = bg_defaults[key]
+									except KeyError:
+										value = 'unknown'
+								bg_dict.update({key:value})
+						else: 									#if group NOT found
+							bg_dict = bg_defaults
+						try:									#check if valid color
+							colorVal = colors[bg_dict['color_py']] 
+						except KeyError:
+							bg_dict['colorVal'] = colors['default']
+							bg_dict['color_py'] = colors['default']
+					except KeyError:
+						bg_dict = bg_defaults
+						
+			# >> UPDATE memberInfo	
+				memberInfo = {**memberInfo, **{'bg_settings':bg_dict}}
+		memberObject['obj'] = memberInfo
+		print(memberObject)
+		return memberObject
 				
 	@commands.command(pass_context=True,aliases=['loadsheet',], no_pm=True)
 	async def savesheet(self, ctx, header_row: str, data_range: str, groupRowsBy: str,filename: str,sheet_id: str):
