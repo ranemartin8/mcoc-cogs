@@ -137,17 +137,10 @@ class gsheet_cog:
 
 	if __name__ == '__main__':
 		main()
-#	@commands.command(pass_context=True, no_pm=True)
-#	async def pytest(self):	
-#		self, ctx, *, user: discord.Member=None
-#err_msg = "There can only be 1 user argument.  All others should be '#'"
-#                await self.ctx.bot.say(err_msg)
-#                raise commands.BadArgument(err_msg)		
-	async def memberObject(self,message,user_id):
-		#memberObj = memberObject(ctx,user_id)
+	
+	async def memberObject(self,message,user_id): #memberObj = memberObject(ctx,user_id)
 		server = message.server
 		user = server.get_member(user_id)
-#		user_id = user.id
 		foldername = server.id
 		memberInfo = {}
 		if not os.path.exists(self.shell_json.format(foldername,'MemberInfo')):
@@ -156,9 +149,7 @@ class gsheet_cog:
 			raise commands.BadArgument(err_msg)	
 		member_json = dataIO.load_json(self.shell_json.format(foldername,'MemberInfo'))
 		alliance_json = dataIO.load_json(self.shell_json.format(foldername,'AllianceInfo'))
-#		print(user_id)
-#		print(foldername)
-#		
+
 		memberjson = member_json[user_id]
 		if not memberjson:
 			await self.bot.say("User info not found in spreadsheet data.")
@@ -168,12 +159,12 @@ class gsheet_cog:
 		memberInfo['bg'] = memberInfo.get('bg','all') #replace empty bg entries with "all"
 		memberInfo['name'] = memberInfo.get('name',user.name) #replace empty name entries with username
 	# BUILD ROSTER ARRAYS
-		defense = [memberInfo.get('awd_1'),memberInfo.get('awd_2'),memberInfo.get('awd_3'),memberInfo.get('awd_4'),memberInfo.get('awd_5')]
-		defense[:] = [x for x in defense if x != None]
-		a_team = [memberInfo.get('a_team_1'),memberInfo.get('a_team_2'),memberInfo.get('a_team_3')]
-		a_team[:] = [x for x in a_team if x != None]
-		b_team = [memberInfo.get('b_team_1'),memberInfo.get('b_team_2'),memberInfo.get('b_team_3')]
-		b_team[:] = [x for x in b_team if x != None]
+		defense = [memberInfo.get('awd_1','None'), memberInfo.get('awd_2','None'), memberInfo.get('awd_3','None'), memberInfo.get('awd_4','None'), memberInfo.get('awd_5','None')]
+		defense[:] = [x for x in defense if x != 'None']
+		a_team = [memberInfo.get('a_team_1','None'),memberInfo.get('a_team_2','None'),memberInfo.get('a_team_3','None')]
+		a_team[:] = [x for x in a_team if x != 'None']
+		b_team = [memberInfo.get('b_team_1','None'),memberInfo.get('b_team_2','None'),memberInfo.get('b_team_3','None')]
+		b_team[:] = [x for x in b_team if x != 'None']
 	# BUILD PATH STRING
 		path_list = []
 		if memberInfo['map5a']: path_list.append('Map 5a:  '+memberInfo['map5a'])
@@ -211,7 +202,6 @@ class gsheet_cog:
 				map5c_img = bgSettings.get('map5c',maps['map5c']) 
 				aw_img = bgSettings.get('aw',maps['aw']) 
 		memberInfo.update({'color':colorVal, 'localtime':localtime, 'clockemoji':clockemoji, 'map5a_img':map5a_img, 'map5b_img':map5b_img, 'map5c_img':map5c_img, 'aw_img':aw_img, 'localtime_raw':get_time, 'a_team':a_team, 'b_team':b_team, 'defense':defense, 'paths':path_str}) #update member dictionary
-		print(memberInfo)
 		return memberInfo
 #raise KeyError('Cannot find Champion {} in data files'.format(self.full_name))
 				
@@ -276,7 +266,6 @@ class gsheet_cog:
 		if not avatar: avatar = user.default_avatar_url 
 		try:
 			memberObj = await self.memberObject(ctx.message,user_id)
-			print(memberObj)
 			em = discord.Embed(color=memberObj['color'])
 			em.set_thumbnail(url=user.avatar_url)
 			em.add_field(name='**'+memberObj['name']+'**',value='Battlegroup: **'+memberObj['bg']+'**\n'
@@ -330,6 +319,7 @@ class gsheet_cog:
 			em.set_thumbnail(url=user.avatar_url)
 			em.add_field(name=clockemoji + '  ' + memberInfo.get('name','not found'), value='Battlegroup: **'+memberInfo.get('bg','not found')+'**\nLocal Time: **'+localtime+'**')
 			await self.bot.say(embed=em)
+			print(em.to_dict())
 		except:
 			await self.bot.say("Something went wrong.")
 			raise
