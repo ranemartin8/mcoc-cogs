@@ -63,60 +63,51 @@ def clock_emoji(datetime_obj):
 		return ':clock' + clock_time + ':'
 	else:
 		return ':alarm_clock:'
-#
-#class MemberFinder(commands.Converter):
-#	async def _memberFinder(self):
-#		bot = self.ctx.bot
-#    '''Argument Parsing class that geneartes Champion objects from user input'''
-#		if not user:
-#			user = author
-#		elif ctx.message.mentions:
-#			user = ctx.message.mentions[0]
-#		elif server.get_member_named(str(user)):
-#			user = server.get_member_named(str(user))
-#		else:
-#			mem_dict = {}
-#			for member in server.members:
-#				mem_dict.update({member.name:member})
-#			matches = difflib.get_close_matches(user,mem_dict.keys())
-#			print(matches)
-#			if matches: 
-#				firstmatch = matches[0]
-#				user = mem_dict[firstmatch]
-#				await self.bot.say("Multiple matches found: {}\n\nBest match:".format(', '.join(matches)))
-#		if not user:
-#			await self.bot.say("No user matching found. Try again.")
-#			await self.bot.delete_message(search_msg)
-#			return
-#
-#    arg_help = '''
-#    Specify a single champion with optional parameters of star, rank, or sig.
-#    Champion names can be a number of aliases or partial aliases if no conflicts are found.
-#    Examples:
-#        4* yj r4 s30  ->  4 star Yellowjacket rank 4/40 sig 30
-#        r35*im        ->  5 star Ironman rank 3/45 sig 99
-#        '''
-#
-#	async def convert(self):
-#        bot = self.ctx.bot
-#        attrs = {}
-#        if self._bare_arg:
-#            args = self.argument.rsplit(' ', maxsplit=1)
-#            if len(args) > 1 and args[-1].isdecimal():
-#                attrs[self._bare_arg] = int(args[-1])
-#                self.argument = args[0]
-#        arg = ''.join(self.argument.lower().split(' '))
-#        for m in self.parse_re.finditer(arg):
-#            attrs[m.lastgroup] = int(m.group(m.lastgroup))
-#        token = self.parse_re.sub('', arg)
-#        if not token:
-#            err_str = "No Champion remains from arg '{}'".format(self.argument)
-#            await bot.say(err_str)
-#            raise commands.BadArgument(err_str)
-#        return (await self.get_champion(bot, token, attrs))
-#
-#	
-#	
+class MemberFinder(commands.Converter):
+    async def convert(self):
+		self.argument.replace(' ','')
+		
+        tags = set()
+        user = None
+        for arg in self.argument.split():
+            if arg.startswith('#'):
+                tags.add(arg.lower())
+            elif user is None:
+                user = commands.UserConverter(self.ctx, arg).convert()
+            else:
+                err_msg = "There can only be 1 user argument.  All others should be '#'"
+                await self.ctx.bot.say(err_msg)
+                raise commands.BadArgument(err_msg)
+        if user is None:
+            user = self.ctx.message.author
+        return {'tags': tags, 'user': user}
+	
+	
+class MemberFinder(commands.Converter):
+    async def convert(self):
+		message = self.ctx.message
+		user_string = self.argument.replace(' ','')
+		server = message.server
+		if message.mentions:
+			user = message.mentions[0]
+		elif server.get_member_named(str(user_string)):
+			user = server.get_member_named(str(user_string))
+		else:
+			mem_dict = {}
+			for member in server.members:
+				mem_dict.update({member.name:member})
+			matches = difflib.get_close_matches(user_string,mem_dict.keys())
+			print(matches)
+			if matches: 
+				bestmatch = matches[0]
+				user = mem_dict[bestmatch]
+				await self.ctx.bot.say("Multiple matches found: {}\n\nBest match:".format(', '.join(matches)))
+		if not user:
+			err_msg = "No user matches found. Try again."
+			await self.ctx.bot.say(err_msg)
+			raise commands.BadArgument(err_msg)		
+		return user
+
 	
 class gsheet_cog:
 	"""[in progress]. This cog contains commands that interact with Google Sheets."""
@@ -321,21 +312,7 @@ class gsheet_cog:
 		if not user:
 			user = author
 		else:
-			user = commands.UserConverter(ctx,user).convert()
-#		elif ctx.message.mentions:
-#			user = ctx.message.mentions[0]
-#		elif server.get_member_named(str(user)):
-#			user = server.get_member_named(str(user))
-#		else:
-#			mem_dict = {}
-#			for member in server.members:
-#				mem_dict.update({member.name:member})
-#			matches = difflib.get_close_matches(user,mem_dict.keys())
-#			print(matches)
-#			if matches: 
-#				firstmatch = matches[0]
-#				user = mem_dict[firstmatch]
-#				await self.bot.say("Multiple matches found: {}\n\nBest match:".format(', '.join(matches)))
+			user = await MemberFinder(ctx, user).convert()
 		if not user:
 			await self.bot.say("No user matching found. Try again.")
 			await self.bot.delete_message(search_msg)
