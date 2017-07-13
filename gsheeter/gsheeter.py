@@ -256,13 +256,19 @@ class gsheet_cog:
 			raise
 			
 	@commands.command(pass_context=True,aliases=['getmember',], no_pm=True)
-	async def member(self, ctx, *, user: discord.Member=None):
+#	async def member(self, ctx, *, user: discord.Member=None):
+	async def member(self, ctx, *, user: str=None):
 		"""Get Member Info"""
 		search_msg = await self.bot.say('Searching...')
-#		self.bot.send_message(msg.channel, text)
 		author = ctx.message.author
 		server = ctx.message.server
-		if not user: user = author
+		if not user:
+			user = author
+		else:
+			user = server.get_member_named(user)
+		if not user:
+			await self.bot.say("No user matching found. Try again.")
+			return
 		user_id = user.id
 		avatar = user.avatar_url
 		if not avatar: avatar = user.default_avatar_url 
@@ -271,7 +277,7 @@ class gsheet_cog:
 			joined_at = user.joined_at
 			since_joined = (ctx.message.timestamp - joined_at).days
 			user_joined = joined_at.strftime("%b %e %Y")
-			joined_on = "Joined {} on {}, {} days ago".format(server.name,user_joined, since_joined)
+			joined_on = "Joined: **{}** ({} days ago)".format(server.name,user_joined, since_joined)
 			status = "Current Status: **{}**".format(user.status)
 			roles = [x.name for x in user.roles if x.name != "@everyone"]
 			if roles:
@@ -281,8 +287,8 @@ class gsheet_cog:
 				roles = "None"				
 			em = discord.Embed(color=memberObj['color'])
 			em.set_thumbnail(url=user.avatar_url)
-			em.add_field(name='**'+memberObj['name']+'**',value='Battlegroup: **'+memberObj['bg']+'**'
-						 '\n'+status+'\n'+joined_on+''
+			em.add_field(name='**'+memberObj['name']+'**',value='\n'+status+'\n'+joined_on+'\n\n'
+						 'Battlegroup: **'+memberObj['bg']+'**'
 						 'Local Time: **'+memberObj['localtime']+'**  '+memberObj['clockemoji'],inline=False)
 			if memberObj['a_team'][0]:
 				em.add_field(name='**A-Team**',value='\n'.join(memberObj['a_team']))
@@ -297,10 +303,7 @@ class gsheet_cog:
 		except:
 			await self.bot.say("Something went wrong.")
 			raise
-
-		
-        
-			
+	
 	@commands.command(pass_context=True,aliases=['localtime',], no_pm=True)
 	async def time(self, ctx, *, user: discord.Member=None):
 		"""Get the local time of an Alliance Member.
