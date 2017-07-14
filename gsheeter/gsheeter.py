@@ -193,12 +193,18 @@ class gsheet_cog:
 			return
 		else:
 			output_dict = {}
+			groupby_value = header_values[0].index(groupby_key)
+			#If not key, default to first column
 			if not groupby_key:
-				i = 0
 				for row in body_values:
 					dict_zip = dict(zip(header_values[0], row))
-					output_dict.update({i:dict_zip})
-					i += 1
+					groupby = row[0]
+					output_dict.update({groupby:dict_zip})				
+#				i = 0
+#				for row in body_values:
+#					dict_zip = dict(zip(header_values[0], row))
+#					output_dict.update({i:dict_zip})
+#					i += 1
 			else:	
 				groupby_value = header_values[0].index(groupby_key)
 				for row in body_values:
