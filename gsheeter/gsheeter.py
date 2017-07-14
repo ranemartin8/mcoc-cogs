@@ -325,7 +325,7 @@ class gsheet_cog:
 			<data_range>   - These will be your JSON values. EX: Sheet1!A2:D
 			<filename>     - Ex: MembersData
 			<sheet_id>     - The SheetID of a PUBLISHED Sheet with Link Sharing ON. EX: 1kI0Dzsb6idFdJ6qzLIBYh2oIypB1O4Ko4BdRita-Vvg
-								>>https://docs.google.com/spreadsheets/d/[SheetID]/pubhtml
+								>>Find it here: https://docs.google.com/spreadsheets/d/[SheetID]/pubhtml
 			<groupRowsBy>  - Title of sheet column that contains UNIQUE VALUES that your JSON will be grouped by. EX: UserID
 
 		Complete Example:
@@ -508,7 +508,7 @@ class gsheet_cog:
 				localtime = "not found"
 			em = discord.Embed(color=colorVal)
 			em.set_thumbnail(url=user.avatar_url)
-			em.add_field(name=clockemoji + '  ' + memberInfo.get('name','not found'), /
+			em.add_field(name=clockemoji + '  ' + memberInfo.get('name','not found'),
 						 value='Battlegroup: **'+memberInfo.get('bg','not found')+'**\nLocal Time: **'+localtime+'**')
 			
 			await self.bot.say(embed=em)
