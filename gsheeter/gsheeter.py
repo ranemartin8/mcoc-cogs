@@ -485,8 +485,9 @@ class gsheet_cog:
 				em.add_field(name='**B-Team**',value='\n'.join(memInfo['b_team']))
 			if memInfo['defense']:
 				em.add_field(name='**AW Defense**',value='\n'.join(memInfo['defense']))
-			if memInfo['paths'] and memInfo['paths'] != 'No paths found':
+			if memInfo['paths']:
 				em.add_field(name='**Paths**',value=memInfo['paths'],inline=False)
+				# and memInfo['paths'] != 'No paths found'
 		try:
 			await self.bot.say(embed=em)
 			await self.bot.delete_message(search_msg)
