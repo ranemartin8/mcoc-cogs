@@ -383,7 +383,7 @@ class gsheet_cog:
 			filename = 'AllianceInfo'
 		foldername = ctx.message.author
 		try:
-			self.main(sheet,range_headers,range_body,groupby_key,foldername,filename)
+			self.main(sheet,range_headers,range_body,foldername,filename,groupby_key)
 			await self.bot.say("Success! File has been updated!")
 		except:
 			await self.bot.say("Something went wrong.")
