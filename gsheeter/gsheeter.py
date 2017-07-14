@@ -211,7 +211,7 @@ class gsheet_cog:
 				output_dict.update({groupby:dict_zip})				
 
 			self.save_shell_file(output_dict,foldername,filename)
-			if warn: await self.ctx.bot.say(warn.format(grouped_by))
+			if warn: await self.bot.say(warn.format(grouped_by))
 				
 	if __name__ == '__main__':
 		main()
