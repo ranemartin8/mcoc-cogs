@@ -196,15 +196,14 @@ class gsheet_cog:
 			output_dict = {}
 			if not groupby_key: 
 				groupby_value = 0
-				warn = "No <GROUP_BY> value provided in command string."
-						"By default, JSON rows grouped by 1st Column: **{}**"
+				warn = "No <GROUP_BY> value provided in command string. By default, JSON rows grouped by 1st Column: **{}**"
 			else:
 				try:
 					groupby_value = header_values[0].index(groupby_key)
 				except ValueError:
 					groupby_value = 0
-					warn = "<GROUP_BY> value not found in <HEADER_ROW> range."
-							"By default, JSON rows grouped by 1st Column: **{}**"
+					warn = "<GROUP_BY> value not found in <HEADER_ROW> range. By default, JSON rows grouped by 1st Column: **{}**"
+					
 			grouped_by = header_values[0][groupby_value]
 			for row in body_values:
 				dict_zip = dict(zip(header_values[0], row))
