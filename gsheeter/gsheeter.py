@@ -109,8 +109,8 @@ class MemberFinder(commands.Converter):
 						for mem_id in results:
 							ser_mem = server.get_member(mem_id)
 							result_names.append(ser_mem.display_name)
-						await self.ctx.bot.say("Multiple possible matches found: {}\n\n"
-											   "So, I just went with first match: **{}**".format(', '.join(result_names),user.display_name))
+						await self.ctx.bot.say("A few possible matches were found: ```{}```\n\n"
+											   "So I just went with first match: **{}**".format(', '.join(result_names),user.display_name))
 			else:
 				matches = difflib.get_close_matches(user_string,mem_dict.keys(), n=3, cutoff=0.5)
 				if matches:
@@ -120,8 +120,8 @@ class MemberFinder(commands.Converter):
 					user = server.get_member(match_id)
 					find_method = 'User found by fuzzy matching'
 					if len(matches) > 1:
-						await self.ctx.bot.say("Multiple fuzzy matches found: {}\n\n"
-											   "So, I just went with best match: **{}**".format(', '.join(matches),user.display_name))
+						await self.ctx.bot.say("A few fuzzy matches were found: ```{}```\n\n"
+											   "So I just went with closest match: **{}**".format(', '.join(matches),user.display_name))
 				else:
 					user = 'user_error'
 		if find_method: print('Search Method: '+find_method)
