@@ -311,7 +311,7 @@ class gsheet_cog:
 				
 		# GET ALLIANCE JSON	 (bg colors and map images)
 				bg_defaults = {
-					'colorVal':colors['default'],'color_py':colors['default'],'color_dec':0xcc6600,'color_hex':'#cc6600',
+					'colorVal':'default','color_py':'default','color_dec':0xcc6600,'color_hex':'#cc6600',
 					'map5a':maps['map5a'],'map5b':maps['map5b'],'map5c':maps['map5c'],'aw':maps['aw']
 					}
 				bg_dict = {'color_cy':'default'}
@@ -332,11 +332,12 @@ class gsheet_cog:
 										value = 'unknown'
 								bg_dict.update({key:value})
 							try:									#check if valid color
-								colorVal = colors[bg_dict['color_py']] 
+								colorCheck = colors[bg_dict['color_py']] 
 							except KeyError:
 								bg_dict['color_py'] = 'default'
 						except KeyError:
 							bg_dict = bg_defaults
+					bg_dict = {**bg_defaults,**bg_dict}
 						
 			# >> UPDATE memberInfo	
 				memberInfo = {**memberInfo, **{'bg_settings':bg_dict}}
