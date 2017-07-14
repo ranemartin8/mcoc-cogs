@@ -276,13 +276,20 @@ class gsheet_cog:
 				memberInfo['name'] = memberInfo.get('name',user.display_name) #replace empty name entries with username
 				
 		# BUILD ROSTER ARRAYS
-				defense = [memberInfo.get('awd_1','None'), memberInfo.get('awd_2','None'), memberInfo.get('awd_3','None'),
-						   memberInfo.get('awd_4','None'), memberInfo.get('awd_5','None')]
-				a_team = [memberInfo.get('a_team_1','None'),memberInfo.get('a_team_2','None'),memberInfo.get('a_team_3','None')]
-				b_team = [memberInfo.get('b_team_1','None'),memberInfo.get('b_team_2','None'),memberInfo.get('b_team_3','None')]
-				defense[:] = [x for x in defense if x != 'None']
-				a_team[:] = [x for x in a_team if x != 'None']
-				b_team[:] = [x for x in b_team if x != 'None']
+#				defense = [memberInfo.get('awd_1','None'), memberInfo.get('awd_2','None'), memberInfo.get('awd_3','None'),
+#						   memberInfo.get('awd_4','None'), memberInfo.get('awd_5','None')]
+#				a_team = [memberInfo.get('a_team_1','None'),memberInfo.get('a_team_2','None'),memberInfo.get('a_team_3','None')]
+#				b_team = [memberInfo.get('b_team_1','None'),memberInfo.get('b_team_2','None'),memberInfo.get('b_team_3','None')]
+#				defense[:] = [x for x in defense if x != 'None']
+#				a_team[:] = [x for x in a_team if x != 'None']
+#				b_team[:] = [x for x in b_team if x != 'None']
+				defense = [memberInfo.get('awd_1'), memberInfo.get('awd_2'), memberInfo.get('awd_3'),
+						   memberInfo.get('awd_4'), memberInfo.get('awd_5')]
+				a_team = [memberInfo.get('a_team_1'),memberInfo.get('a_team_2'),memberInfo.get('a_team_3')]
+				b_team = [memberInfo.get('b_team_1'),memberInfo.get('b_team_2'),memberInfo.get('b_team_3')]
+#				teams = [defense,a_team,b_team]
+#				for team in teams:
+#					len(team)
 			# >> UPDATE memberInfo	
 				memberInfo = {**memberInfo, **{'defense':defense,'a_team':a_team,'b_team':b_team}}
 				
@@ -472,13 +479,13 @@ class gsheet_cog:
 			em.add_field(name='**'+memInfo['name']+'**',value='\n'+status+'\n'+joined_on+'\n\n'
 						 'Battlegroup: **'+memInfo['bg']+'**\n'
 						 'Local Time: **'+memInfo['localtime']+'**  '+memInfo['clockemoji'],inline=False)
-			if memInfo['a_team'][0]:
+			if memInfo['a_team']:
 				em.add_field(name='**A-Team**',value='\n'.join(memInfo['a_team']))
-			if memInfo['b_team'][0]:
+			if memInfo['b_team']:
 				em.add_field(name='**B-Team**',value='\n'.join(memInfo['b_team']))
-			if memInfo['defense'][0]:
+			if memInfo['defense']:
 				em.add_field(name='**AW Defense**',value='\n'.join(memInfo['defense']))
-			if memInfo['paths']:
+			if if memInfo['paths'] and memInfo['paths'] != 'No paths found':
 				em.add_field(name='**Paths**',value=memInfo['paths'],inline=False)
 		try:
 			await self.bot.say(embed=em)
