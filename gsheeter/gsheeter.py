@@ -479,12 +479,15 @@ class gsheet_cog:
 			em.add_field(name='**'+memInfo['name']+'**',value='\n'+status+'\n'+joined_on+'\n\n'
 						 'Battlegroup: **'+memInfo['bg']+'**\n'
 						 'Local Time: **'+memInfo['localtime']+'**  '+memInfo['clockemoji'],inline=False)
-			if memInfo['a_team'][0:3]:
-				em.add_field(name='**A-Team**',value='\n'.join(filter(None, memInfo['a_team'])))
-			if memInfo['b_team'][0:3]:
-				em.add_field(name='**B-Team**',value='\n'.join(filter(None, memInfo['b_team'])))
-			if memInfo['defense'][0:3]:
-				em.add_field(name='**AW Defense**',value='\n'.join(filter(None, memInfo['defense'])))
+			a_team = '\n'.join(filter(None, memInfo['a_team']))
+			b_team = '\n'.join(filter(None, memInfo['b_team']))
+			defense = '\n'.join(filter(None, memInfo['defense']))
+			if a_team:
+				em.add_field(name='**A-Team**',value=a_team)
+			if b_team:
+				em.add_field(name='**B-Team**',value=b_team)
+			if defense:
+				em.add_field(name='**AW Defense**',value=defense)
 			if memInfo['paths']:
 				em.add_field(name='**Paths**',value=memInfo['paths'],inline=False)
 		print(em.to_dict())
