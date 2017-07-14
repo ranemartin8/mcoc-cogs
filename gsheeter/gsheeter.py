@@ -426,6 +426,7 @@ class gsheet_cog:
 		except KeyError:
 			getErr = 'other'
 			getMsg = 'Error unknown.'
+			memInfo_status = 'failure'
 			
 		if getErr != 'success':
 			memInfo_status = 'failure'	
@@ -434,43 +435,42 @@ class gsheet_cog:
 				getMsg = memberObj['err_msg']
 				print(getMsg)
 			else:
-				await self.bot.say(memberObj['err_msg'])
-				await self.bot.delete_message(search_msg)
-				return
+				showError = 'false'
+				print(getMsg)
 			
-		#ALL MEMBERS
-			joined_at = user.joined_at
-			since_joined = (ctx.message.timestamp - joined_at).days
-			user_joined = joined_at.strftime("%b %e %Y")
-			joined_on = "Joined: **{}** ({} days ago)".format(user_joined, since_joined)
-			status = "Current Status: **{}**".format(user.status)
-			roles = [x.name for x in user.roles if x.name != "@everyone"]
-			if roles:
-				roles = sorted(roles, key=[x.name for x in server.role_hierarchy if x.name != "@everyone"].index)
-				roles = ", ".join(roles)
-			else:
-				roles = "None"
-				
-			em = discord.Embed(color=memInfo['color'])
-			em.set_thumbnail(url=avatar)
-			
-			if memInfo_status == 'failure':
-				em.add_field(name='**'+user.display_name+'**',value='\n'+status+'\n'+joined_on+'\n\n',inline=False)	
-				em.add_field(name='**Roles**',value=roles,inline=False)	
-				if showError == 'true':
-					em.add_field(name='**User Info**',value=getMsg)
-			else:
-				em.add_field(name='**'+memberObj['name']+'**',value='\n'+status+'\n'+joined_on+'\n\n'
-							 'Battlegroup: **'+memberObj['bg']+'**\n'
-							 'Local Time: **'+memberObj['localtime']+'**  '+memberObj['clockemoji'],inline=False)
-				if memberObj['a_team'][0]:
-					em.add_field(name='**A-Team**',value='\n'.join(memberObj['a_team']))
-				if memberObj['b_team'][0]:
-					em.add_field(name='**B-Team**',value='\n'.join(memberObj['b_team']))
-				if memberObj['defense'][0]:
-					em.add_field(name='**AW Defense**',value='\n'.join(memberObj['defense']))
-				if memberObj['paths']:
-					em.add_field(name='**Paths**',value=memberObj['paths'],inline=False)
+	#ALL MEMBERS
+		joined_at = user.joined_at
+		since_joined = (ctx.message.timestamp - joined_at).days
+		user_joined = joined_at.strftime("%b %e %Y")
+		joined_on = "Joined: **{}** ({} days ago)".format(user_joined, since_joined)
+		status = "Current Status: **{}**".format(user.status)
+		roles = [x.name for x in user.roles if x.name != "@everyone"]
+		if roles:
+			roles = sorted(roles, key=[x.name for x in server.role_hierarchy if x.name != "@everyone"].index)
+			roles = ", ".join(roles)
+		else:
+			roles = "None"
+
+		em = discord.Embed(color=memInfo['color'])
+		em.set_thumbnail(url=avatar)
+
+		if memInfo_status == 'failure':
+			em.add_field(name='**'+user.display_name+'**',value='\n'+status+'\n'+joined_on+'\n\n',inline=False)	
+			em.add_field(name='**Roles**',value=roles,inline=False)	
+			if showError == 'true':
+				em.add_field(name='**User Info**',value=getMsg)
+		else:
+			em.add_field(name='**'+memberObj['name']+'**',value='\n'+status+'\n'+joined_on+'\n\n'
+						 'Battlegroup: **'+memberObj['bg']+'**\n'
+						 'Local Time: **'+memberObj['localtime']+'**  '+memberObj['clockemoji'],inline=False)
+			if memberObj['a_team'][0]:
+				em.add_field(name='**A-Team**',value='\n'.join(memberObj['a_team']))
+			if memberObj['b_team'][0]:
+				em.add_field(name='**B-Team**',value='\n'.join(memberObj['b_team']))
+			if memberObj['defense'][0]:
+				em.add_field(name='**AW Defense**',value='\n'.join(memberObj['defense']))
+			if memberObj['paths']:
+				em.add_field(name='**Paths**',value=memberObj['paths'],inline=False)
 		try:
 			await self.bot.say(embed=em)
 			await self.bot.delete_message(search_msg)
