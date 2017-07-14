@@ -213,19 +213,24 @@ class gsheet_cog:
 		"""Save a Google Sheet as a JSON file.
 		Requires a PUBLISHED Google Sheet with Link Sharing turned ON and set to "Anybody with link can edit". 
 		
+		
 		ARGS: *Required
 		---------------
-		<header_row>*
-		 - These will be your JSON keys. EX: Sheet1!1:1
-		<data_range>*
-		 - These will be your JSON values. EX: Sheet1!A2:D
-		<filename>*
+		<HEADER_ROW>*
+		 - Set as JSON keys
+		 - EX: Sheet1!1:1
+		<DATA_RANGE>*
+		 - Set as JSON values
+		 - EX: Sheet1!A2:D
+		<FILENAME>*
 		 - Ex: MembersData
-		<sheet_id>*
-		 - The SheetID >>https://docs.google.com/spreadsheets/d/[SHEETID]/pubhtml
+		<SHEETID>*
+		 - Pull from spreadsheet URL
+		 - https://docs.google.com/spreadsheets/d/[SHEETID]/pubhtml
 		 - EX: 1kI0Dzsb6idFdJ6qzLIBYh2oIypB1O4Ko4BdRita-Vvg
-		<groupRowsBy> (Default=1st Column)
-		 - Title of  Column to group your JSON by.
+		<GROUP_BY> 
+		 - Optional (Default=1st Column)
+		 - Header Value of Column to group rows by.
 		 - Must contain UNIQUE VALUES. EX: UserID
 
 		EX:
