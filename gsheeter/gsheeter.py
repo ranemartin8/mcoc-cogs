@@ -210,7 +210,51 @@ class gsheet_cog:
 
 	if __name__ == '__main__':
 		main()
+		
+	@commands.command(pass_context=True,aliases=['loadsheet',], no_pm=True)
+	async def savesheet(self, ctx, header_row: str, data_range: str,filename: str,sheet_id: str, groupRowsBy: str=None):
+		"""Save a Google Sheet as JSON or refresh an existing JSON.
+		
+		ARGS:
+		<header_row>
+			>> These will be your JSON keys. EX: Sheet1!1:1
+		<data_range>
+			>> These will be your JSON values. EX: Sheet1!A2:D
+		<filename>
+			>> Ex: MembersData
+		<sheet_id>
+			>> The SheetID of a PUBLISHED Sheet with Link Sharing ON. 
+			>> EX: 1kI0Dzsb6idFdJ6qzLIBYh2oIypB1O4Ko4BdRita-Vvg
+			>> Find it here: https://docs.google.com/spreadsheets/d/[SheetID]/pubhtml
+		<groupRowsBy>
+			>> Title of sheet column that contains UNIQUE VALUES
+			>> that your JSON will be grouped by. EX: UserID
 
+		EX:
+			>> [p]savesheet Sheet1!1:1 Sheet1!A2:D MembersData 1kI0Dzsb6idFdJ6qzLIBYh2oIypB1O4Ko4BdRita-Vvg UserID
+		
+		File Save Location: /data/gsheeter/[user-id]
+		
+		"""
+		server = ctx.message.server
+		foldername = ctx.message.author.id
+		a1_notation_check = re.compile(r'\'?[\w\d]+\'?![\w\d]+\:[\w\d]+')
+		if not a1_notation_check.fullmatch(header_row):
+			await self.bot.say("Use correct A1 Notation for the Header Row"
+							   "(single row only): Ex. Sheet1!A2:Z2 or 'This Sheet'!1:1")
+			return
+		if not a1_notation_check.fullmatch(data_range):
+			await self.bot.say("Use correct A1 Notation for the Data Range:"
+							   " Ex. Sheet1!A2:D or 'My Sheet'!B2:Z1000")
+			return
+		try:
+			self.main(sheet_id,header_row,data_range,foldername,filename,groupRowsBy)
+			await self.bot.say("This file has been saved!")
+		except:
+			await self.bot.say("Something went wrong.")
+			raise
+			
+			
 #CREATE MEMBER OBJECT  
 
 	async def memberObject(self,message,user_id,name): #memberObj = memberObject(ctx,user_id)
@@ -324,48 +368,7 @@ class gsheet_cog:
 		print(memberObject)
 		return memberObject
 				
-	@commands.command(pass_context=True,aliases=['loadsheet',], no_pm=True)
-	async def savesheet(self, ctx, header_row: str, data_range: str,filename: str,sheet_id: str, groupRowsBy: str=None):
-		"""Save a Google Sheet as JSON or refresh an existing JSON.
-		
-		ARGS:
-		<header_row>
-			>> These will be your JSON keys. EX: Sheet1!1:1
-		<data_range>
-			>> These will be your JSON values. EX: Sheet1!A2:D
-		<filename>
-			>> Ex: MembersData
-		<sheet_id>
-			>> The SheetID of a PUBLISHED Sheet with Link Sharing ON. 
-			>> EX: 1kI0Dzsb6idFdJ6qzLIBYh2oIypB1O4Ko4BdRita-Vvg
-			>> Find it here: https://docs.google.com/spreadsheets/d/[SheetID]/pubhtml
-		<groupRowsBy>
-			>> Title of sheet column that contains UNIQUE VALUES
-			>> that your JSON will be grouped by. EX: UserID
 
-		EX:
-			>> [p]savesheet Sheet1!1:1 Sheet1!A2:D MembersData 1kI0Dzsb6idFdJ6qzLIBYh2oIypB1O4Ko4BdRita-Vvg UserID
-		
-		File Save Location: /data/gsheeter/[user-id]
-		
-		"""
-		server = ctx.message.server
-		foldername = ctx.message.author.id
-		a1_notation_check = re.compile(r'\'?[\w\d]+\'?![\w\d]+\:[\w\d]+')
-		if not a1_notation_check.fullmatch(header_row):
-			await self.bot.say("Use correct A1 Notation for the Header Row"
-							   "(single row only): Ex. Sheet1!A2:Z2 or 'This Sheet'!1:1")
-			return
-		if not a1_notation_check.fullmatch(data_range):
-			await self.bot.say("Use correct A1 Notation for the Data Range:"
-							   " Ex. Sheet1!A2:D or 'My Sheet'!B2:Z1000")
-			return
-		try:
-			self.main(sheet_id,header_row,data_range,foldername,filename,groupRowsBy)
-			await self.bot.say("This file has been saved!")
-		except:
-			await self.bot.say("Something went wrong.")
-			raise
 			
 	@commands.command(pass_context=True,aliases=['updateinfo',], no_pm=True)
 	async def refreshmembers(self, ctx):
