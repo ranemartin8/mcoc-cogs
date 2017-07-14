@@ -297,7 +297,7 @@ class gsheet_cog:
 				else: 
 					path_str = '\n'.join(path_list)
 			# >> UPDATE memberInfo	
-				memberInfo = {**memberInfo, **{'path_str':path_str}}
+				memberInfo = {**memberInfo, **{'paths':path_str}}
 				
 		# SET TIMEZONE & CLOCK EMOJI
 				if memberInfo['timezone']:
@@ -314,7 +314,7 @@ class gsheet_cog:
 					'colorVal':colors['default'],'color_py':colors['default'],'color_dec':0xcc6600,'color_hex':'#cc6600',
 					'map5a':maps['map5a'],'map5b':maps['map5b'],'map5c':maps['map5c'],'aw':maps['aw']
 					}
-				bg_dict = {}
+				bg_dict = {'color_cy':'default'}
 				if not dataIO.is_valid_json(self.shell_json.format(foldername,'AllianceInfo')): 		#No file
 					bg_dict = bg_defaults
 				else:
@@ -334,14 +334,14 @@ class gsheet_cog:
 							try:									#check if valid color
 								colorVal = colors[bg_dict['color_py']] 
 							except KeyError:
-								bg_dict['colorVal'] = colors['default']
-								bg_dict['color_py'] = colors['default']
+								bg_dict['color_py'] = 'default'
 						except KeyError:
 							bg_dict = bg_defaults
 						
 			# >> UPDATE memberInfo	
-				memberInfo = {**memberInfo, **{'color':bg_dict['color_py'],'bg_settings':bg_dict,'err_type':'success'}}
+				memberInfo = {**memberInfo, **{'bg_settings':bg_dict}}
 				memberObject['obj'] = memberInfo
+				memberObject['err_type'] = 'success'
 		print(json.dumps(memberObject))
 		return memberObject
 				
@@ -450,8 +450,14 @@ class gsheet_cog:
 			roles = ", ".join(roles)
 		else:
 			roles = "None"
-
-		em = discord.Embed(color=memInfo['color'])
+		
+		try_color = memInfo['color']
+		if not try_color or try_color == 'default' or not colors[try_color]:
+			final_color = user.color
+		else:
+			final_color = colors[try_color]
+			
+		em = discord.Embed(color=final_color)
 		em.set_thumbnail(url=avatar)
 
 		if memInfo_status == 'failure' or not memInfo:
