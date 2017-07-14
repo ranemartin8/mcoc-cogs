@@ -480,11 +480,11 @@ class gsheet_cog:
 						 'Battlegroup: **'+memInfo['bg']+'**\n'
 						 'Local Time: **'+memInfo['localtime']+'**  '+memInfo['clockemoji'],inline=False)
 			if memInfo['a_team'][0:3]:
-				em.add_field(name='**A-Team**',value='\n'.join(memInfo['a_team']))
+				em.add_field(name='**A-Team**',value='\n'.join(filter(None, memInfo['a_team'])))
 			if memInfo['b_team'][0:3]:
-				em.add_field(name='**B-Team**',value='\n'.join(memInfo['b_team']))
+				em.add_field(name='**B-Team**',value='\n'.join(filter(None, memInfo['b_team'])))
 			if memInfo['defense'][0:3]:
-				em.add_field(name='**AW Defense**',value='\n'.join(memInfo['defense']))
+				em.add_field(name='**AW Defense**',value='\n'.join(filter(None, memInfo['defense'])))
 			if memInfo['paths']:
 				em.add_field(name='**Paths**',value=memInfo['paths'],inline=False)
 		print(em.to_dict())
