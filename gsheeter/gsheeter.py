@@ -470,7 +470,7 @@ class gsheet_cog:
 					em.add_field(name='**AW Defense**',value='\n'.join(memberObj['defense']))
 				if memberObj['paths']:
 					em.add_field(name='**Paths**',value=memberObj['paths'],inline=False)
-
+		try:
 			await self.bot.say(embed=em)
 			await self.bot.delete_message(search_msg)
 		except:
