@@ -477,7 +477,7 @@ class gsheet_cog:
 				em.add_field(name='**B-Team**',value='\n'.join(memInfo['b_team']))
 			if len(memInfo['defense']) > 0:
 				em.add_field(name='**AW Defense**',value='\n'.join(memInfo['defense']))
-			if memInfo['paths'] and memInfo['paths'] != 'No paths found':
+			if memInfo['paths']:
 				em.add_field(name='**Paths**',value=memInfo['paths'],inline=False)
 		try:
 			await self.bot.say(embed=em)
