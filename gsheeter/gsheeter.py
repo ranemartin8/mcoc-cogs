@@ -262,7 +262,7 @@ class gsheet_cog:
 			return
 		try:
 			await self.main(sheet_id,header_row,data_range,foldername,filename,groupRowsBy)
-			em = self.quickembed()
+			em = self.quickembed("Success!","This file has been saved.",'green')
 			await self.bot.say(embed=em)
 			await self.bot.delete_message(search_msg)
 		except:
@@ -386,7 +386,7 @@ class gsheet_cog:
 				
 
 			
-	@commands.command(pass_context=True,aliases=['updateinfo',], no_pm=True)
+	@commands.command(pass_context=True,aliases=['updateinfo',], no_pm=True,hidden=True)
 	async def refreshmembers(self, ctx):
 		"""Refreshs members json from Google Sheet"""
 		server = ctx.message.server
@@ -404,7 +404,8 @@ class gsheet_cog:
 		foldername = ctx.message.author.id
 		try:
 			self.main(sheet,range_headers,range_body,foldername,filename,groupby_key)
-			await self.bot.say("Success! File has been updated!")
+			em = self.quickembed("Success!","File has been updated.",'green')
+			await self.bot.say(embed=em)
 		except:
 			await self.bot.say("Something went wrong.")
 			raise
