@@ -23,7 +23,6 @@ from datetime import tzinfo, timedelta, datetime
 import pytz
 from colour import Color
 import difflib
-#from difflib_data import *
 
 colors = {
 	'red': discord.Color(0xff3333 ), 'orange': discord.Color(0xcc6600),
@@ -36,16 +35,20 @@ colors = {
 	'grey': discord.Color(0x666666)
 	}
 maps = {
-'map5a':'http://i.imgur.com/hAAQ3Az.jpg',
-'map5b':'http://i.imgur.com/C4q8TaG.jpg',
-'map5c':'http://i.imgur.com/xTCQ6WE.jpg',
-'aw':'https://i.imgur.com/6jkgZXj.png'
-}
+	'map5a':'http://i.imgur.com/hAAQ3Az.jpg',
+	'map5b':'http://i.imgur.com/C4q8TaG.jpg',
+	'map5c':'http://i.imgur.com/xTCQ6WE.jpg',
+	'aw':'https://i.imgur.com/6jkgZXj.png'
+	}
 c_times = {
-'1260':'1','100':'1','960':'10','1000':'10','1030':'1030','1060':'11','1100':'11','1130':'1130','1160':'12','1200':'12','1230':'1230','130':'130','160':'2','200':'2','230':'230','260':'3','300':'3','330':'330','360':'4','400':'4','430':'430','460':'5','500':'5','530':'530','560':'6','600':'6','630':'630','660':'7','700':'7','730':'730','760':'8','800':'8','830':'830','860':'9','900':'9','930':'930'
-}
-def time_roundup(dt, delta):
-		return dt + (datetime.min - dt) % delta	
+		'1260':'1','100':'1','960':'10','1000':'10','1030':'1030','1060':'11','1100':'11',
+		'1130':'1130','1160':'12','1200':'12','1230':'1230','130':'130','160':'2','200':'2',
+		'230':'230','260':'3','300':'3','330':'330','360':'4','400':'4','430':'430','460':'5',
+		'500':'5','530':'530','560':'6','600':'6','630':'630','660':'7','700':'7','730':'730',
+		'760':'8','800':'8','830':'830','860':'9','900':'9','930':'930'
+		}
+#def time_roundup(dt, delta):
+#		return dt + (datetime.min - dt) % delta	
 	
 def getLocalTime(datetime_obj,timezone):
 	utcmoment = datetime_obj.replace(tzinfo=pytz.utc)
@@ -54,11 +57,11 @@ def getLocalTime(datetime_obj,timezone):
 
 def clock_emoji(datetime_obj):
 	time_int = int(datetime_obj.strftime("%I%M").lstrip('0'))
-	clock_times = [1260, 100, 960, 1000, 1030, 1060, 1100, 1130, 1160, 1200, 1230, 130, 160, 200, 230, 260, 300, 330, 360, 400, 430, 460, 500, 530, 560, 600, 630, 660, 700, 730, 760, 800, 830, 860, 900, 930]
+	clock_times = [1260, 100, 960, 1000, 1030, 1060, 1100, 1130, 1160, 1200, 1230,
+				   130, 160, 200, 230, 260, 300, 330, 360, 400, 430, 460, 500, 530,
+				   560, 600, 630, 660, 700, 730, 760, 800, 830, 860, 900, 930]
 	closest_time = min(clock_times, key=lambda x:abs(x-time_int))
-#	removezeroes = re.compile(r'0{2}')
 	clock_time = c_times[str(closest_time)]
-#	clock_time = removezeroes.sub('',str(closest_time))
 	if clock_time:
 		return ':clock' + clock_time + ':'
 	else:
@@ -83,7 +86,6 @@ class MemberFinder(commands.Converter):
 			mem_dict = {}
 			for member in server.members:
 				mem_dict.update({member.display_name:member.id})
-#			print(mem_dict)
 			results = []
 			for key,value in mem_dict.items():
 				checkfor_str = key.find(user_string)
@@ -93,13 +95,13 @@ class MemberFinder(commands.Converter):
 				#TOO MANY: if there are 5 or more possible results
 				if len(results) > 4: 
 					results_count = len(results) - 4
-#					results_remain = results_count 
 					for mem_id in results:
 						ser_mem = server.get_member(mem_id)
 						result_names.append(ser_mem.display_name)
 					firstfour = ', '.join(result_names[0:4])
 					user = 'user_toomany'
-					await self.ctx.bot.say("Too many possible matches found: ```{} and {} others.```\nPlease be more specific and try again.".format(firstfour,results_count))
+					await self.ctx.bot.say("Too many possible matches found: ```{} and {} others.```"
+										   "\nPlease be more specific and try again.".format(firstfour,results_count))
 				#Less than 4 results
 				else:
 					firstresult = results[0]
@@ -110,18 +112,19 @@ class MemberFinder(commands.Converter):
 							ser_mem = server.get_member(mem_id)
 							result_names.append(ser_mem.display_name)
 						await self.ctx.bot.say("A few possible matches were found: ```{}```\n\n"
-											   "So I just went with first match: **{}**".format(', '.join(result_names),user.display_name))
+											   "So I just went with first match: **{}**"
+											   " ".format(', '.join(result_names),user.display_name))
 			else:
 				matches = difflib.get_close_matches(user_string,mem_dict.keys(), n=3, cutoff=0.5)
 				if matches:
-#					print('Match(es): '+', '.join(matches)
 					bestmatch = matches[0]
 					match_id = mem_dict[bestmatch]
 					user = server.get_member(match_id)
 					find_method = 'User found by fuzzy matching'
 					if len(matches) > 1:
 						await self.ctx.bot.say("A few fuzzy matches were found: ```{}```\n\n"
-											   "So I just went with closest match: **{}**".format(', '.join(matches),user.display_name))
+											   "So I just went with closest match:"
+											   " **{}**".format(', '.join(matches),user.display_name))
 				else:
 					user = 'user_error'
 		if find_method: print('Search Method: '+find_method)
@@ -144,7 +147,6 @@ class gsheet_cog:
 	SCOPES = 'https://www.googleapis.com/auth/spreadsheets'
 	CLIENT_SECRET_FILE = 'client_secret.json'
 	APPLICATION_NAME = 'Google Sheets API Python Quickstart'
-
 
 	def get_credentials(self):
 		"""https://developers.google.com/sheets/api/quickstart/python
@@ -178,14 +180,11 @@ class gsheet_cog:
 		"""Shows basic usage of the Sheets API."""
 		credentials = self.get_credentials()
 		http = credentials.authorize(httplib2.Http())
-		discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
-						'version=v4')
-		service = discovery.build('sheets', 'v4', http=http,
-									discoveryServiceUrl=discoveryUrl)
-		headers_get = service.spreadsheets().values().get(
-					spreadsheetId=sheet, range=range_headers).execute()
-		body_get = service.spreadsheets().values().get(
-				spreadsheetId=sheet, range=range_body).execute()
+		discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?version=v4')
+		service = discovery.build('sheets', 'v4', http=http, discoveryServiceUrl=discoveryUrl)
+		headers_get = service.spreadsheets().values().get(spreadsheetId=sheet, range=range_headers).execute()
+		body_get = service.spreadsheets().values().get(spreadsheetId=sheet, range=range_body).execute()
+		
 		header_values = headers_get.get('values', [])
 		groupby_value = header_values[0].index(groupby_key)
 		body_values = body_get.get('values', [])
@@ -203,27 +202,8 @@ class gsheet_cog:
 
 	if __name__ == '__main__':
 		main()
-#			objectUpdate = {'fileexists':'true'}
-		
-#		fileExists,err_type,err_msg = "false","error","unknown" #Declare default output values				
-#			err_msg = "No members file detected. Use command **[prefix]savesheet** to save a"
-#						"Google Sheet as Members file. **File Name must be 'MemberInfo'**"
-#			await self.ctx.bot.say(err_msg)
-#			return
-#			err_msg = "No members file detected. Use command **[prefix]savesheet** to save a"
-#						"Google Sheet as Members file. **File Name must be 'MemberInfo'**"
-#
-#			# >> UPDATE memberInfo	
-#						memberInfo = {**memberInfo, **{'colorVal':colorVal, 'color_dec':color_dec, 'color_hex':color_hex,
-#													   'map5a_img':map5a_img, 'map5b_img':map5b_img, 'map5c_img':map5c_img, 'aw_img':aw_img}}						
-#					
-#				memberInfo.update({'color':colorVal, 'localtime':localtime, 'clockemoji':clockemoji, 'map5a_img':map5a_img,
-#								   'map5b_img':map5b_img, 'map5c_img':map5c_img, 'aw_img':aw_img, 'localtime_raw':get_time,
-#								   'a_team':a_team, 'b_team':b_team, 'defense':defense, 'paths':path_str}) #update member dictionary
 
-
-
-#CREATE MEMBER OBJECT Returns 
+#CREATE MEMBER OBJECT  
 
 	async def memberObject(self,message,user_id,name): #memberObj = memberObject(ctx,user_id)
 		"""
@@ -321,13 +301,6 @@ class gsheet_cog:
 						try:
 							bg_json = alliance_json[memberInfo.get('bg','all').lower()]				#GET BG DICT()
 							bg_dict = {**bg_defaults,**bg_json} #merge
-#							for key,value in bg_json.items():
-#								if not value: 					#if value is blank
-#									try:
-#										value = bg_defaults[key]
-#									except KeyError:
-#										value = 'unknown'
-#								bg_dict.update({key:value})
 							try:									#check if valid color
 								colorCheck = colors[bg_dict['color_py']] 
 							except KeyError:
@@ -340,17 +313,26 @@ class gsheet_cog:
 				memberObject['obj'] = memberInfo
 				memberObject['err_type'] = 'success'
 				memberObject['err_msg'] = 'Member Object success'
-#		print(memberObject)
+		print(memberObject)
 		return memberObject
 				
 	@commands.command(pass_context=True,aliases=['loadsheet',], no_pm=True)
-	async def savesheet(self, ctx, header_row: str, data_range: str, groupRowsBy: str,filename: str,sheet_id: str):
-		"""Save a Google Sheet as JSON or refresh an existing JSON. 
+	async def savesheet(self, ctx, header_row: str, data_range: str,filename: str,sheet_id: str, groupRowsBy: str=None):
+		"""Save a Google Sheet as JSON or refresh an existing JSON.
 		
-		File Location: data/gsheeter/[server-id]
+		All arguments are required:
+			<header_row>   - These will be your JSON keys. EX: Sheet1!1:1
+			<data_range>   - These will be your JSON values. EX: Sheet1!A2:D
+			<filename>     - Ex: MembersData
+			<sheet_id>     - The SheetID of a PUBLISHED Sheet with Link Sharing ON. EX: 1kI0Dzsb6idFdJ6qzLIBYh2oIypB1O4Ko4BdRita-Vvg
+								>>https://docs.google.com/spreadsheets/d/[SheetID]/pubhtml
+			<groupRowsBy>  - Title of sheet column that contains UNIQUE VALUES that your JSON will be grouped by. EX: UserID
+
+		Complete Example:
+			>> [p]savesheet Sheet1!1:1 Sheet1!A2:D MembersData 1kI0Dzsb6idFdJ6qzLIBYh2oIypB1O4Ko4BdRita-Vvg UserID
 		
-		Example:
-		!savesheet Sheet1!1:1 Sheet1!A2:D FirstName MembersData 1kI0Dzsb6idFdJ6qzLIBYh2oIypB1O4Ko4BdRita-Vvg
+		File Save Location: /data/gsheeter/[user-id]
+		
 		"""
 		server = ctx.message.server
 		foldername = server.id
@@ -502,7 +484,8 @@ class gsheet_cog:
 			user = author
 		user_id = user.id
 		if not os.path.exists(self.shell_json.format(foldername,'MemberInfo')):
-			await self.bot.say("No members file detected. Use command **[prefix]savesheet** to save a Google Sheet as Members file. **File Name must be 'MemberInfo'**")
+			await self.bot.say("No members file detected. Use command **[prefix]savesheet**"
+							   " to save a Google Sheet as Members file. **File Name must be 'MemberInfo'**")
 			return
 		member_json = dataIO.load_json(self.shell_json.format(foldername,'MemberInfo'))
 		alliance_json = dataIO.load_json(self.shell_json.format(foldername,'AllianceInfo'))
@@ -525,27 +508,14 @@ class gsheet_cog:
 				localtime = "not found"
 			em = discord.Embed(color=colorVal)
 			em.set_thumbnail(url=user.avatar_url)
-			em.add_field(name=clockemoji + '  ' + memberInfo.get('name','not found'), value='Battlegroup: **'+memberInfo.get('bg','not found')+'**\nLocal Time: **'+localtime+'**')
+			em.add_field(name=clockemoji + '  ' + memberInfo.get('name','not found'), /
+						 value='Battlegroup: **'+memberInfo.get('bg','not found')+'**\nLocal Time: **'+localtime+'**')
 			
 			await self.bot.say(embed=em)
 		except:
 			await self.bot.say("Something went wrong.")
 			raise
 
-	async def _robust_edit(self, msg, text):
-		try:
-			msg = await self.bot.edit_message(msg, text)
-		except discord.errors.NotFound:
-			msg = await self.bot.send_message(msg.channel, text)
-		except:
-			raise
-		return msg
-	async def _robust_delete(self, msg):
-		try:
-			msg = await self.bot.delete_message(msg)
-		except:
-			raise
-		return msg
 
 			
 def setup(bot):
