@@ -340,7 +340,7 @@ class gsheet_cog:
 				memberObject['obj'] = memberInfo
 				memberObject['err_type'] = 'success'
 				memberObject['err_msg'] = 'Member Object success'
-		print(memberObject)
+#		print(memberObject)
 		return memberObject
 				
 	@commands.command(pass_context=True,aliases=['loadsheet',], no_pm=True)
@@ -480,7 +480,7 @@ class gsheet_cog:
 				em.add_field(name='**AW Defense**',value=defense)
 			if memInfo['paths']:
 				em.add_field(name='**Paths**',value=memInfo['paths'],inline=False)
-		print(em.to_dict())
+#		print(em.to_dict())
 		try:
 			await self.bot.say(embed=em)
 			await self.bot.delete_message(search_msg)
