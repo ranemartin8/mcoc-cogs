@@ -196,13 +196,13 @@ class gsheet_cog:
 			output_dict = {}
 			if not groupby_key: 
 				groupby_value = 0
-				warn = "No <GROUP_BY> value provided in command string. By default, JSON rows grouped by 1st Column: **{}**"
+				warn = ":warning:  No <GROUP_BY> value provided in command string. By default, JSON rows grouped by 1st Column: **{}**"
 			else:
 				try:
 					groupby_value = header_values[0].index(groupby_key)
 				except ValueError:
 					groupby_value = 0
-					warn = "<GROUP_BY> value not found in <HEADER_ROW> range. By default, JSON rows grouped by 1st Column: **{}**"
+					warn = ":warning:  <GROUP_BY> value not found in <HEADER_ROW> range. By default, JSON rows grouped by 1st Column: **{}**"
 					
 			grouped_by = header_values[0][groupby_value]
 			for row in body_values:
@@ -211,7 +211,7 @@ class gsheet_cog:
 				output_dict.update({groupby:dict_zip})				
 
 			self.save_shell_file(output_dict,foldername,filename)
-			if warn: await self.bot.say(warn.format(grouped_by))
+			if warn: await self.bot.say(warn.format(grouped_by.upper()))
 				
 	if __name__ == '__main__':
 		main()
@@ -262,7 +262,8 @@ class gsheet_cog:
 			return
 		try:
 			await self.main(sheet_id,header_row,data_range,foldername,filename,groupRowsBy)
-			await self.bot.say("This file has been saved!")
+			em = self.quickembed("Success!","This file has been saved.")
+			await self.bot.say(embed=em)
 			await self.bot.delete_message(search_msg)
 		except:
 			await self.bot.say("Something went wrong.")
@@ -548,7 +549,15 @@ class gsheet_cog:
 		except:
 			await self.bot.say("Something went wrong.")
 			raise
-
+		
+		def quickembed(self,title,desc):
+			if not title:
+				title = "{} says:".format(self.bot.user.display_name())
+			if not desc:
+				desc = "Hmmm, something is missing here..."
+			em = discord.Embed(color=colors['default'])
+			em.add_field(name=title,value=desc)
+			return em
 
 			
 def setup(bot):
