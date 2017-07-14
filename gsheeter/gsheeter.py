@@ -450,12 +450,14 @@ class gsheet_cog:
 			roles = ", ".join(roles)
 		else:
 			roles = "None"
-		
-		try_color = memInfo['color']
-		if not try_color or try_color == 'default' or not colors[try_color]:
+		try:
+			try_color = memInfo['color_cy']
+			if not try_color or try_color == 'default' or not colors[try_color]:
+				final_color = user.color
+			else:
+				final_color = colors[try_color]
+		except KeyError:
 			final_color = user.color
-		else:
-			final_color = colors[try_color]
 			
 		em = discord.Embed(color=final_color)
 		em.set_thumbnail(url=avatar)
