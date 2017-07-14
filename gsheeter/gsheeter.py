@@ -262,7 +262,7 @@ class gsheet_cog:
 			return
 		try:
 			await self.main(sheet_id,header_row,data_range,foldername,filename,groupRowsBy)
-			em = self.quickembed("","This file has been saved.")
+			em = self.quickembed("Success!","This file has been saved.",'green')
 			await self.bot.say(embed=em)
 			await self.bot.delete_message(search_msg)
 		except:
@@ -550,12 +550,19 @@ class gsheet_cog:
 			await self.bot.say("Something went wrong.")
 			raise
 		
-	def quickembed(self,title,desc):
+	def quickembed(self,title,desc,color):
 		if not title:
 			title = "{} says:".format(self.bot.user.display_name)
 		if not desc:
 			desc = "Hmmm, something is missing here..."
-		em = discord.Embed(color=colors['default'])
+		if not color:
+			color = 'default'
+		try:
+			color = colors[color]
+		except KeyError:
+			color = colors['default']
+			
+		em = discord.Embed(color=color)
 		em.add_field(name="**{}**".format(title),value=desc)
 		return em
 
