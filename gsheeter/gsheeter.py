@@ -476,7 +476,7 @@ class gsheet_cog:
 				em.add_field(name='**A-Team**',value='\n'.join(memInfo['a_team']))
 			if memInfo['b_team'][0]:
 				em.add_field(name='**B-Team**',value='\n'.join(memInfo['b_team']))
-			if memInfo['aw'][0]:
+			if memInfo['defense'][0]:
 				em.add_field(name='**AW Defense**',value='\n'.join(memInfo['defense']))
 			if memInfo['paths']:
 				em.add_field(name='**Paths**',value=memInfo['paths'],inline=False)
