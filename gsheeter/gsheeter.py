@@ -342,7 +342,7 @@ class gsheet_cog:
 				memberInfo = {**memberInfo, **{'bg_settings':bg_dict}}
 				memberObject['obj'] = memberInfo
 				memberObject['err_type'] = 'success'
-		print(json.dumps(memberObject))
+#		print(json.dumps(memberObject))
 		return memberObject
 				
 	@commands.command(pass_context=True,aliases=['loadsheet',], no_pm=True)
