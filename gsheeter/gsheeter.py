@@ -176,7 +176,7 @@ class gsheet_cog:
 			dataIO.save_json(self.shell_json.format(foldername,filename), data)   #then save  file in that folder
 		dataIO.save_json(self.shell_json.format(foldername,filename), data)
 		
-	def main(self,sheet,range_headers,range_body,foldername,filename,groupby_key):
+	async def main(self,sheet,range_headers,range_body,foldername,filename,groupby_key):
 		"""Shows basic usage of the Sheets API."""
 		credentials = self.get_credentials()
 		http = credentials.authorize(httplib2.Http())
@@ -188,23 +188,32 @@ class gsheet_cog:
 		header_values = headers_get.get('values', [])
 		body_values = body_get.get('values', [])
 		output_dict = {}
+		warn = ''
 		if not body_values:
 			print('No data found.')
 			return
 		else:
 			output_dict = {}
-			try:
-				groupby_value = header_values[0].index(groupby_key)
-			except ValueError:
+			if not groupby_key: 
 				groupby_value = 0
-				
+				warn = 'No <GROUP_BY> value provided in command string.'
+						'By default, JSON rows grouped by 1st Column: **{}**'
+			else:
+				try:
+					groupby_value = header_values[0].index(groupby_key)
+				except ValueError:
+					groupby_value = 0
+					warn = '<GROUP_BY> value not found in <HEADER_ROW> range.'
+							'By default, JSON rows grouped by 1st Column: **{}**'
+			grouped_by = header_values[0][groupby_value]
 			for row in body_values:
 				dict_zip = dict(zip(header_values[0], row))
 				groupby = row[groupby_value]
 				output_dict.update({groupby:dict_zip})				
 
 			self.save_shell_file(output_dict,foldername,filename)
-
+			if warn: await self.ctx.bot.say(warn.format(grouped_by))
+				
 	if __name__ == '__main__':
 		main()
 		
@@ -223,7 +232,7 @@ class gsheet_cog:
 		 - Set as JSON values
 		 - EX: Sheet1!A2:D
 		<FILENAME>*
-		 - Ex: MembersData
+		 - Ex: MyJSONFile
 		<SHEETID>*
 		 - Pull from spreadsheet URL
 		 - https://docs.google.com/spreadsheets/d/[SHEETID]/pubhtml
@@ -231,7 +240,8 @@ class gsheet_cog:
 		<GROUP_BY> 
 		 - Optional (Default=1st Column)
 		 - Header Value of Column to group rows by.
-		 - Must contain UNIQUE VALUES. EX: UserID
+		 - Column must contain UNIQUE VALUES. 
+		 - EX: UserID
 
 		EX:
 		 >> [p]savesheet Sheet1!1:1 Sheet1!A2:D MembersData 1kI0Dzsb6idFdJ6qzLIBYh2oIypB1O4Ko4BdRita-Vvg UserID
@@ -252,7 +262,7 @@ class gsheet_cog:
 							   " Ex. Sheet1!A2:D or 'My Sheet'!B2:Z1000")
 			return
 		try:
-			self.main(sheet_id,header_row,data_range,foldername,filename,groupRowsBy)
+			await self.main(sheet_id,header_row,data_range,foldername,filename,groupRowsBy)
 			await self.bot.say("This file has been saved!")
 			await self.bot.delete_message(search_msg)
 		except:
