@@ -550,7 +550,7 @@ class gsheet_cog:
 			await self.bot.say("Something went wrong.")
 			raise
 		
-	def quickembed(self,title,desc,color):
+	def quickembed(self,title: str=None,desc: str=None,color: str=None):
 		if not title:
 			title = "{} says:".format(self.bot.user.display_name)
 		if not desc:
