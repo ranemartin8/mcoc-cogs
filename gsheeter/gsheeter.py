@@ -202,24 +202,7 @@ class gsheet_cog:
 				dict_zip = dict(zip(header_values[0], row))
 				groupby = row[groupby_value]
 				output_dict.update({groupby:dict_zip})				
-			#If not key, default to first column
-#			if not groupby_key:
-#				for row in body_values:
-#					dict_zip = dict(zip(header_values[0], row))
-#					groupby = row[0]
-#					output_dict.update({groupby:dict_zip})				
-##				i = 0
-##				for row in body_values:
-##					dict_zip = dict(zip(header_values[0], row))
-##					output_dict.update({i:dict_zip})
-##					i += 1
-#			else:	
-#				groupby_value = header_values[0].index(groupby_key)
-#				for row in body_values:
-#					dict_zip = dict(zip(header_values[0], row))
-#					groupby = row[groupby_value]
-#					output_dict.update({groupby:dict_zip})
-					
+
 			self.save_shell_file(output_dict,foldername,filename)
 
 	if __name__ == '__main__':
@@ -227,27 +210,28 @@ class gsheet_cog:
 		
 	@commands.command(pass_context=True,aliases=['loadsheet',], no_pm=True)
 	async def savesheet(self, ctx, header_row: str, data_range: str,filename: str,sheet_id: str, groupRowsBy: str=None):
-		"""Save a Google Sheet as JSON or refresh an existing JSON.
+		"""Save a Google Sheet as a JSON file.
+		Requires a PUBLISHED Google Sheet with Link Sharing turned ON and set to "Anybody with link can edit". 
 		
-		ARGS:
-		<header_row>
-			>> These will be your JSON keys. EX: Sheet1!1:1
-		<data_range>
-			>> These will be your JSON values. EX: Sheet1!A2:D
-		<filename>
-			>> Ex: MembersData
-		<sheet_id>
-			>> The SheetID of a PUBLISHED Sheet with Link Sharing ON. 
-			>> EX: 1kI0Dzsb6idFdJ6qzLIBYh2oIypB1O4Ko4BdRita-Vvg
-			>> Find it here: https://docs.google.com/spreadsheets/d/[SheetID]/pubhtml
-		<groupRowsBy>
-			>> Title of sheet column that contains UNIQUE VALUES
-			>> that your JSON will be grouped by. EX: UserID
+		ARGS: *Required
+		---------------
+		<header_row>*
+		 - These will be your JSON keys. EX: Sheet1!1:1
+		<data_range>*
+		 - These will be your JSON values. EX: Sheet1!A2:D
+		<filename>*
+		 - Ex: MembersData
+		<sheet_id>*
+		 - The SheetID >>https://docs.google.com/spreadsheets/d/[SHEETID]/pubhtml
+		 - EX: 1kI0Dzsb6idFdJ6qzLIBYh2oIypB1O4Ko4BdRita-Vvg
+		<groupRowsBy> (Default=1st Column)
+		 - Title of  Column to group your JSON by.
+		 - Must contain UNIQUE VALUES. EX: UserID
 
 		EX:
-			>> [p]savesheet Sheet1!1:1 Sheet1!A2:D MembersData 1kI0Dzsb6idFdJ6qzLIBYh2oIypB1O4Ko4BdRita-Vvg UserID
+		 >> [p]savesheet Sheet1!1:1 Sheet1!A2:D MembersData 1kI0Dzsb6idFdJ6qzLIBYh2oIypB1O4Ko4BdRita-Vvg UserID
 		
-		File Save Location: /data/gsheeter/[user-id]
+		File Location when Saved: /data/gsheeter/[user-id]
 		
 		"""
 		search_msg = await self.bot.say('Saving...')
