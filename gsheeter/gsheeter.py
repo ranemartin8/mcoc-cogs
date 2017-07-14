@@ -176,7 +176,7 @@ class gsheet_cog:
 			dataIO.save_json(self.shell_json.format(foldername,filename), data)   #then save  file in that folder
 		dataIO.save_json(self.shell_json.format(foldername,filename), data)
 		
-	def main(self,sheet,range_headers,range_body,groupby_key,foldername,filename):
+	def main(self,sheet,range_headers,range_body,foldername,filename,groupby_key):
 		"""Shows basic usage of the Sheets API."""
 		credentials = self.get_credentials()
 		http = credentials.authorize(httplib2.Http())
@@ -186,7 +186,6 @@ class gsheet_cog:
 		body_get = service.spreadsheets().values().get(spreadsheetId=sheet, range=range_body).execute()
 		
 		header_values = headers_get.get('values', [])
-		groupby_value = header_values[0].index(groupby_key)
 		body_values = body_get.get('values', [])
 		output_dict = {}
 		if not body_values:
@@ -194,10 +193,18 @@ class gsheet_cog:
 			return
 		else:
 			output_dict = {}
-			for row in body_values:
-				dict_zip = dict(zip(header_values[0], row))
-				groupby = row[groupby_value]
-				output_dict.update({groupby:dict_zip})
+			if not groupby_key:
+				i = 0
+				for row in body_values:
+					dict_zip = dict(zip(header_values[0], row))
+					output_dict.update({i:dict_zip})
+					i += 1
+			else:	
+				groupby_value = header_values[0].index(groupby_key)
+				for row in body_values:
+					dict_zip = dict(zip(header_values[0], row))
+					groupby = row[groupby_value]
+					output_dict.update({groupby:dict_zip})
 			self.save_shell_file(output_dict,foldername,filename)
 
 	if __name__ == '__main__':
@@ -320,15 +327,22 @@ class gsheet_cog:
 	async def savesheet(self, ctx, header_row: str, data_range: str,filename: str,sheet_id: str, groupRowsBy: str=None):
 		"""Save a Google Sheet as JSON or refresh an existing JSON.
 		
-		All arguments are required:
-			<header_row>   - These will be your JSON keys. EX: Sheet1!1:1
-			<data_range>   - These will be your JSON values. EX: Sheet1!A2:D
-			<filename>     - Ex: MembersData
-			<sheet_id>     - The SheetID of a PUBLISHED Sheet with Link Sharing ON. EX: 1kI0Dzsb6idFdJ6qzLIBYh2oIypB1O4Ko4BdRita-Vvg
-								>>Find it here: https://docs.google.com/spreadsheets/d/[SheetID]/pubhtml
-			<groupRowsBy>  - Title of sheet column that contains UNIQUE VALUES that your JSON will be grouped by. EX: UserID
+		ARGS:
+		<header_row>
+			>> These will be your JSON keys. EX: Sheet1!1:1
+		<data_range>
+			>> These will be your JSON values. EX: Sheet1!A2:D
+		<filename>
+			>> Ex: MembersData
+		<sheet_id>
+			>> The SheetID of a PUBLISHED Sheet with Link Sharing ON. 
+			>> EX: 1kI0Dzsb6idFdJ6qzLIBYh2oIypB1O4Ko4BdRita-Vvg
+			>> Find it here: https://docs.google.com/spreadsheets/d/[SheetID]/pubhtml
+		<groupRowsBy>
+			>> Title of sheet column that contains UNIQUE VALUES
+			>> that your JSON will be grouped by. EX: UserID
 
-		Complete Example:
+		EX:
 			>> [p]savesheet Sheet1!1:1 Sheet1!A2:D MembersData 1kI0Dzsb6idFdJ6qzLIBYh2oIypB1O4Ko4BdRita-Vvg UserID
 		
 		File Save Location: /data/gsheeter/[user-id]
@@ -342,7 +356,8 @@ class gsheet_cog:
 							   "(single row only): Ex. Sheet1!A2:Z2 or 'This Sheet'!1:1")
 			return
 		if not a1_notation_check.fullmatch(data_range):
-			await self.bot.say("Use correct A1 Notation for the Data Range: Ex. Sheet1!A2:D or 'My Sheet'!B2:Z1000")
+			await self.bot.say("Use correct A1 Notation for the Data Range:"
+							   " Ex. Sheet1!A2:D or 'My Sheet'!B2:Z1000")
 			return
 		try:
 			self.main(sheet_id,header_row,data_range,groupRowsBy,foldername,filename)
@@ -353,7 +368,7 @@ class gsheet_cog:
 			
 	@commands.command(pass_context=True,aliases=['updateinfo',], no_pm=True)
 	async def refreshmembers(self, ctx):
-		"""Refreshs members json from google sheet"""
+		"""Refreshs members json from Google Sheet"""
 		server = ctx.message.server
 		command = ctx.message.content.split(" ")[0]
 		sheet = '1kI0Dzsb6idFdJ6qzLIBYh2oIypB1O4Ko4BdRita-Vvg'
@@ -375,7 +390,6 @@ class gsheet_cog:
 			raise
 			
 	@commands.command(pass_context=True,aliases=['getmember',], no_pm=True)
-#	async def member(self, ctx, *, user: discord.Member=None):
 	async def member(self, ctx, *, user_string: str=None):
 		"""Get Member Info"""
 		search_msg = await self.bot.say('Searching...')
