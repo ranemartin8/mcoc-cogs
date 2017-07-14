@@ -205,6 +205,7 @@ class gsheet_cog:
 					dict_zip = dict(zip(header_values[0], row))
 					groupby = row[groupby_value]
 					output_dict.update({groupby:dict_zip})
+					
 			self.save_shell_file(output_dict,foldername,filename)
 
 	if __name__ == '__main__':
@@ -360,7 +361,7 @@ class gsheet_cog:
 							   " Ex. Sheet1!A2:D or 'My Sheet'!B2:Z1000")
 			return
 		try:
-			self.main(sheet_id,header_row,data_range,groupRowsBy,foldername,filename)
+			self.main(sheet_id,header_row,data_range,foldername,filename,groupRowsBy)
 			await self.bot.say("This file has been saved!")
 		except:
 			await self.bot.say("Something went wrong.")
