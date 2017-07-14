@@ -276,21 +276,10 @@ class gsheet_cog:
 				memberInfo['name'] = memberInfo.get('name',user.display_name) #replace empty name entries with username
 				
 		# BUILD ROSTER ARRAYS
-#				defense = [memberInfo.get('awd_1','None'), memberInfo.get('awd_2','None'), memberInfo.get('awd_3','None'),
-#						   memberInfo.get('awd_4','None'), memberInfo.get('awd_5','None')]
-#				a_team = [memberInfo.get('a_team_1','None'),memberInfo.get('a_team_2','None'),memberInfo.get('a_team_3','None')]
-#				b_team = [memberInfo.get('b_team_1','None'),memberInfo.get('b_team_2','None'),memberInfo.get('b_team_3','None')]
-#				defense[:] = [x for x in defense if x != 'None']
-#				a_team[:] = [x for x in a_team if x != 'None']
-#				b_team[:] = [x for x in b_team if x != 'None']
 				defense = [memberInfo.get('awd_1'), memberInfo.get('awd_2'), memberInfo.get('awd_3'),
 						   memberInfo.get('awd_4'), memberInfo.get('awd_5')]
 				a_team = [memberInfo.get('a_team_1'),memberInfo.get('a_team_2'),memberInfo.get('a_team_3')]
 				b_team = [memberInfo.get('b_team_1'),memberInfo.get('b_team_2'),memberInfo.get('b_team_3')]
-#				teams = [defense,a_team,b_team]
-#				for team in teams:
-#					len(team)
-			# >> UPDATE memberInfo	
 				memberInfo = {**memberInfo, **{'defense':defense,'a_team':a_team,'b_team':b_team}}
 				
 		# BUILD PATH STRING
@@ -321,7 +310,7 @@ class gsheet_cog:
 					'colorVal':'default','color_py':'default','color_dec':0xcc6600,'color_hex':'#cc6600',
 					'map5a':maps['map5a'],'map5b':maps['map5b'],'map5c':maps['map5c'],'aw':maps['aw']
 					}
-				bg_dict = {'color_cy':'default'}
+#				bg_dict = {'color_cy':'default'}
 				if not dataIO.is_valid_json(self.shell_json.format(foldername,'AllianceInfo')): 		#No file
 					bg_dict = bg_defaults
 				else:
@@ -330,26 +319,27 @@ class gsheet_cog:
 						bg_dict = bg_defaults
 					else:
 						try:
-							bg_json = alliance_json[memberInfo.get('bg','all').lower()] 					#GET BG DICT()
-							for key,value in bg_json.items():
-								if not value: 					#if value is blank
-									try:
-										value = bg_defaults[key]
-									except KeyError:
-										value = 'unknown'
-								bg_dict.update({key:value})
+							bg_json = alliance_json[memberInfo.get('bg','all').lower()]				#GET BG DICT()
+							bg_dict = {**bg_defaults,**bg_json} #merge
+#							for key,value in bg_json.items():
+#								if not value: 					#if value is blank
+#									try:
+#										value = bg_defaults[key]
+#									except KeyError:
+#										value = 'unknown'
+#								bg_dict.update({key:value})
 							try:									#check if valid color
 								colorCheck = colors[bg_dict['color_py']] 
 							except KeyError:
 								bg_dict['color_py'] = 'default'
 						except KeyError:
 							bg_dict = bg_defaults
-					bg_dict = {**bg_defaults,**bg_dict}
-						
+													
 			# >> UPDATE memberInfo	
 				memberInfo = {**memberInfo, **{'bg_settings':bg_dict}}
 				memberObject['obj'] = memberInfo
 				memberObject['err_type'] = 'success'
+				memberObject['err_type'] = 'Member Object success'
 		print(memberObject)
 		return memberObject
 				
@@ -450,7 +440,7 @@ class gsheet_cog:
 		joined_at = user.joined_at
 		since_joined = (ctx.message.timestamp - joined_at).days
 		user_joined = joined_at.strftime("%b %e %Y")
-		joined_on = "Joined: **{}** ({} days ago)".format(user_joined, since_joined)
+		joined_on = "Joined: **{}**\n({} days ago)".format(user_joined, since_joined)
 		status = "Current Status: **{}**".format(user.status)
 		roles = [x.name for x in user.roles if x.name != "@everyone"]
 		if roles:
