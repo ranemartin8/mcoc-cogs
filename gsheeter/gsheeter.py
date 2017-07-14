@@ -219,7 +219,7 @@ class gsheet_cog:
 		
 		server = message.server
 		user = server.get_member(user_id)
-		foldername = server.id
+		foldername = message.author
 		
 		set_color = user.color
 		if set_color == discord.Color.default(): set_color = colors['default']
@@ -349,7 +349,7 @@ class gsheet_cog:
 		
 		"""
 		server = ctx.message.server
-		foldername = server.id
+		foldername = ctx.message.author
 		a1_notation_check = re.compile(r'\'?[\w\d]+\'?![\w\d]+\:[\w\d]+')
 		if not a1_notation_check.fullmatch(header_row):
 			await self.bot.say("Use correct A1 Notation for the Header Row"
@@ -381,7 +381,7 @@ class gsheet_cog:
 			range_body = 'ASSGR_info!A2:ab'
 			groupby_key = 'group'
 			filename = 'AllianceInfo'
-		foldername = server.id
+		foldername = ctx.message.author
 		try:
 			self.main(sheet,range_headers,range_body,groupby_key,foldername,filename)
 			await self.bot.say("Success! File has been updated!")
@@ -493,7 +493,7 @@ class gsheet_cog:
 		"""
 		author = ctx.message.author
 		server = ctx.message.server
-		foldername = server.id
+		foldername = ctx.message.author
 		if not user:
 			user = author
 		user_id = user.id
