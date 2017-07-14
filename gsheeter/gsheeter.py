@@ -223,10 +223,18 @@ class gsheet_cog:
 
 
 
-#CREATE MEMBER OBJECT
-	async def memberObject(self,message,user_id,name): #memberObj = memberObject(ctx,user_id)
+#CREATE MEMBER OBJECT Returns 
 
-		memberObject = {'fileExists':'false','dataExists':'false','obj':'','err_type':'unknown','err_msg':'unknown'} #EMPTY SHELL
+	async def memberObject(self,message,user_id,name): #memberObj = memberObject(ctx,user_id)
+		"""
+		Errors: memberObject['err_type'] -- no_file, no_user, unknown, success
+		"""
+		set_color = user.color
+		if set_color == discord.Color.default(): set_color = colors['default']
+			
+		memberObject = {'fileExists':'false','dataExists':'false','obj':{'color':set_color},
+						'err_type':'unknown','err_msg':'Something went wrong. Please try again.'} #EMPTY SHELL
+		
 		server = message.server
 		user = server.get_member(user_id)
 		foldername = server.id
@@ -235,7 +243,7 @@ class gsheet_cog:
 		if os.path.exists(self.shell_json.format(foldername,'MemberInfo')):
 			memberObject = {**memberObject, **{'fileExists':'true'}}
 
-	#NO FILE! Return memberObject with empty 'obj'
+	#NO FILE - ERROR! Return memberObject 
 		if memberObject['fileExists'] == 'false':
 			err_msg = "No members file detected."
 			memberObject = {**memberObject, **{'err_type':'no_file','err_msg':err_msg}}
@@ -250,7 +258,7 @@ class gsheet_cog:
 				dataExists = 'false'
 			memberObject = {**memberObject, **{'dataExists':dataExists}}
 			
-	#NO DATA! Return memberObject with empty 'obj'
+	#NO DATA - ERROR! Return memberObject
 			if memberObject['dataExists'] == 'false':
 				err_msg = "User info for **{}** not found in spreadsheet data.".format(name)
 				memberObject = {**memberObject, **{'err_type':'no_user','err_msg':err_msg}}
@@ -258,20 +266,17 @@ class gsheet_cog:
 	#DATA FOUND!
 			else:
 				memberInfo = {}
-				set_color = user.color
-				if set_color == discord.Color.default(): set_color = colors['default']
 				memberInfo = {
-					'color':set_color, 'localtime':'unknown', 'clockemoji':':alarm_clock:', 'map5a_img': maps['map5a'],
+					'localtime':'unknown', 'clockemoji':':alarm_clock:', 'map5a_img': maps['map5a'],
 					'map5b_img': maps['map5b'], 'map5c_img': maps['map5c'], 'aw_img': maps['aw'], 'localtime_raw':'unknown',
-					'a_team':'', 'b_team':'', 'defense':'', 'paths':''
+					'a_team':'', 'b_team':'', 'defense':'', 'paths':'','bg_settings':''
 					}
 				memberInfo.update(memberjson)
-				
-#				memberInfo['bg'] = memberInfo.get('bg','all') #replace empty bg entries with "all"
 				memberInfo['name'] = memberInfo.get('name',user.display_name) #replace empty name entries with username
 				
 		# BUILD ROSTER ARRAYS
-				defense = [memberInfo.get('awd_1','None'), memberInfo.get('awd_2','None'), memberInfo.get('awd_3','None'), memberInfo.get('awd_4','None'), memberInfo.get('awd_5','None')]
+				defense = [memberInfo.get('awd_1','None'), memberInfo.get('awd_2','None'), memberInfo.get('awd_3','None'),
+						   memberInfo.get('awd_4','None'), memberInfo.get('awd_5','None')]
 				a_team = [memberInfo.get('a_team_1','None'),memberInfo.get('a_team_2','None'),memberInfo.get('a_team_3','None')]
 				b_team = [memberInfo.get('b_team_1','None'),memberInfo.get('b_team_2','None'),memberInfo.get('b_team_3','None')]
 				defense[:] = [x for x in defense if x != 'None']
@@ -334,9 +339,9 @@ class gsheet_cog:
 							bg_dict = bg_defaults
 						
 			# >> UPDATE memberInfo	
-				memberInfo = {**memberInfo, **{'bg_settings':bg_dict}}
-		memberObject['obj'] = memberInfo
-		print(memberObject)
+				memberInfo = {**memberInfo, **{'color':bg_dict['color_py'],'bg_settings':bg_dict,'err_type':'success'}}
+				memberObject['obj'] = memberInfo
+		print(json.dumps(memberObject))
 		return memberObject
 				
 	@commands.command(pass_context=True,aliases=['loadsheet',], no_pm=True)
@@ -410,11 +415,29 @@ class gsheet_cog:
 		user_id = user.id
 		avatar = user.avatar_url
 		if not avatar: avatar = user.default_avatar_url 
+			
 		try:
 			memberObj = await self.memberObject(ctx.message,user_id,user.display_name)
-			if memberObj == 'error':
+			getErr = memberObj['err_type']
+			getMsg = memberObj['err_msg']
+			memInfo = memberObj['obj']
+			memInfo_status = 'success'
+		except KeyError:
+			getErr = 'other'
+			getMsg = 'Error unknown.'
+			
+		if getErr != 'success':
+			memInfo_status = 'failure'	
+			if getErr == 'no_file' or getErr == 'no_user':
+				showError = 'true'
+				getMsg = memberObj['err_msg']
+				print(getMsg)
+			else:
+				await self.bot.say(memberObj['err_msg'])
 				await self.bot.delete_message(search_msg)
 				return
+			
+		#ALL MEMBERS
 			joined_at = user.joined_at
 			since_joined = (ctx.message.timestamp - joined_at).days
 			user_joined = joined_at.strftime("%b %e %Y")
@@ -425,19 +448,29 @@ class gsheet_cog:
 				roles = sorted(roles, key=[x.name for x in server.role_hierarchy if x.name != "@everyone"].index)
 				roles = ", ".join(roles)
 			else:
-				roles = "None"				
-			em = discord.Embed(color=memberObj['color'])
-			em.set_thumbnail(url=user.avatar_url)
-			em.add_field(name='**'+memberObj['name']+'**',value='\n'+status+'\n'+joined_on+'\n\n'
-						 'Battlegroup: **'+memberObj['bg']+'**\n'
-						 'Local Time: **'+memberObj['localtime']+'**  '+memberObj['clockemoji'],inline=False)
-			if memberObj['a_team'][0]:
-				em.add_field(name='**A-Team**',value='\n'.join(memberObj['a_team']))
-			if memberObj['b_team'][0]:
-				em.add_field(name='**B-Team**',value='\n'.join(memberObj['b_team']))
-			if memberObj['defense'][0]:
-				em.add_field(name='**AW Defense**',value='\n'.join(memberObj['defense']))
-			if memberObj['paths']: em.add_field(name='**Paths**',value=memberObj['paths'],inline=False)
+				roles = "None"
+				
+			em = discord.Embed(color=memInfo['color'])
+			em.set_thumbnail(url=avatar)
+			
+			if memInfo_status == 'failure':
+				em.add_field(name='**'+user.display_name+'**',value='\n'+status+'\n'+joined_on+'\n\n',inline=False)	
+				em.add_field(name='**Roles**',value=roles,inline=False)	
+				if showError == 'true':
+					em.add_field(name='**User Info**',value=getMsg)
+			else:
+				em.add_field(name='**'+memberObj['name']+'**',value='\n'+status+'\n'+joined_on+'\n\n'
+							 'Battlegroup: **'+memberObj['bg']+'**\n'
+							 'Local Time: **'+memberObj['localtime']+'**  '+memberObj['clockemoji'],inline=False)
+				if memberObj['a_team'][0]:
+					em.add_field(name='**A-Team**',value='\n'.join(memberObj['a_team']))
+				if memberObj['b_team'][0]:
+					em.add_field(name='**B-Team**',value='\n'.join(memberObj['b_team']))
+				if memberObj['defense'][0]:
+					em.add_field(name='**AW Defense**',value='\n'.join(memberObj['defense']))
+				if memberObj['paths']:
+					em.add_field(name='**Paths**',value=memberObj['paths'],inline=False)
+
 			await self.bot.say(embed=em)
 			await self.bot.delete_message(search_msg)
 		except:
