@@ -454,23 +454,23 @@ class gsheet_cog:
 		em = discord.Embed(color=memInfo['color'])
 		em.set_thumbnail(url=avatar)
 
-		if memInfo_status == 'failure':
+		if memInfo_status == 'failure' or not memInfo:
 			em.add_field(name='**'+user.display_name+'**',value='\n'+status+'\n'+joined_on+'\n\n',inline=False)	
 			em.add_field(name='**Roles**',value=roles,inline=False)	
 			if showError == 'true':
 				em.add_field(name='**User Info**',value=getMsg)
 		else:
-			em.add_field(name='**'+memberObj['name']+'**',value='\n'+status+'\n'+joined_on+'\n\n'
-						 'Battlegroup: **'+memberObj['bg']+'**\n'
-						 'Local Time: **'+memberObj['localtime']+'**  '+memberObj['clockemoji'],inline=False)
-			if memberObj['a_team'][0]:
-				em.add_field(name='**A-Team**',value='\n'.join(memberObj['a_team']))
-			if memberObj['b_team'][0]:
-				em.add_field(name='**B-Team**',value='\n'.join(memberObj['b_team']))
-			if memberObj['defense'][0]:
-				em.add_field(name='**AW Defense**',value='\n'.join(memberObj['defense']))
-			if memberObj['paths']:
-				em.add_field(name='**Paths**',value=memberObj['paths'],inline=False)
+			em.add_field(name='**'+memInfo['name']+'**',value='\n'+status+'\n'+joined_on+'\n\n'
+						 'Battlegroup: **'+memInfo['bg']+'**\n'
+						 'Local Time: **'+memInfo['localtime']+'**  '+memInfo['clockemoji'],inline=False)
+			if memInfo['a_team'][0]:
+				em.add_field(name='**A-Team**',value='\n'.join(memInfo['a_team']))
+			if memInfo['b_team'][0]:
+				em.add_field(name='**B-Team**',value='\n'.join(memInfo['b_team']))
+			if memInfo['defense'][0]:
+				em.add_field(name='**AW Defense**',value='\n'.join(memInfo['defense']))
+			if memInfo['paths']:
+				em.add_field(name='**Paths**',value=memInfo['paths'],inline=False)
 		try:
 			await self.bot.say(embed=em)
 			await self.bot.delete_message(search_msg)
