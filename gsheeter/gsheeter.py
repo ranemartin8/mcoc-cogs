@@ -339,7 +339,7 @@ class gsheet_cog:
 				memberInfo = {**memberInfo, **{'bg_settings':bg_dict}}
 				memberObject['obj'] = memberInfo
 				memberObject['err_type'] = 'success'
-				memberObject['err_type'] = 'Member Object success'
+				memberObject['err_msg'] = 'Member Object success'
 		print(memberObject)
 		return memberObject
 				
