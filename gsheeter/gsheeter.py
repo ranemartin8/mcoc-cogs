@@ -550,14 +550,14 @@ class gsheet_cog:
 			await self.bot.say("Something went wrong.")
 			raise
 		
-		def quickembed(self,title,desc):
-			if not title:
-				title = "{} says:".format(self.bot.user.display_name())
-			if not desc:
-				desc = "Hmmm, something is missing here..."
-			em = discord.Embed(color=colors['default'])
-			em.add_field(name=title,value=desc)
-			return em
+	def quickembed(self,title,desc):
+		if not title:
+			title = "{} says:".format(self.bot.user.display_name())
+		if not desc:
+			desc = "Hmmm, something is missing here..."
+		em = discord.Embed(color=colors['default'])
+		em.add_field(name=title,value=desc)
+		return em
 
 			
 def setup(bot):
