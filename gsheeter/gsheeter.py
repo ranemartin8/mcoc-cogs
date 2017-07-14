@@ -229,15 +229,16 @@ class gsheet_cog:
 		"""
 		Errors: memberObject['err_type'] -- no_file, no_user, unknown, success
 		"""
+		
+		server = message.server
+		user = server.get_member(user_id)
+		foldername = server.id
+		
 		set_color = user.color
 		if set_color == discord.Color.default(): set_color = colors['default']
 			
 		memberObject = {'fileExists':'false','dataExists':'false','obj':{'color':set_color},
 						'err_type':'unknown','err_msg':'Something went wrong. Please try again.'} #EMPTY SHELL
-		
-		server = message.server
-		user = server.get_member(user_id)
-		foldername = server.id
 		
 	#CHECK FOR FILE! Update 'fileexists' to 'true' if found
 		if os.path.exists(self.shell_json.format(foldername,'MemberInfo')):
