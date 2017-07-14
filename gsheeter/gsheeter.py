@@ -236,6 +236,7 @@ class gsheet_cog:
 		File Save Location: /data/gsheeter/[user-id]
 		
 		"""
+		search_msg = await self.bot.say('Saving...')
 		server = ctx.message.server
 		foldername = ctx.message.author.id
 		a1_notation_check = re.compile(r'\'?[\w\d]+\'?![\w\d]+\:[\w\d]+')
@@ -250,8 +251,10 @@ class gsheet_cog:
 		try:
 			self.main(sheet_id,header_row,data_range,foldername,filename,groupRowsBy)
 			await self.bot.say("This file has been saved!")
+			await self.bot.delete_message(search_msg)
 		except:
 			await self.bot.say("Something went wrong.")
+			await self.bot.delete_message(search_msg)
 			raise
 			
 			
