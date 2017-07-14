@@ -262,7 +262,7 @@ class gsheet_cog:
 			return
 		try:
 			await self.main(sheet_id,header_row,data_range,foldername,filename,groupRowsBy)
-			em = self.quickembed("Success!","This file has been saved.")
+			em = self.quickembed("","This file has been saved.")
 			await self.bot.say(embed=em)
 			await self.bot.delete_message(search_msg)
 		except:
