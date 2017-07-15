@@ -566,7 +566,15 @@ class gsheet_cog:
 		em = discord.Embed(color=color)
 		em.add_field(name="**{}**".format(title),value=desc)
 		return em
-
+#	-alias add user_id debug "User ID: " + str(ctx.message.mentions[0].id)
+#	(lambda input: #code)
+##		-alias add em debug (lambda input: bot.say(embed=discord.Embed(description=input)))
+##									.add_description(name='Users with 1 Warning', value='')))
+##		(lambda file='', bot=bot: (bot.say( )))em
+##		(lambda em='default', bot=bot: (bot.say(embed=discord.Embed(description=em))))
+##	Alexa alias add warnings debug bot.say(embed=discord.Embed().add_field(name='Users with 1 Warning', value='\n'.join([x.name for x in server.members if 'Warning poop' in [y.name for y in x.roles]])).add_field(name='Users with 2 Warning', value='\n'.join([x.name for x in server.members if 'Warning pooppoop' in [y.name for y in x.roles]])))
+##	
+##=alias add bots debug "User ID: " + str(len([m for m in ctx.message.server.members if 'Bots' in [r.name for r in m.roles]]))+ "\nOnline: "+ str(len([m for m in ctx.message.server.members if 'Bots' in [r.name for r in m.roles] and m.status.name == 'online'])) + '\n\nPeeps with bot tags: '+str(len([m.name for m in ctx.message.server.members if m.bot])) + '\nBot tags online: ' + str(len([m.name for m in ctx.message.server.members if m.bot and m.status.name == 'online']))
 			
 def setup(bot):
 	bot.add_cog(gsheet_cog(bot))
