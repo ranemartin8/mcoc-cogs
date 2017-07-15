@@ -221,11 +221,11 @@ class gsheet_cog:
 		main()
 		
 	@commands.command(pass_context=True,)
-		async def testimport(self,ctx,champ:str):
-		"""This does stuff!"""
-			cog = ctx.bot.get_cog('ChampConverterMult')
-			champs = cog.convert(champ)
-			print(champs)
+	async def testimport(self,ctx,champ:str):
+	"""This does stuff!"""
+		cog = ctx.bot.get_cog('ChampConverterMult')
+		champs = cog.convert(champ)
+		print(champs)
 #			await self.bot.say("I can do stuff!")	
 		
 		
