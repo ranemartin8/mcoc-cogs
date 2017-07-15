@@ -232,10 +232,11 @@ class gsheet_cog:
 	@commands.command(pass_context=True,)
 	async def tryimport(self, ctx, *, champs: SplatoonWeapon):
 		"""This does stuff!"""
+		await self.bot.say("Result: ```{}```".format(champs))	
 #		cog = ctx.bot.get_cog('ChampConverterMult')
 #		champs = cog.convert(champ)
-		print(champs)
-#			await self.bot.say("I can do stuff!")			
+		await print(champs)
+#		await self.bot.say("I can do stuff!")			
 		
 	@commands.command(pass_context=True,aliases=['loadsheet',], no_pm=True)
 	async def savesheet(self, ctx, header_row: str, data_range: str,filename: str,sheet_id: str, groupRowsBy: str=None):
