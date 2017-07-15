@@ -233,7 +233,7 @@ class gsheet_cog:
 
 		
 	@commands.command(pass_context=True,)
-	async def tryimport(self, ctx, *, champs: SplatoonWeapon):
+	async def tryimport(self, ctx, champs: SplatoonWeapon):
 		"""This does stuff!"""
 		values = champs
 		await self.bot.say("Result: ```{}```".format(values))	
