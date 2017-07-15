@@ -138,7 +138,7 @@ class MemberFinder(commands.Converter):
 class SplatoonWeapon(commands.Converter):	
 	async def convert(self, ctx, argument):
 		"""This does stuff!"""
-		cog = ctx.bot.get_cog('ChampConverterMult')
+		cog = await ctx.bot.get_cog('ChampConverterMult')
 		champs = cog.convert(champ)
 		print(champs)
 		return champs
