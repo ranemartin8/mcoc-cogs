@@ -232,7 +232,7 @@ class gsheet_cog:
 		main()
 
 		
-	@commands.command(pass_context=True,)
+	@commands.command(pass_context=True)
 	async def tryimport(self, ctx, champs: SplatoonWeapon):
 		"""This does stuff!"""
 		values = champs
