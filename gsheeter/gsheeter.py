@@ -139,7 +139,9 @@ class SplatoonWeapon(commands.Converter):
 	async def convert(self, ctx, argument):
 		"""This does stuff!"""
 		cog = await ctx.bot.get_cog('ChampConverterMult')
-		champs = cog.convert(champ)
+		if cog is None:
+			raise commands.BadArgument('Splatoon related commands seemingly disabled.')
+		champs = cog.convert(argument)
 		print(champs)
 		return champs
 #			await self.bot.say("I can do stuff!")	
@@ -232,10 +234,11 @@ class gsheet_cog:
 	@commands.command(pass_context=True,)
 	async def tryimport(self, ctx, *, champs: SplatoonWeapon):
 		"""This does stuff!"""
-		await self.bot.say("Result: ```{}```".format(champs))	
+		values = champs
+		await self.bot.say("Result: ```{}```".format(values))	
 #		cog = ctx.bot.get_cog('ChampConverterMult')
 #		champs = cog.convert(champ)
-		await print(champs)
+		print(champs)
 #		await self.bot.say("I can do stuff!")			
 		
 	@commands.command(pass_context=True,aliases=['loadsheet',], no_pm=True)
