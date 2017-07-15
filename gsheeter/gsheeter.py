@@ -136,12 +136,13 @@ class MemberFinder(commands.Converter):
 #		cog = ctx.bot.get_cog('Splatoon')	
 		
 class SplatoonWeapon(commands.Converter):	
-	async def convert(self, ctx, argument):
+	async def convert(self):
 		"""This does stuff!"""
-		cog = await ctx.bot.get_cog('ChampConverterMult')
+		cog = self.ctx.bot.get_cog('ChampConverterMult')
+		string = self.argument
 		if cog is None:
 			raise commands.BadArgument('Splatoon related commands seemingly disabled.')
-		champs = cog.convert(argument)
+		champs = cog.convert(string)
 		print(champs)
 		return champs
 #			await self.bot.say("I can do stuff!")	
