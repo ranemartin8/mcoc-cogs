@@ -136,7 +136,7 @@ class MemberFinder(commands.Converter):
 #		cog = ctx.bot.get_cog('Splatoon')	
 		
 class SplatoonWeapon(commands.Converter):	
-	async def testimport(self, ctx, argument):
+	async def convert(self, ctx, argument):
 		"""This does stuff!"""
 		cog = ctx.bot.get_cog('ChampConverterMult')
 		champs = cog.convert(champ)
@@ -159,14 +159,6 @@ class gsheet_cog:
 	SCOPES = 'https://www.googleapis.com/auth/spreadsheets'
 	CLIENT_SECRET_FILE = 'client_secret.json'
 	APPLICATION_NAME = 'Google Sheets API Python Quickstart'
-
-	@commands.command(pass_context=True,)
-	async def tryimport(self, ctx, *, champs: SplatoonWeapon):
-		"""This does stuff!"""
-#		cog = ctx.bot.get_cog('ChampConverterMult')
-#		champs = cog.convert(champ)
-		print(champs)
-#			await self.bot.say("I can do stuff!")	
 
 	def get_credentials(self):
 		"""https://developers.google.com/sheets/api/quickstart/python
@@ -237,7 +229,13 @@ class gsheet_cog:
 		main()
 
 		
-		
+	@commands.command(pass_context=True,)
+	async def tryimport(self, ctx, *, champs: SplatoonWeapon):
+		"""This does stuff!"""
+#		cog = ctx.bot.get_cog('ChampConverterMult')
+#		champs = cog.convert(champ)
+		print(champs)
+#			await self.bot.say("I can do stuff!")			
 		
 	@commands.command(pass_context=True,aliases=['loadsheet',], no_pm=True)
 	async def savesheet(self, ctx, header_row: str, data_range: str,filename: str,sheet_id: str, groupRowsBy: str=None):
