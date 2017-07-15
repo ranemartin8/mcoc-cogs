@@ -131,7 +131,11 @@ class MemberFinder(commands.Converter):
 		if len(result_names) > 0: print('Result(s): '+', '.join(result_names))
 		if len(matches) > 0: print('Match(es): '+', '.join(matches))
 		return user
-	
+#class SplatoonWeapon(commands.Converter):x
+#	async def convert(self, ctx, argument):
+#		cog = ctx.bot.get_cog('Splatoon')	
+		
+		
 class gsheet_cog:
 	"""[in progress]. This cog contains commands that interact with Google Sheets."""
 	def __init__(self, bot):
@@ -215,6 +219,16 @@ class gsheet_cog:
 				
 	if __name__ == '__main__':
 		main()
+		
+	@commands.command(pass_context=True,)
+		async def testimport(self,ctx,champ:str):
+		"""This does stuff!"""
+			cog = ctx.bot.get_cog('ChampConverterMult')
+			champs = cog.convert(champ)
+			print(champs)
+#			await self.bot.say("I can do stuff!")	
+		
+		
 		
 	@commands.command(pass_context=True,aliases=['loadsheet',], no_pm=True)
 	async def savesheet(self, ctx, header_row: str, data_range: str,filename: str,sheet_id: str, groupRowsBy: str=None):
