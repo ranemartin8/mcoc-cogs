@@ -236,7 +236,18 @@ class mcocProfile:
 			pass
 		else:
 			game_name = profile["game_name"]
-			em.add_field(name="**"+field_names["game_name"]+"**", value=game_name)
+			em.add_field(name="**"+field_names["game_name"]+"**", value=game_name,inline=False)
+			
+		if "summonerlevel" not in profile:
+			pass
+		else:
+			summonerlevel = profile["summonerlevel"]
+			em.add_field(name="**"+field_names["summonerlevel"]+"**", value=summonerlevel,inline=False)
+		if "herorating" not in profile:
+			pass
+		else:
+			herorating = profile["herorating"]
+			em.add_field(name="**"+field_names["herorating"]+"**", value=herorating,inline=False)
 			
 		if "timezone" not in profile:
 			pass
@@ -247,19 +258,10 @@ class mcocProfile:
 			localtime = get_time.strftime("%I:%M").lstrip('0') + ' ' + get_time.strftime("%P")
 			# CUSTOM CLOCK EMOJI.lower()
 			clockemoji = clock_emoji(get_time)		
-			em.add_field(name="Time", value='Local Time: ' + localtime + '  ' + clockemoji+ '\nTimezone: ' + timezone)	
+			em.add_field(name="Time", value='Timezone: ' + timezone + '\nLocal Time: ' + localtime + '  ' + clockemoji,inline=False)	
 			
-		if "summonerlevel" not in profile:
-			pass
-		else:
-			summonerlevel = profile["summonerlevel"]
-			em.add_field(name="**"+field_names["summonerlevel"]+"**", value=summonerlevel)
-		if "herorating" not in profile:
-			pass
-		else:
-			herorating = profile["herorating"]
-			em.add_field(name="**"+field_names["herorating"]+"**", value=herorating)
-			
+		if user.avatar_url:
+			em.set_thumbnail(url=user.avatar_url)
 		await self.bot.say(embed=em)
 			
 #    def get_champion(self, cdict):
