@@ -33,19 +33,19 @@ class mcocProfile:
 	async def _newprofile(self, ctx):
 		"""Create a new profile"""
 		message = ctx.message
-		user = message.author
+		author = message.author
 		channel = message.channel
 		
 		if author.id in self.mcocProf or self.mcocProf[author.id] == True:
-			data = discord.Embed(colour=user.colour)
-			data.add_field(name="Error:warning:",value="Oops, it seems like you already have a profile, {}.".format(user.mention))
+			data = discord.Embed(colour=author.colour)
+			data.add_field(name="Error:warning:",value="Oops, it seems like you already have a profile, {}.".format(author.mention))
 			await self.bot.say(embed=data)
 		else:
 			self.mcocProf[author.id] = {}
 			dataIO.save_json(self.profJSON, self.mcocProf)
 			await self.bot.say("Hi {}! Let's begin setting up your Summonor profile! You can reply **skip** to"
 							   "skip a question or **stop** to exit this session. This session will automatically"
-							   "end after 3 minutes without a response.\nNow, start by telling me your in-game name.".format(user))
+							   "end after 3 minutes without a response.\nNow, start by telling me your in-game name.".format(author))
 			
 			game_name = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
 			
