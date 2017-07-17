@@ -7,8 +7,25 @@ import asyncio
 from timezonefinder import TimezoneFinder
 from geopy.geocoders import Nominatim
 
+field_names = {'summonerlevel':'Summoner Level','herorating':'Total Base Hero Rating','timezone':'Timezone','gamename':'In-Game Name'}
 
+def getLocalTime(datetime_obj,timezone):
+	utcmoment = datetime_obj.replace(tzinfo=pytz.utc)
+	get_time = utcmoment.astimezone(pytz.timezone(timezone))
+	return get_time
 
+def clock_emoji(datetime_obj):
+	time_int = int(datetime_obj.strftime("%I%M").lstrip('0'))
+	clock_times = [1260, 100, 960, 1000, 1030, 1060, 1100, 1130, 1160, 1200, 1230,
+				   130, 160, 200, 230, 260, 300, 330, 360, 400, 430, 460, 500, 530,
+				   560, 600, 630, 660, 700, 730, 760, 800, 830, 860, 900, 930]
+	closest_time = min(clock_times, key=lambda x:abs(x-time_int))
+	clock_time = c_times[str(closest_time)]
+	if clock_time:
+		return ':clock' + clock_time + ':'
+	else:
+		return ':alarm_clock:'
+	
 class mcocProfile:
 	"""Commands for creating and managing your Marvel Contest of Champions Profile"""
 
@@ -142,12 +159,16 @@ class mcocProfile:
 			dataIO.save_json(self.profJSON, self.mcocProf)
 		self.mcocProf[author.id].update({field : value})
 		dataIO.save_json(self.profJSON, self.mcocProf)
-#		value = self.mcocProf[author.id][field]
+		if field not in field_names:
+			field_name = field
+		else:
+			field_name = field_names[field]
+			
 		if field in self.mcocProf[author.id]:
 			value = self.mcocProf[author.id][field]
-			await self.bot.say('Your **{}** is set to **{}**.'.format(field, value))
+			await self.bot.say('Your **{}** is set to **{}**.'.format(field_name, value))
 		else:
-			await self.bot.say('Something went wrong. **{}** not set'.format(field))
+			await self.bot.say('Something went wrong. **{}** not set'.format(field_name))
 			return
 		
 	async def gettimezone(self, query):
@@ -165,31 +186,74 @@ class mcocProfile:
 		
 
 		
-	@mcoc_profile.command(pass_context=True,invoke_without_command=True)
+	@mcoc_profile.command(pass_context=True)
 	async def gamename(self, ctx, *, game_name : str):
 		"""
 		Set your In-Game Name."""			
 		await self.edit_field('game_name', ctx, game_name)
 	
-	@mcoc_profile.command(pass_context=True,invoke_without_command=True)
+	@mcoc_profile.command(pass_context=True)
 	async def timezone(self, ctx, *, location : str):
 		"""
 		Provide your location to set your timezone."""			
 		timezone = await self.gettimezone(location)
 		await self.edit_field('timezone', ctx, timezone)
 	
-	@mcoc_profile.command(pass_context=True,invoke_without_command=True)
+	@mcoc_profile.command(pass_context=True)
 	async def level(self, ctx, *, summonerlevel : float):
 		"""
-		Set your summonor level."""			
+		Set your Summonor Level."""			
 		await self.edit_field('summonerlevel', ctx, summonerlevel)
 		
-	@mcoc_profile.command(pass_context=True,invoke_without_command=True)
+	@mcoc_profile.command(pass_context=True)
 	async def rating(self, ctx, *, rating : float):
 		"""
 		Set your Total Base Hero Rating."""			
 		await self.edit_field('herorating', ctx, rating)
-		
+
+	@mcoc_profile.command(pass_context=True)
+	async def view(self, ctx, *, user: discord.Member=None):
+		"""
+		Set your Total Base Hero Rating."""			
+		author = ctx.message.author
+		if not user:
+			user = author
+		user_id = user.id
+		if user_id not in self.mcocProf or self.mcocProf[user_id] == False:
+			await self.bot.say('No profile has been created for that user.')
+			return
+		profile = self.mcocProf[user_id]
+		em = discord.Embed(color=user.colour)
+		if "game_name" not in profile:
+			pass
+		else:
+			game_name = profile["game_name"]
+			em.add_field(name="**"+field_names["game_name"]+"**", value=game_name)
+			
+		if "timezone" not in profile:
+			pass
+		else:
+			timezone = profile["timezone"]
+			utcmoment_naive = datetime.utcnow()
+			get_time = getLocalTime(utcmoment_naive,timezone)
+			localtime = get_time.strftime("%I:%M").lstrip('0') + ' ' + get_time.strftime("%P")
+			# CUSTOM CLOCK EMOJI.lower()
+			clockemoji = clock_emoji(get_time)		
+			em.add_field(name="Time", value='Local Time: ' + localtime + '  ' + clockemoji+ '\nTimezone: ' + timezone)	
+			
+		if "summonerlevel" not in profile:
+			pass
+		else:
+			summonerlevel = profile["summonerlevel"]
+			em.add_field(name="**"+field_names["summonerlevel"]+"**", value=summonerlevel)
+		if "herorating" not in profile:
+			pass
+		else:
+			herorating = profile["herorating"]
+			em.add_field(name="**"+field_names["herorating"]+"**", value=herorating)
+			
+		 await self.bot.say(embed=em)
+			
 #    def get_champion(self, cdict):
 #        mcoc = self.bot.get_cog('MCOC')
 #        champ_attr = {self.attr_map[k]: cdict[k] for k in self.attr_map.keys()}
