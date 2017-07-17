@@ -7,7 +7,7 @@ import asyncio
 from timezonefinder import TimezoneFinder
 from geopy.geocoders import Nominatim
 
-field_names = {'summonerlevel':'Summoner Level','herorating':'Total Base Hero Rating','timezone':'Timezone','gamename':'In-Game Name'}
+field_names = {'summonerlevel':'Summoner Level','herorating':'Total Base Hero Rating','timezone':'Timezone','game_name':'In-Game Name'}
 
 def getLocalTime(datetime_obj,timezone):
 	utcmoment = datetime_obj.replace(tzinfo=pytz.utc)
