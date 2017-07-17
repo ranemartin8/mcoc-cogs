@@ -119,15 +119,15 @@ class mcocProfile:
 		if field == 'summonerlevel':
 			is_number = await self.is_number(value)
 			if is_number is False:
-				validity.update({'status':'invalid','reason':'Summoner Level must be a number.'})
+				validity.update({'status':'invalid','reason':'Summoner Level must be a number. Summoner Level not set.'})
 			elif int(value) > 60 or int(value) < 0:
-				validity.update({'status':'invalid','reason':'Summoner Level must fall between 0 and 60.'})
+				validity.update({'status':'invalid','reason':'Summoner Level must fall between 0 and 60. Summoner Level not set.'})
 			else:
 				pass
 		if field == 'herorating':
 			is_number = await self.is_number(value)
 			if is_number is False:
-				validity.update({'status':'invalid','reason':'Hero Rating must be a number.'})
+				validity.update({'status':'invalid','reason':'Hero Rating must be a number. Hero Rating not set.'})
 		return validity
 			
 
@@ -147,12 +147,16 @@ class mcocProfile:
 			value = self.mcocProf[author.id][field]
 			await self.bot.say('Your **{}** is set to **{}**.'.format(field, value))
 		else:
-			await self.bot.say('Something went wrong')
+			await self.bot.say('Something went wrong. **{}** not set'.format(field))
 			return
 		
 	async def gettimezone(self, query):
 		geolocator = Nominatim()
-		location = geolocator.geocode(query)
+		try:
+			location = geolocator.geocode(query)
+		except GeocoderTimedOut:
+			await self.bot.say('Location not found.')
+			return			
 		latitude = location.latitude 
 		longitude = location.longitude
 		tf = TimezoneFinder()
@@ -173,6 +177,18 @@ class mcocProfile:
 		Provide your location to set your timezone."""			
 		timezone = await self.gettimezone(location)
 		await self.edit_field('timezone', ctx, timezone)
+	
+	@mcoc_profile.command(pass_context=True,invoke_without_command=True)
+	async def level(self, ctx, *, summonerlevel : float):
+		"""
+		Set your summonor level."""			
+		await self.edit_field('summonerlevel', ctx, summonerlevel)
+		
+	@mcoc_profile.command(pass_context=True,invoke_without_command=True)
+	async def rating(self, ctx, *, rating : float):
+		"""
+		Set your Total Base Hero Rating."""			
+		await self.edit_field('herorating', ctx, rating)
 		
 #    def get_champion(self, cdict):
 #        mcoc = self.bot.get_cog('MCOC')
