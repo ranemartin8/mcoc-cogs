@@ -80,7 +80,7 @@ class mcocProfile:
 
 
 	async def edit_field(self, field, ctx, value):
-		user = ctx.message.author
+		author = ctx.message.author
 		if author.id not in self.mcocProf or self.mcocProf[author.id] == False:
 			self.mcocProf[author.id] = {}
 			dataIO.save_json(self.profJSON, self.mcocProf)
