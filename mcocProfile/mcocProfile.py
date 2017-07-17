@@ -36,43 +36,43 @@ class mcocProfile:
 		author = message.author
 		channel = message.channel
 		
-		if author.id in self.mcocProf or self.mcocProf[author.id] == True:
-			data = discord.Embed(colour=author.colour)
-			data.add_field(name="Error:warning:",value="Oops, it seems like you already have a profile, {}.".format(author.mention))
-			await self.bot.say(embed=data)
-		else:
-			self.mcocProf[author.id] = {}
-			dataIO.save_json(self.profJSON, self.mcocProf)
-			await self.bot.say("Hi {}! Let's begin setting up your Summonor profile! You can reply **skip** to"
-							   "skip a question or **stop** to exit this session. This session will automatically"
-							   "end after 3 minutes without a response.\nNow, start by telling me your in-game name.".format(author))
-			
-			game_name = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
-			
-			if game_name.content is None:
-				await self.bot.say('{0.mention}, your session has timed out.'.format(author))
-				return
-			if game_name.content.lower() in self.stopSkip:
-				await self.bot.say('{}'.format(self.stopSkip[game_name.content.lower()]))
-				if game_name.content.lower() == 'stop': 
-					return 
-					
-			await ctx.invoke(self.game_name, game_name.content)
-			
-			await self.bot.say("Now let's set your timezone. Where do you live? (City/State/Country)")
-			
-			location = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
-			if location.content is None:
-				await self.bot.say('{0.mention}, your session has timed out.'.format(author))
-				return
-			if location.content.lower() in self.stopSkip:
-				await self.bot.say('{}'.format(self.stopSkip[location.content.lower()]))
-				if location.content.lower() == 'stop': 
-					return 	
-			await ctx.invoke(self.timezone, location.content)	
-			
-			await self.bot.say("done!")
+#		if author.id not in self.mcocProf or self.mcocProf[author.id] == False:
+#			data = discord.Embed(colour=author.colour)
+#			data.add_field(name="Error:warning:",value="Oops, it seems like you already have a profile, {}.".format(author.mention))
+#			await self.bot.say(embed=data)
+#		else:
+		self.mcocProf[author.id] = {}
+		dataIO.save_json(self.profJSON, self.mcocProf)
+		await self.bot.say("Hi {}! Let's begin setting up your Summonor profile! You can reply **skip** to"
+						   "skip a question or **stop** to exit this session. This session will automatically"
+						   "end after 3 minutes without a response.\nNow, start by telling me your in-game name.".format(author))
+
+		game_name = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
+
+		if game_name.content is None:
+			await self.bot.say('{0.mention}, your session has timed out.'.format(author))
 			return
+		if game_name.content.lower() in self.stopSkip:
+			await self.bot.say('{}'.format(self.stopSkip[game_name.content.lower()]))
+			if game_name.content.lower() == 'stop': 
+				return 
+
+		await ctx.invoke(self.game_name, game_name.content)
+
+		await self.bot.say("Now let's set your timezone. Where do you live? (City/State/Country)")
+
+		location = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
+		if location.content is None:
+			await self.bot.say('{0.mention}, your session has timed out.'.format(author))
+			return
+		if location.content.lower() in self.stopSkip:
+			await self.bot.say('{}'.format(self.stopSkip[location.content.lower()]))
+			if location.content.lower() == 'stop': 
+				return 	
+		await ctx.invoke(self.timezone, location.content)	
+
+		await self.bot.say("done!")
+		return
 			
 #			
 #		if author.id not in self.mcocProf or self.mcocProf[author.id] == False:
