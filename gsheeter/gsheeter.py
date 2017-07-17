@@ -135,17 +135,17 @@ class MemberFinder(commands.Converter):
 #	async def convert(self, ctx, argument):
 #		cog = ctx.bot.get_cog('Splatoon')	
 		
-class SplatoonWeapon(commands.Converter):	
-	async def convert(self):
-		"""This does stuff!"""
-		cog = self.ctx.bot.get_cog('ChampConverterMult')
-		string = self.argument
-		if cog is None:
-			raise commands.BadArgument('Splatoon related commands seemingly disabled.')
-		champs = cog.convert(string)
-		print(champs)
-		return champs
-#			await self.bot.say("I can do stuff!")	
+#class SplatoonWeapon(commands.Converter):	
+#	async def convert(self):
+#		"""This does stuff!"""
+#		cog = self.ctx.bot.get_cog('ChampConverterMult')
+#		string = self.argument
+#		if cog is None:
+#			raise commands.BadArgument('Splatoon related commands seemingly disabled.')
+#		champs = cog.convert(string)
+#		print(champs)
+#		return champs
+##			await self.bot.say("I can do stuff!")	
 
 class gsheet_cog:
 	"""[in progress]. This cog contains commands that interact with Google Sheets."""
@@ -232,15 +232,16 @@ class gsheet_cog:
 		main()
 
 		
-	@commands.command(pass_context=True)
-	async def tryimport(self, ctx, champs: SplatoonWeapon):
-		"""This does stuff!"""
-		values = champs
-		await self.bot.say("Result: ```{}```".format(values))	
-#		cog = ctx.bot.get_cog('ChampConverterMult')
-#		champs = cog.convert(champ)
-		print(champs)
-#		await self.bot.say("I can do stuff!")			
+#	@commands.command(pass_context=True)
+#	async def tryimport(self, ctx, champs: SplatoonWeapon):
+#		"""This does stuff!"""
+#		values = champs
+#		await self.bot.say("Result: ```{}```".format(values))	
+#		await self.bot.say("this")	
+##		cog = ctx.bot.get_cog('ChampConverterMult')
+##		champs = cog.convert(champ)
+#		print(champs)
+##		await self.bot.say("I can do stuff!")			
 		
 	@commands.command(pass_context=True,aliases=['loadsheet',], no_pm=True)
 	async def savesheet(self, ctx, header_row: str, data_range: str,filename: str,sheet_id: str, groupRowsBy: str=None):
