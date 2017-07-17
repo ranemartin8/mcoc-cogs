@@ -13,8 +13,8 @@ class mcocProfile:
 	"""Commands for creating and managing your Marvel Contest of Champions Profile"""
 
 	def __init__(self, bot):
-		self.game_name = kwargs.get('game_name')
-		self.timezone = kwargs.get('timezone')
+#		self.game_name = kwargs.get('game_name')
+#		self.timezone = kwargs.get('timezone')
 		self.bot = bot
 		self.profJSON = "data/mcocProfile/profiles.json"
 		self.mcocProf = dataIO.load_json(self.profJSON)
@@ -58,8 +58,9 @@ class mcocProfile:
 			await self.bot.say('{}'.format(self.stopSkip[game_name.content.lower()]))
 			if game_name.content.lower() == 'stop': 
 				return 
-
-		await ctx.invoke(self.game_name, game_name=game_name.content)
+			
+		await self.edit_field('game_name', ctx, game_name.content)
+#		await ctx.invoke(self.game_name, game_name=game_name.content)
 
 		await self.bot.say("Now let's set your timezone. Where do you live? (City/State/Country)")
 
@@ -71,26 +72,12 @@ class mcocProfile:
 			await self.bot.say('{}'.format(self.stopSkip[location.content.lower()]))
 			if location.content.lower() == 'stop': 
 				return 	
-		await ctx.invoke(self.timezone, timezone=location.content)	
-
-		await self.bot.say("done!")
-		return
+		timezone = await self.gettimezone(location.content)
+		await self.edit_field('timezone', ctx, timezone)
+		
+		return await self.bot.say("done!")
 			
-#			
-#		if author.id not in self.mcocProf or self.mcocProf[author.id] == False:
-#			self.mcocProf[author.id] = {}
-#			dataIO.save_json(self.profJSON, self.mcocProf)
-#			
-#		if user.id not in self.nerdie[server.id]:
-#			self.nerdie[server.id][user.id] = {}
-#			dataIO.save_json(self.profile, self.nerdie)
-#			data = discord.Embed(colour=user.colour)
-#			data.add_field(name="Congrats!:sparkles:", value="You have officaly created your acconut for **{}**, {}.".format(server, user.mention))
-#			await self.bot.say(embed=data)
-#		else: 
-#			data = discord.Embed(colour=user.colour)
-#			data.add_field(name="Error:warning:",value="Opps, it seems like you already have an account, {}.".format(user.mention))
-#			await self.bot.say(embed=data)
+
 
 	async def edit_field(self, field, ctx, value):
 		user = ctx.message.author
@@ -107,19 +94,16 @@ class mcocProfile:
 			await self.bot.say('Something went wrong')
 			return
 		
-#	def gettimezone(self, query):
-#		geolocator = Nominatim()
-#		location = geolocator.geocode(query)
-#		latitude = location.latitude 
-#		longitude = location.longitude
-#		tf = TimezoneFinder()
-#		tz = tf.timezone_at(lng=longitude, lat=latitude)
-#		return tz
+	async def gettimezone(self, query):
+		geolocator = Nominatim()
+		location = geolocator.geocode(query)
+		latitude = location.latitude 
+		longitude = location.longitude
+		tf = TimezoneFinder()
+		tz = tf.timezone_at(lng=longitude, lat=latitude)
+		return tz
 		
-#    def get_champion(self, cdict):
-#        mcoc = self.bot.get_cog('MCOC')
-#        champ_attr = {self.attr_map[k]: cdict[k] for k in self.attr_map.keys()}
-#        return mcoc.get_champion(cdict['Id'], champ_attr)	
+
 		
 	@mcoc_profile.command(pass_context=True,invoke_without_command=True)
 	async def game_name(self, ctx, *, game_name : str):
@@ -129,17 +113,16 @@ class mcocProfile:
 		await self.edit_field('game_name', ctx, game_name)
 	
 	@mcoc_profile.command(pass_context=True,invoke_without_command=True)
-	async def timezone(self, ctx, *, timezone : str):
+	async def timezone(self, ctx, *, location : str):
 		"""
 		Set your timezone"""			
-		geolocator = Nominatim()
-		location_obj = geolocator.geocode(timezone)
-		latitude = location_obj.latitude 
-		longitude = location_obj.longitude
-		tf = TimezoneFinder()
-		tz = tf.timezone_at(lng=longitude, lat=latitude)
-		await self.edit_field('timezone', ctx, tz)
+		timezone = await self.gettimezone(location)
+		await self.edit_field('timezone', ctx, timezone)
 		
+#    def get_champion(self, cdict):
+#        mcoc = self.bot.get_cog('MCOC')
+#        champ_attr = {self.attr_map[k]: cdict[k] for k in self.attr_map.keys()}
+#        return mcoc.get_champion(cdict['Id'], champ_attr)			
 #		if author.id not in self.mcocProf or self.mcocProf[author.id] == False:
 #			self.mcocProf[author.id] = {}
 #			dataIO.save_json(self.profJSON, self.mcocProf)
@@ -160,6 +143,21 @@ class mcocProfile:
 #			await self.bot.say("Congrats, the help embed footer has been set to: ```{}```".format(message.content))
 #		else:
 #			await self.bot.say("There was an error.")		
+#			
+#		if author.id not in self.mcocProf or self.mcocProf[author.id] == False:
+#			self.mcocProf[author.id] = {}
+#			dataIO.save_json(self.profJSON, self.mcocProf)
+#			
+#		if user.id not in self.nerdie[server.id]:
+#			self.nerdie[server.id][user.id] = {}
+#			dataIO.save_json(self.profile, self.nerdie)
+#			data = discord.Embed(colour=user.colour)
+#			data.add_field(name="Congrats!:sparkles:", value="You have officaly created your acconut for **{}**, {}.".format(server, user.mention))
+#			await self.bot.say(embed=data)
+#		else: 
+#			data = discord.Embed(colour=user.colour)
+#			data.add_field(name="Error:warning:",value="Opps, it seems like you already have an account, {}.".format(user.mention))
+#			await self.bot.say(embed=data)
 #		
 def check_folder():
 	if not os.path.exists("data/mcocProfile"):
