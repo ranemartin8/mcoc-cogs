@@ -23,7 +23,7 @@ class mcocProfile:
 
 #    @checks.is_owner()
 	@commands.group(pass_context=True)
-	async def profile(self, ctx):
+	async def mcoc_profile(self, ctx):
 		"""mcocProfile allows you to create and manage your MCOC Profile."""
 		if ctx.invoked_subcommand is None:
 			await send_cmd_help(ctx)
