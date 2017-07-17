@@ -223,7 +223,7 @@ class mcocProfile:
 			await self.bot.say('No profile has been created for that user.')
 			return
 		profile = self.mcocProf[user_id]
-		em = discord.Embed(color=user.colour)
+		em = discord.Embed(color=user.color)
 		if "game_name" not in profile:
 			pass
 		else:
@@ -252,7 +252,7 @@ class mcocProfile:
 			herorating = profile["herorating"]
 			em.add_field(name="**"+field_names["herorating"]+"**", value=herorating)
 			
-		 await self.bot.say(embed=em)
+		await self.bot.say(embed=em)
 			
 #    def get_champion(self, cdict):
 #        mcoc = self.bot.get_cog('MCOC')
