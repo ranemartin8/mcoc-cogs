@@ -13,6 +13,8 @@ class mcocProfile:
 	"""Commands for creating and managing your Marvel Contest of Champions Profile"""
 
 	def __init__(self, bot):
+		self.game_name = kwargs.get('game_name')
+		self.timezone = kwargs.get('timezone')
 		self.bot = bot
 		self.profJSON = "data/mcocProfile/profiles.json"
 		self.mcocProf = dataIO.load_json(self.profJSON)
@@ -57,7 +59,7 @@ class mcocProfile:
 			if game_name.content.lower() == 'stop': 
 				return 
 
-		await self.game_name(game_name.content)
+		await ctx.invoke(self.game_name, game_name=game_name.content)
 
 		await self.bot.say("Now let's set your timezone. Where do you live? (City/State/Country)")
 
@@ -69,7 +71,7 @@ class mcocProfile:
 			await self.bot.say('{}'.format(self.stopSkip[location.content.lower()]))
 			if location.content.lower() == 'stop': 
 				return 	
-		await self.timezone(location.content)	
+		await ctx.invoke(self.timezone, timezone=location.content)	
 
 		await self.bot.say("done!")
 		return
@@ -127,11 +129,11 @@ class mcocProfile:
 		await self.edit_field('game_name', ctx, game_name)
 	
 	@mcoc_profile.command(pass_context=True,invoke_without_command=True)
-	async def timezone(self, ctx, *, location : str):
+	async def timezone(self, ctx, *, timezone : str):
 		"""
 		Set your timezone"""			
 		geolocator = Nominatim()
-		location_obj = geolocator.geocode(location)
+		location_obj = geolocator.geocode(timezone)
 		latitude = location_obj.latitude 
 		longitude = location_obj.longitude
 		tf = TimezoneFinder()
