@@ -18,10 +18,10 @@ from .utils.dataIO import dataIO
 from functools import wraps
 import discord
 from discord.ext import commands
-from .utils.dataIO import fileIO #rane added this
+
 from .utils import chat_formatting as chat
 from pprint import pprint #rane added this
-
+from .utils.dataIO import fileIO #rane added this
 
 data_files = {
     'spotlight': {'remote': 'https://docs.google.com/spreadsheets/d/1I3T2G2tRV05vQKpBfmI04VpvP5LjCBPfVICDmuJsjks/pub?gid=0&single=true&output=csv',
