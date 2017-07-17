@@ -255,7 +255,7 @@ class mcocProfile:
 			timezone = profile["timezone"]
 			utcmoment_naive = datetime.utcnow()
 			get_time = getLocalTime(utcmoment_naive,timezone)
-			localtime = get_time.strftime("%I:%M").lstrip('0') + ' ' + get_time.strftime("%P")
+			localtime = get_time.strftime("%I:%M").lstrip('0') + ' ' + get_time.strftime("%p")
 			# CUSTOM CLOCK EMOJI.lower()
 			clockemoji = clock_emoji(get_time)		
 			em.add_field(name="Time", value='Timezone: ' + timezone + '\nLocal Time: ' + localtime + '  ' + clockemoji,inline=False)	
