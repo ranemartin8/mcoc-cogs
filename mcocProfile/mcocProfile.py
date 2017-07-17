@@ -72,7 +72,7 @@ class mcocProfile:
 		if response.content.lower() == 'skip':
 			await self.bot.say('Question skipped!')
 		else: 
-			timezone = await self.gettimezone(location.content)
+			timezone = await self.gettimezone(response.content)
 			await self.edit_field('timezone', ctx, timezone)
 			
 		return await self.bot.say("All done!")
