@@ -119,14 +119,14 @@ class mcocProfile:
 #        champ_attr = {self.attr_map[k]: cdict[k] for k in self.attr_map.keys()}
 #        return mcoc.get_champion(cdict['Id'], champ_attr)	
 		
-	@mcoc_profile.command(pass_context=True)
+	@mcoc_profile.command(pass_context=True,invoke_without_command=True)
 	async def game_name(self, ctx, *, game_name : str):
 		"""
 		Set your In-Game Name"""			
 
 		await self.edit_field('game_name', ctx, game_name)
 	
-	@mcoc_profile.command(pass_context=True)
+	@mcoc_profile.command(pass_context=True,invoke_without_command=True)
 	async def timezone(self, ctx, *, location : str):
 		"""
 		Set your timezone"""			
