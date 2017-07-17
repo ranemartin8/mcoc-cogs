@@ -19,12 +19,12 @@ class mcocProfile:
 		self.profJSON = "data/mcocProfile/profiles.json"
 		self.mcocProf = dataIO.load_json(self.profJSON)
 		self.stopSkip = {
-			'skip':'Question skipped! On to the next one...',
+			'skip':'Question skipped!',
 			'stop':'You\'ve exited this profile-making session.'
 			}
 
 #    @checks.is_owner()
-	@commands.group(pass_context=True)
+	@commands.group(pass_context=True, name="prof")
 	async def mcoc_profile(self, ctx):
 		"""mcocProfile allows you to create and manage your MCOC Profile."""
 		if ctx.invoked_subcommand is None:
@@ -49,34 +49,33 @@ class mcocProfile:
 						   "skip a question or **stop** to exit this session. This session will automatically"
 						   "end after 3 minutes without a response.\nNow, start by telling me your in-game name.".format(author))
 
-		game_name = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
-
-		if game_name.content is None:
-			await self.bot.say('{0.mention}, your session has timed out.'.format(author))
+		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
+		if response.content is None or response.content.lower() == 'stop':
+			if game_name.content is None:	
+				await self.bot.say('{0.mention}, your session has timed out.'.format(author))
+			else:
+				await self.bot.say('You\'ve exited this profile-making session.')
 			return
-		if game_name.content.lower() in self.stopSkip:
-			await self.bot.say('{}'.format(self.stopSkip[game_name.content.lower()]))
-			if game_name.content.lower() == 'stop': 
-				return 
-			
-		await self.edit_field('game_name', ctx, game_name.content)
-#		await ctx.invoke(self.game_name, game_name=game_name.content)
+		if response.content.lower() == 'skip':
+			await self.bot.say('Question skipped!')
+		else: 
+			await self.edit_field('game_name', ctx, response.content)
 
 		await self.bot.say("Now let's set your timezone. Where do you live? (City/State/Country)")
-
-		location = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
-		if location.content is None:
-			await self.bot.say('{0.mention}, your session has timed out.'.format(author))
+		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
+		if response.content is None or response.content.lower() == 'stop':
+			if game_name.content is None:	
+				await self.bot.say('{0.mention}, your session has timed out.'.format(author))
+			else:
+				await self.bot.say('You\'ve exited this profile-making session.')
 			return
-		if location.content.lower() in self.stopSkip:
-			await self.bot.say('{}'.format(self.stopSkip[location.content.lower()]))
-			if location.content.lower() == 'stop': 
-				return 	
-		timezone = await self.gettimezone(location.content)
-		await self.edit_field('timezone', ctx, timezone)
-		
-		return await self.bot.say("done!")
+		if response.content.lower() == 'skip':
+			await self.bot.say('Question skipped!')
+		else: 
+			timezone = await self.gettimezone(location.content)
+			await self.edit_field('timezone', ctx, timezone)
 			
+		return await self.bot.say("All done!")
 
 
 	async def edit_field(self, field, ctx, value):
@@ -106,7 +105,7 @@ class mcocProfile:
 
 		
 	@mcoc_profile.command(pass_context=True,invoke_without_command=True)
-	async def game_name(self, ctx, *, game_name : str):
+	async def gamename(self, ctx, *, game_name : str):
 		"""
 		Set your In-Game Name"""			
 
