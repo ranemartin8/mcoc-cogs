@@ -86,10 +86,7 @@ class mcocProfile:
 		elif response.content.lower() == 'skip':
 			await self.bot.say('Question skipped!')
 		else: 
-			if int(response.content) > 60 or int(response.content) < 0:
-			
-			else:
-				await self.edit_field('summonerlevel', ctx, response.content)		
+			await self.edit_field('summonerlevel', ctx, response.content)		
 			
 		await self.bot.say("What is your Total Base Here Rating?")	
 		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
@@ -108,13 +105,20 @@ class mcocProfile:
 		return await self.bot.say("All done!")
 	
 	async def check_field(self, field, value):
-		field_checks = {'herorating':'yes'}
+		field_checks = {'summonerlevel':'yes','herorating':'yes'}
 		validity = {'status':'valid','reason':'n/a'}
 		if field not in field_checks:
 			return validity
-		if field == 'herorating':
-			if int(value) > 60 or int(value) < 0:
+		if field == 'summonerlevel':
+			if isinstance(value,(int, float)) is False:
+				validity.update({'status':'invalid','reason':'Summoner Level must be a number.'})
+			elif int(value) > 60 or int(value) < 0:
 				validity.update({'status':'invalid','reason':'Summoner Level must fall between 0 and 60.'})
+			else:
+				pass
+		if field == 'herorating':
+			if isinstance(value,(int, float)) is False:
+				validity.update({'status':'invalid','reason':'Hero Rating must be a number.'})
 		return validity
 			
 
