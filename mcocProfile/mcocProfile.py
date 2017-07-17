@@ -27,13 +27,15 @@ def clock_emoji(datetime_obj):
 		return ':clock' + clock_time + ':'
 	else:
 		return ':alarm_clock:'
+	
 c_times = {
 		'1260':'1','100':'1','960':'10','1000':'10','1030':'1030','1060':'11','1100':'11',
 		'1130':'1130','1160':'12','1200':'12','1230':'1230','130':'130','160':'2','200':'2',
 		'230':'230','260':'3','300':'3','330':'330','360':'4','400':'4','430':'430','460':'5',
 		'500':'5','530':'530','560':'6','600':'6','630':'630','660':'7','700':'7','730':'730',
 		'760':'8','800':'8','830':'830','860':'9','900':'9','930':'930'
-		}	
+		}
+
 class mcocProfile:
 	"""Commands for creating and managing your Marvel Contest of Champions Profile"""
 
@@ -41,17 +43,14 @@ class mcocProfile:
 		self.bot = bot
 		self.profJSON = "data/mcocProfile/profiles.json"
 		self.mcocProf = dataIO.load_json(self.profJSON)
-		self.stopSkip = {
-			'skip':'Question skipped!',
-			'stop':'You\'ve exited this profile-making session.'
-			}
+
 
 #    @checks.is_owner()
 	@commands.group(pass_context=True, name="prof")
 	async def mcoc_profile(self, ctx):
 		"""mcocProfile allows you to create and manage your MCOC Profile."""
 		if ctx.invoked_subcommand is None:
-			await send_cmd_help(ctx)
+			await self.bot.send_cmd_help(ctx)
 			return
 		
 	@mcoc_profile.command(pass_context=True, name="make")
