@@ -8,10 +8,13 @@ from timezonefinder import TimezoneFinder
 from geopy.geocoders import Nominatim
 from datetime import tzinfo, timedelta, datetime
 import pytz
+from .mcoc import ChampConverter, ChampConverterMult, QuietUserError
 
 field_names = {'summonerlevel':'Summoner Level','herorating':'Total Base Hero Rating','timezone':'Timezone','game_name':'In-Game Name'}
 fields_list = ['summonerlevel','herorating','timezone','game_name']
 valid_fields = set(fields_list)
+
+remote_data_basepath = 'https://raw.githubusercontent.com/JasonJW/mcoc-cogs/master/mcoc/data/'
 
 def getLocalTime(datetime_obj,timezone):
 	utcmoment = datetime_obj.replace(tzinfo=pytz.utc)
@@ -126,7 +129,19 @@ class mcocProfile:
 			await self.bot.say('Question skipped!')
 		else: 
 			await self.edit_field('herorating', ctx, response.content)			
-			
+
+		await self.bot.say("Who is your Profile Champion?")	
+		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
+		if response.content is None:
+			await self.bot.say('{0.mention}, your session has timed out.'.format(author))
+			return
+		if response.content.lower() == 'stop':
+			await self.bot.say('You\'ve exited this profile-making session.')
+			return
+		elif response.content.lower() == 'skip':
+			await self.bot.say('Question skipped!')
+		else: 
+			await self.edit_field('profilechamp', ctx, response.content)	
 			
 		return await self.bot.say("All done!")
 	
@@ -154,6 +169,10 @@ class mcocProfile:
 			is_number = await self.is_number(value)
 			if is_number is False:
 				validity.update({'status':'invalid','reason':'Hero Rating must be a number. Hero Rating not set.'})
+		if field == 'profilechamp':
+			champ = ChampConverter(self.ctx, profilechamp).convert()
+			if not champ.mcocportrait:
+				validity.update({'status':'invalid','reason':'Champion could not be found.'})
 		return validity
 			
 
@@ -179,6 +198,7 @@ class mcocProfile:
 		else:
 			await self.bot.say('Something went wrong. **{}** not set'.format(field_name))
 			return
+
 		
 	@mcoc_profile.command(pass_context=True)
 	async def delete(self, ctx, *, field : str):
@@ -215,7 +235,10 @@ class mcocProfile:
 		tz = tf.timezone_at(lng=longitude, lat=latitude)
 		return tz
 		
-
+    def get_avatar(self):
+        image = '{}portraits/portrait_{}.png'.format(remote_data_basepath, self.mcocportrait)
+        print(image)
+        return image
 		
 	@mcoc_profile.command(pass_context=True)
 	async def gamename(self, ctx, *, game_name : str):
@@ -242,7 +265,13 @@ class mcocProfile:
 		Set your Total Base Hero Rating."""			
 		await self.edit_field('herorating', ctx, rating)
 
-
+	@mcoc_profile.command(pass_context=True)
+	async def profilechamp(self, ctx, *, champ: ChampConverter):
+		"""
+		Set your profile champ."""
+		name = champ.hookid
+		await self.edit_field('profilechamp', ctx, name)
+		
 		
 	@mcoc_profile.command(pass_context=True)
 	async def view(self, ctx, *, user: discord.Member=None):
@@ -284,9 +313,15 @@ class mcocProfile:
 			# CUSTOM CLOCK EMOJI.lower()
 			clockemoji = clock_emoji(get_time)		
 			em.add_field(name="Time", value='Timezone: ' + timezone + '\nLocal Time: ' + localtime + '  ' + clockemoji,inline=False)	
+		
+		if "profilechamp" not in profile:
+			if user.avatar_url:
+				em.set_thumbnail(url=user.avatar_url)
+		else:
+			profilechamp = profile["profilechamp"]
+			champ = ChampConverter(ctx, profilechamp).convert()
+			em.set_thumbnail(url=champ.get_avatar())
 			
-		if user.avatar_url:
-			em.set_thumbnail(url=user.avatar_url)
 		await self.bot.say(embed=em)
 			
 #    def get_champion(self, cdict):
