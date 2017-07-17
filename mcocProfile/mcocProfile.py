@@ -104,20 +104,29 @@ class mcocProfile:
 			
 		return await self.bot.say("All done!")
 	
+	async def is_number(self,s):
+		try:
+			float(s)
+			return True
+		except ValueError:
+			return False
+		
 	async def check_field(self, field, value):
 		field_checks = {'summonerlevel':'yes','herorating':'yes'}
 		validity = {'status':'valid','reason':'n/a'}
 		if field not in field_checks:
 			return validity
 		if field == 'summonerlevel':
-			if isinstance(value,(int, float)) is False:
+			is_number = await self.is_number(value)
+			if is_number is False:
 				validity.update({'status':'invalid','reason':'Summoner Level must be a number.'})
 			elif int(value) > 60 or int(value) < 0:
 				validity.update({'status':'invalid','reason':'Summoner Level must fall between 0 and 60.'})
 			else:
 				pass
 		if field == 'herorating':
-			if isinstance(value,(int, float)) is False:
+			is_number = await self.is_number(value)
+			if is_number is False:
 				validity.update({'status':'invalid','reason':'Hero Rating must be a number.'})
 		return validity
 			
