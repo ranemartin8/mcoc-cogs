@@ -10,7 +10,7 @@ from geopy.geocoders import Nominatim
 
 
 class mcocProfile:
-    """Commands for creating and managing your Marvel Contest of Champions Profile"""
+	"""Commands for creating and managing your Marvel Contest of Champions Profile"""
 
 	def __init__(self, bot):
 		self.bot = bot
