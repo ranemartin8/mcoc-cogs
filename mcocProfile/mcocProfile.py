@@ -46,7 +46,7 @@ class mcocProfile:
 
 
 #    @checks.is_owner()
-	@commands.group(pass_context=True, name="prof")
+	@commands.group(pass_context=True, name="profiler",aliases=['account',])
 	async def mcoc_profile(self, ctx):
 		"""mcocProfile allows you to create and manage your MCOC Profile."""
 		if ctx.invoked_subcommand is None:
