@@ -45,9 +45,9 @@ class mcocProfile:
 #		else:
 		self.mcocProf[author.id] = {}
 		dataIO.save_json(self.profJSON, self.mcocProf)
-		await self.bot.say("Hi {}! Let's begin setting up your Summonor profile! You can reply **skip** to"
-						   "skip a question or **stop** to exit this session. This session will automatically"
-						   "end after 3 minutes without a response.\nNow, start by telling me your in-game name.".format(author))
+		await self.bot.say("Hi **{}**! Let's begin setting up your Summonor profile!\n - You can reply **skip** to"
+						   "skip a question or **stop** to exit this session. \n - This session will automatically "
+						   "end after *3 minutes* without a response.\n\nNow, start by telling me your **in-game name**.".format(author))
 
 		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
 		if response.content is None or response.content.lower() == 'stop':
