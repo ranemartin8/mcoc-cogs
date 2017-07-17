@@ -182,7 +182,7 @@ class mcocProfile:
 		geolocator = Nominatim()
 		try:
 			location = geolocator.geocode(query)
-		except GeocoderTimedOut:
+		except:
 			await self.bot.say('Location not found.')
 			return			
 		latitude = location.latitude 
@@ -213,7 +213,7 @@ class mcocProfile:
 		await self.edit_field('summonerlevel', ctx, summonerlevel)
 		
 	@mcoc_profile.command(pass_context=True)
-	async def rating(self, ctx, *, rating : float):
+	async def rating(self, ctx, *, rating : int):
 		"""
 		Set your Total Base Hero Rating."""			
 		await self.edit_field('herorating', ctx, rating)
@@ -221,7 +221,7 @@ class mcocProfile:
 	@mcoc_profile.command(pass_context=True)
 	async def view(self, ctx, *, user: discord.Member=None):
 		"""
-		Set your Total Base Hero Rating."""			
+		View a users profile.."""			
 		author = ctx.message.author
 		if not user:
 			user = author
