@@ -57,7 +57,7 @@ class mcocProfile:
 			if game_name.content.lower() == 'stop': 
 				return 
 
-		await ctx.invoke(self.game_name, game_name.content)
+		await self.game_name(game_name.content)
 
 		await self.bot.say("Now let's set your timezone. Where do you live? (City/State/Country)")
 
@@ -69,7 +69,7 @@ class mcocProfile:
 			await self.bot.say('{}'.format(self.stopSkip[location.content.lower()]))
 			if location.content.lower() == 'stop': 
 				return 	
-		await ctx.invoke(self.timezone, location.content)	
+		await self.timezone(location.content)	
 
 		await self.bot.say("done!")
 		return
