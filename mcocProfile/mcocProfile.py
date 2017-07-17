@@ -235,10 +235,10 @@ class mcocProfile:
 		tz = tf.timezone_at(lng=longitude, lat=latitude)
 		return tz
 		
-    def get_avatar(self):
-        image = '{}portraits/portrait_{}.png'.format(remote_data_basepath, self.mcocportrait)
-        print(image)
-        return image
+	def get_avatar(self):
+		image = '{}portraits/portrait_{}.png'.format(remote_data_basepath, self.mcocportrait)
+		print(image)
+		return image
 		
 	@mcoc_profile.command(pass_context=True)
 	async def gamename(self, ctx, *, game_name : str):
