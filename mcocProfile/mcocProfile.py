@@ -201,12 +201,12 @@ class mcocProfile:
 
 		
 	@mcoc_profile.command(pass_context=True)
-	async def delete(self, ctx, *, field : str):
+	async def delete(self, ctx, *, field : str,aliases=['del',]):
 		"""
 		Delete a field from your profile."""
 		author = ctx.message.author
 		if field not in valid_fields:
-			await self.bot.say('**{}** is not a valid field. Try again with a valid field from the following list: '.format(field,"\n".join(fields_list)))
+			await self.bot.say('**{}** is not a valid field. Try again with a valid field from the following list: {}'.format(field,'\n'.join(fields_list)))
 			return
 		if author.id not in self.mcocProf or self.mcocProf[author.id] == False:
 			self.mcocProf[author.id] = {}
