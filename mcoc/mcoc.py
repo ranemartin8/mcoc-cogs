@@ -1,22 +1,3 @@
-Skip to content
-This repository
-Search
-Pull requests
-Issues
-Marketplace
-Gist
- @ranemartin8
- Sign out
- Watch 3
-  Star 1
-  Fork 2 JasonJW/mcoc-cogs
- Code  Issues 2  Pull requests 0  Projects 0  Wiki Insights 
-Branch: DeltaDev Find file Copy pathmcoc-cogs/mcoc/mcoc.py
-c24f4ea  a day ago
-@DeltaSigma130 DeltaSigma130 Re-Merge
-3 contributors @JasonJW @DeltaSigma130 @mcoc-collector
-RawBlameHistory     
-1420 lines (1273 sloc)  58.2 KB
 import re
 from datetime import datetime, timedelta
 from textwrap import wrap
