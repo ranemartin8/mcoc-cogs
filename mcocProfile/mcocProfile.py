@@ -10,6 +10,8 @@ from datetime import tzinfo, timedelta, datetime
 import pytz
 
 field_names = {'summonerlevel':'Summoner Level','herorating':'Total Base Hero Rating','timezone':'Timezone','game_name':'In-Game Name'}
+fields_list = ['summonerlevel','herorating','timezone','game_name']
+valid_fields = set(fields_list)
 
 def getLocalTime(datetime_obj,timezone):
 	utcmoment = datetime_obj.replace(tzinfo=pytz.utc)
@@ -46,7 +48,7 @@ class mcocProfile:
 
 
 #    @checks.is_owner()
-	@commands.group(pass_context=True, name="profiler",aliases=['account',])
+	@commands.group(pass_context=True, name="profiler",aliases=['account','prof',])
 	async def mcoc_profile(self, ctx):
 		"""mcocProfile allows you to create and manage your MCOC Profile."""
 		if ctx.invoked_subcommand is None:
@@ -178,6 +180,28 @@ class mcocProfile:
 			await self.bot.say('Something went wrong. **{}** not set'.format(field_name))
 			return
 		
+	@mcoc_profile.command(pass_context=True)
+	async def delete(self, ctx, *, field : str):
+		"""
+		Delete a field from your profile."""
+		author = ctx.message.author
+		if field not in valid_fields:
+			await self.bot.say('**{}** is not a valid field. Try again with a valid field from the following list: '.format(field,"\n".join(fields_list)))
+			return
+		if author.id not in self.mcocProf or self.mcocProf[author.id] == False:
+			self.mcocProf[author.id] = {}
+			dataIO.save_json(self.profJSON, self.mcocProf)	
+		if field not in field_names:
+			field_name = field
+		else:
+			field_name = field_names[field]
+		if field in self.mcocProf[author.id]:
+			del self.mcocProf[author.id][field]
+			await self.bot.say('Your **{}** has been deleted.'.format(field_name))
+		else:
+			await self.bot.say('Something went wrong. **{}** not deleted'.format(field_name))
+			return
+		
 	async def gettimezone(self, query):
 		geolocator = Nominatim()
 		try:
@@ -218,6 +242,8 @@ class mcocProfile:
 		Set your Total Base Hero Rating."""			
 		await self.edit_field('herorating', ctx, rating)
 
+
+		
 	@mcoc_profile.command(pass_context=True)
 	async def view(self, ctx, *, user: discord.Member=None):
 		"""
