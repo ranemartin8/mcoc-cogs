@@ -15,7 +15,7 @@ import ast
 import csv
 import aiohttp
 import re
-
+from __main__ import send_cmd_help
 ### Monkey Patch of JSONEnconder
 from json import JSONEncoder
 
