@@ -124,8 +124,8 @@ class mcocProfile:
 
 	async def edit_field(self, field, ctx, value):
 		check = await self.check_field(field,value)
-		if check.status == 'invalid':
-			await self.bot.say(check.reason)
+		if check['status'] == 'invalid':
+			await self.bot.say(check['reason'])
 			return
 		author = ctx.message.author
 		if author.id not in self.mcocProf or self.mcocProf[author.id] == False:
