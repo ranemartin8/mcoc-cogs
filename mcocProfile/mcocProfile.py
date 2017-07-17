@@ -170,7 +170,7 @@ class mcocProfile:
 			if is_number is False:
 				validity.update({'status':'invalid','reason':'Hero Rating must be a number. Hero Rating not set.'})
 		if field == 'profilechamp':
-			champ = ChampConverter(self.ctx, profilechamp).convert()
+			champ = await ChampConverter(self.ctx, profilechamp).convert()
 			if not champ.mcocportrait:
 				validity.update({'status':'invalid','reason':'Champion could not be found.'})
 		return validity
@@ -319,7 +319,7 @@ class mcocProfile:
 				em.set_thumbnail(url=user.avatar_url)
 		else:
 			profilechamp = profile["profilechamp"]
-			champ = ChampConverter(ctx, profilechamp).convert()
+			champ = await ChampConverter(ctx, profilechamp).convert()
 			em.set_thumbnail(url=champ.get_avatar())
 			
 		await self.bot.say(embed=em)
