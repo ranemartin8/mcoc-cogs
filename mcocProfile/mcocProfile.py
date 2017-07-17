@@ -13,8 +13,6 @@ class mcocProfile:
 	"""Commands for creating and managing your Marvel Contest of Champions Profile"""
 
 	def __init__(self, bot):
-#		self.game_name = kwargs.get('game_name')
-#		self.timezone = kwargs.get('timezone')
 		self.bot = bot
 		self.profJSON = "data/mcocProfile/profiles.json"
 		self.mcocProf = dataIO.load_json(self.profJSON)
@@ -46,39 +44,85 @@ class mcocProfile:
 		self.mcocProf[author.id] = {}
 		dataIO.save_json(self.profJSON, self.mcocProf)
 		await self.bot.say("Hi **{}**! Let's begin setting up your Summonor profile!\n - You can reply **skip** to"
-						   "skip a question or **stop** to exit this session. \n - This session will automatically "
+						   " skip a question or **stop** to exit this session. \n - This session will automatically "
 						   "end after *3 minutes* without a response.\n\nNow, start by telling me your **in-game name**.".format(author))
 
 		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
-		if response.content is None or response.content.lower() == 'stop':
-			if game_name.content is None:	
-				await self.bot.say('{0.mention}, your session has timed out.'.format(author))
-			else:
-				await self.bot.say('You\'ve exited this profile-making session.')
+		
+		if response.content is None:
+			await self.bot.say('{0.mention}, your session has timed out.'.format(author))
 			return
-		if response.content.lower() == 'skip':
+		if response.content.lower() == 'stop':
+			await self.bot.say('You\'ve exited this profile-making session.')
+			return
+		elif response.content.lower() == 'skip':
 			await self.bot.say('Question skipped!')
 		else: 
 			await self.edit_field('game_name', ctx, response.content)
 
 		await self.bot.say("Now let's set your timezone. Where do you live? (City/State/Country)")
+		
 		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
-		if response.content is None or response.content.lower() == 'stop':
-			if game_name.content is None:	
-				await self.bot.say('{0.mention}, your session has timed out.'.format(author))
-			else:
-				await self.bot.say('You\'ve exited this profile-making session.')
+		if response.content is None:
+			await self.bot.say('{0.mention}, your session has timed out.'.format(author))
 			return
-		if response.content.lower() == 'skip':
+		if response.content.lower() == 'stop':
+			await self.bot.say('You\'ve exited this profile-making session.')
+			return
+		elif response.content.lower() == 'skip':
 			await self.bot.say('Question skipped!')
-		else: 
+		else:
 			timezone = await self.gettimezone(response.content)
 			await self.edit_field('timezone', ctx, timezone)
+
+		await self.bot.say("What is your Summonor Level? (0-60)")	
+		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
+		if response.content is None:
+			await self.bot.say('{0.mention}, your session has timed out.'.format(author))
+			return
+		if response.content.lower() == 'stop':
+			await self.bot.say('You\'ve exited this profile-making session.')
+			return
+		elif response.content.lower() == 'skip':
+			await self.bot.say('Question skipped!')
+		else: 
+			if int(response.content) > 60 or int(response.content) < 0:
+			
+			else:
+				await self.edit_field('summonerlevel', ctx, response.content)		
+			
+		await self.bot.say("What is your Total Base Here Rating?")	
+		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
+		if response.content is None:
+			await self.bot.say('{0.mention}, your session has timed out.'.format(author))
+			return
+		if response.content.lower() == 'stop':
+			await self.bot.say('You\'ve exited this profile-making session.')
+			return
+		elif response.content.lower() == 'skip':
+			await self.bot.say('Question skipped!')
+		else: 
+			await self.edit_field('herorating', ctx, response.content)			
+			
 			
 		return await self.bot.say("All done!")
-
+	
+	async def check_field(self, field, value):
+		field_checks = {'herorating':'yes'}
+		validity = {'status':'valid','reason':'n/a'}
+		if field not in field_checks:
+			return validity
+		if field == 'herorating':
+			if int(value) > 60 or int(value) < 0:
+				validity.update({'status':'invalid','reason':'Summoner Level must fall between 0 and 60.'})
+		return validity
+			
 
 	async def edit_field(self, field, ctx, value):
+		check = await self.check_field(field,value)
+		if check.status == 'invalid'
+			await self.bot.say(check.reason)
+			return
 		author = ctx.message.author
 		if author.id not in self.mcocProf or self.mcocProf[author.id] == False:
 			self.mcocProf[author.id] = {}
@@ -107,14 +151,13 @@ class mcocProfile:
 	@mcoc_profile.command(pass_context=True,invoke_without_command=True)
 	async def gamename(self, ctx, *, game_name : str):
 		"""
-		Set your In-Game Name"""			
-
+		Set your In-Game Name."""			
 		await self.edit_field('game_name', ctx, game_name)
 	
 	@mcoc_profile.command(pass_context=True,invoke_without_command=True)
 	async def timezone(self, ctx, *, location : str):
 		"""
-		Set your timezone"""			
+		Provide your location to set your timezone."""			
 		timezone = await self.gettimezone(location)
 		await self.edit_field('timezone', ctx, timezone)
 		
