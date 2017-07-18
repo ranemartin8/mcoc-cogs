@@ -289,7 +289,7 @@ class mcocProfile:
 		return dataIO.load_json(f)
 		
 	@mcoc_profile.command(pass_context=True,aliases=['awd',])
-	async def teams(self, ctx, *, team, champs : ChampConverterMult):
+	async def teams(self, ctx, *, team:str , champs : ChampConverterMult):
 		"""
 		Set your Alliance War Defenders."""	
 		user_id = ctx.message.author.id
