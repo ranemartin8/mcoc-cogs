@@ -117,7 +117,7 @@ class mcocProfile:
 		
 	async def hook_file(self, userid):
 		data = {}
-		if not os.path.exists(self.hookPath):
+		if not os.path.exists(self.hookPath.format(userid)):
 			os.makedirs(self.hookPath.format(userid))
 		f = self.hookJSON.format(userid)
 		if not dataIO.is_valid_json(f):
