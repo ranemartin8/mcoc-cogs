@@ -10,11 +10,13 @@ from datetime import tzinfo, timedelta, datetime
 import pytz
 from .mcoc import ChampConverter, ChampConverterMult, QuietUserError
 
-field_names = {'summonerlevel':'Summoner Level','herorating':'Total Base Hero Rating','timezone':'Timezone','game_name':'In-Game Name','aq':'Alliance Quest','awd':'AW Defense','awo':'AW Offense','alliance':'Alliance'}
+field_names = {'summonerlevel':'Summoner Level','herorating':'Total Base Hero Rating','timezone':'Timezone','game_name':'In-Game Name','aq':'Alliance Quest','awd':'AW Defense','awo':'AW Offense','alliance':'Alliance','bg':'Battlegroup','achievements':'Achievements'}
 fields_list = field_names.keys()
 valid_fields = set(fields_list)
 valid_int = {'1','2','3','4','5'}
 valid_stop = {'stop','end','cancel'}
+achievements_set = {'rol','lol','rtl','100%act4'}
+bg_set = {'bg1','bg2','bg3'}
 remote_data_basepath = 'https://raw.githubusercontent.com/JasonJW/mcoc-cogs/master/mcoc/data/'
 
 def getLocalTime(datetime_obj,timezone):
@@ -238,7 +240,7 @@ class mcocProfile:
 	@mcoc_profile.command(pass_context=True)
 	async def profilechamp(self, ctx, *, champ: ChampConverter):
 		"""
-		Set your profile champ."""
+		Set your Profile champion."""
 		name = champ.hookid
 		await self.edit_field('profilechamp', ctx, name)
 
@@ -349,11 +351,18 @@ class mcocProfile:
 			profile['hidden_fields'] = []
 		hidden_fields = profile['hidden_fields']
 		em = discord.Embed(color=user.color)
+		
 		if "game_name" not in profile or "game_name" in hidden_fields:
-			pass
+			em.add_field(name="**Summoner**", value=user.display_name,inline=False)
 		else:
 			game_name = profile["game_name"]
 			em.add_field(name="**"+field_names["game_name"]+"**", value=game_name,inline=False)
+			
+		if "alliance" not in profile or "alliance" in hidden_fields:
+			pass
+		else:
+			alliance = profile["alliance"]
+			em.add_field(name="**"+field_names["alliance"]+"**", value=alliance,inline=False)
 			
 		if "summonerlevel" not in profile or "summonerlevel" in hidden_fields:
 			pass
@@ -361,6 +370,7 @@ class mcocProfile:
 			summonerlevel = profile["summonerlevel"]
 			summonerlevel = int(summonerlevel)
 			em.add_field(name="**"+field_names["summonerlevel"]+"**", value='{:,}'.format(summonerlevel),inline=False)
+			
 		if "herorating" not in profile or "herorating" in hidden_fields:
 			pass
 		else:
@@ -368,6 +378,32 @@ class mcocProfile:
 			herorating = int(herorating)
 			em.add_field(name="**"+field_names["herorating"]+"**", value='{:,}'.format(herorating),inline=False)
 			
+		if "achievements" in hidden_fields:
+			pass
+		else:
+			roles = user.roles
+			role_names = {}
+			for role in roles:
+				role_names.add(role.name.lower())
+			achievements = role_names & achievements_set
+			if len(achievements) == 0:
+				pass
+			else:
+				em.add_field(name="**"+field_names["achievements"]+"**", value=str(', '.join(achievements)).upper(),inline=False)
+	
+		if "bg" in hidden_fields:
+			pass
+		else:
+			roles = user.roles
+			role_names = {}
+			for role in roles:
+				role_names.add(role.name.lower())
+			bg = role_names & bg_set
+			if len(bg) == 0:
+				pass
+			else:
+				em.add_field(name="**"+field_names["bg"]+"**", value=bg[0].upper(),inline=False)
+	
 		if "timezone" not in profile or "timezone" in hidden_fields:
 			pass
 		else:
@@ -377,7 +413,7 @@ class mcocProfile:
 			localtime = get_time.strftime("%I:%M").lstrip('0') + ' ' + get_time.strftime("%p")
 			# CUSTOM CLOCK EMOJI.lower()
 			clockemoji = clock_emoji(get_time)		
-			em.add_field(name="Time", value='Timezone: ' + timezone + '\nLocal Time: ' + localtime + '  ' + clockemoji,inline=False)	
+			em.add_field(name="**Time**", value='Timezone: ' + timezone + '\nLocal Time: ' + localtime + '  ' + clockemoji,inline=False)	
 		
 		if "profilechamp" not in profile or "profilechamp" in hidden_fields:
 			if user.avatar_url:
