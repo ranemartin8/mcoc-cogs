@@ -327,8 +327,10 @@ class mcocProfile:
 				i += 1
 			await self.bot.say('Reply with the # (1 - {}) of the champion you\'d like to replace.\n{}'.format(max_int,'\n'.join(current_champs)))
 			check = lambda m: isinstance(int(m.content), int) == True
-			response = await self.bot.wait_for_message(channel=channel, author=author, check=check, timeout=180.0)
+			response = await self.bot.wait_for_message(channel=channel, author=author, check=check, timeout=30.0)
 			resp_int = int(response.content)
+			if response is None:
+				await self.bot.say('Request timeout.')
 			if resp_int < max_int or resp_int == 0:
 				await self.bot.say('Number must fall between 1 and {}. Team not updated.'.format(max_int))
 				return
