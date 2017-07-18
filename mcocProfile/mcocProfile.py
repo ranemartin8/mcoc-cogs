@@ -10,7 +10,7 @@ from datetime import tzinfo, timedelta, datetime
 import pytz
 from .mcoc import ChampConverter, ChampConverterMult, QuietUserError
 
-field_names = {'summonerlevel':'Summoner Level','herorating':'Total Base Hero Rating','timezone':'Timezone','game_name':'In-Game Name'}
+field_names = {'summonerlevel':'Summoner Level','herorating':'Total Base Hero Rating','timezone':'Timezone','game_name':'In-Game Name','aq':'Alliance Quest','awd':'Alliance War Defense','awo':'Alliance War Defense'}
 fields_list = ['summonerlevel','herorating','timezone','game_name']
 valid_fields = set(fields_list)
 
@@ -48,6 +48,8 @@ class mcocProfile:
 		self.bot = bot
 		self.profJSON = "data/mcocProfile/profiles.json"
 		self.mcocProf = dataIO.load_json(self.profJSON)
+		self.hookJSON = "data/hook/users/{}/champs.json"
+		
 
 
 #    @checks.is_owner()
@@ -240,7 +242,15 @@ class mcocProfile:
 		image = '{}portraits/portrait_{}.png'.format(remote_data_basepath, self.mcocportrait)
 		print(image)
 		return image
+	
+	async def hook_file(self, userid):
+		data = {}
+		f = self.hookJSON.format(userid)
+		if not dataIO.is_valid_json(f):
+			dataIO.save_json(f, data)
+		return dataIO.load_json(f)
 		
+
 	@mcoc_profile.command(pass_context=True)
 	async def gamename(self, ctx, *, game_name : str):
 		"""
@@ -323,6 +333,22 @@ class mcocProfile:
 			champ = await ChampConverter(ctx, profilechamp).convert()
 			em.set_thumbnail(url=champ.get_avatar())
 			
+		hook = await self.hook_file(user_id)
+		if 	"aq" not in hook:
+			pass
+		else:
+			aq_list = hook["aq"]
+			em.add_field(name="**"+field_names["aq"]+"**", value='\n'.join(aq_list),inline=False)
+		if 	"awo" not in hook:
+			pass
+		else:
+			awo_list = hook["awo"]
+			em.add_field(name="**"+field_names["awo"]+"**", value='\n'.join(awo_list),inline=False)
+		if 	"awd" not in hook:
+			pass
+		else:
+			awd_list = hook["awd"]
+			em.add_field(name="**"+field_names["awd"]+"**", value='\n'.join(awd_list),inline=False)
 		await self.bot.say(embed=em)
 			
 #    def get_champion(self, cdict):
@@ -369,8 +395,12 @@ def check_folder():
 	if not os.path.exists("data/mcocProfile"):
 		print("Creating data/mcocProfile folder...")
 		os.makedirs("data/mcocProfile")
-		print("Folder created!")
-
+		print("Profiles Folder created!")
+	if not os.path.exists("data/hook/users"):
+		print("Creating data/hook/users folder...")
+		os.makedirs("data/hook/users")
+		print("Hook Users Folder created!")
+		
 def check_file():
 	data = {}
 	f = "data/mcocProfile/profiles.json"
