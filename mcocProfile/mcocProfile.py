@@ -12,6 +12,7 @@ from .mcoc import ChampConverter, ChampConverterMult, QuietUserError
 from .gsheeter import MemberFinder
 
 field_names = {'summonerlevel':'Summoner Level','herorating':'Total Base Hero Rating','timezone':'Timezone','game_name':'In-Game Name','aq':'Alliance Quest','awd':'AW Defense','awo':'AW Offense','alliance':'Alliance','bg':'Battlegroup','achievements':'Achievements'}
+hook_fields = {'awo','awd','aq'}
 fields_list = field_names.keys()
 valid_fields = set(fields_list)
 valid_int = {'1','2','3','4','5'}
@@ -55,7 +56,7 @@ class mcocProfile:
 		self.hookPath = "data/hook/users/{}"
 		self.hookJSON = "data/hook/users/{}/champs.json"
 		
-	@commands.group(pass_context=True, name="profiler",aliases=['account','prof',])
+	@commands.group(no_pm=True, pass_context=True, name="profiler",aliases=['account','prof',])
 	async def mcoc_profile(self, ctx):
 		"""mcocProfile allows you to create and manage your MCOC Profile."""
 		if ctx.invoked_subcommand is None:
@@ -124,7 +125,7 @@ class mcocProfile:
 			dataIO.save_json(f, data)
 		return dataIO.load_json(f)
 		
-	@mcoc_profile.command(pass_context=True,aliases=['del',])
+	@mcoc_profile.command(no_pm=True, pass_context=True,aliases=['del',])
 	async def delete(self, ctx, *, field : str):
 		"""
 		Delete a field from your profile."""
@@ -157,7 +158,7 @@ class mcocProfile:
 			else: 
 				await self.bot.say('No **{}** available to delete.'.format(field_name))
 				
-	@mcoc_profile.command(pass_context=True)
+	@mcoc_profile.command(no_pm=True, pass_context=True)
 	async def display(self, ctx, show_or_hide : str, field: str):
 		"""
 		Toggle the visibility of a field on your profile."""	
@@ -215,7 +216,26 @@ class mcocProfile:
 		print(image)
 		return image
 	
-	@mcoc_profile.command(pass_context=True)
+	@command.command(no_pm=True, pass_context=True)
+	@checks.is_owner()
+	async def profedit(self, ctx, user : str, field : str, value : str):
+		"""
+		OWNER ONLY. Update member profile fields."""
+		user = await MemberFinder(ctx, user).convert()
+		user_id = user.id
+		if field not in valid_fields:
+			await self.bot.say('**{}** is not a valid field. Try again with a valid '
+							   'field from the following list: \n- {}'.format(field,'\n- '.join(fields_list)))
+			return
+		if field not in hook_fields:
+			await self.edit_field(user_id, field, ctx, value)
+			return
+		else:
+			champs = await ChampConverter(ctx, value).convert()
+			await self.hook_update(user_id, field, value, ctx.message)
+			return
+		
+	@mcoc_profile.command(no_pm=True, pass_context=True)
 	async def gamename(self, ctx, game_name : str, user : str=None):
 		"""
 		Set your In-Game Name."""
@@ -227,33 +247,33 @@ class mcocProfile:
 		user_id = user.id
 		await self.edit_field(user_id,'game_name', ctx, game_name)
 	
-	@mcoc_profile.command(pass_context=True)
+	@mcoc_profile.command(no_pm=True, pass_context=True)
 	async def timezone(self, ctx, *, location : str):
 		"""
 		Provide your location to set your timezone."""			
 		timezone = await self.gettimezone(location)
 		await self.edit_field('timezone', ctx, timezone)
 	
-	@mcoc_profile.command(pass_context=True,aliases=['summonerlevel',])
+	@mcoc_profile.command(no_pm=True, pass_context=True,aliases=['summonerlevel',])
 	async def level(self, ctx, *, summonerlevel : str):
 		"""
 		Set your Summonor Level."""			
 		await self.edit_field('summonerlevel', ctx, summonerlevel)
 		
-	@mcoc_profile.command(pass_context=True,aliases=['herorating',])
+	@mcoc_profile.command(no_pm=True, pass_context=True,aliases=['herorating',])
 	async def rating(self, ctx, *, rating : str):
 		"""
 		Set your Total Base Hero Rating."""	
 		await self.edit_field('herorating', ctx, rating)
 		
-	@mcoc_profile.command(pass_context=True)
+	@mcoc_profile.command(no_pm=True, pass_context=True)
 	async def profilechamp(self, ctx, *, champ: ChampConverter):
 		"""
 		Set your Profile champion."""
 		name = champ.hookid
 		await self.edit_field('profilechamp', ctx, name)
 
-	@mcoc_profile.command(pass_context=True)
+	@mcoc_profile.command(no_pm=True, pass_context=True)
 	async def alliance(self, ctx, *, alliance:str):
 		"""
 		Set your Alliance Name."""
@@ -321,26 +341,21 @@ class mcocProfile:
 			await self.bot.say('Your **{} team** is now:\n{}'.format(team_name,'\n'.join(champ_list)))		
 			
 	
-	@mcoc_profile.command(pass_context=True)
-	async def defense(self, ctx, *, champs : ChampConverterMult, user:str=None):
+	@mcoc_profile.command(no_pm=True, pass_context=True)
+	async def defense(self, ctx, *, champs : ChampConverterMult):
 		"""
 		Set your Alliance War Defense team."""	
-		author = ctx.message.author
-		if not user:
-			user = author
-		else:
-			user = await MemberFinder(ctx, user).convert()
-		user_id = user.id
+		user_id = ctx.message.author.id
 		await self.hook_update(user_id,'awd', champs, ctx.message)
 
-	@mcoc_profile.command(pass_context=True)
+	@mcoc_profile.command(no_pm=True, pass_context=True)
 	async def offense(self, ctx, *, champs : ChampConverterMult):
 		"""
 		Set your Alliance War Offense team."""	
 		user_id = ctx.message.author.id
 		await self.hook_update(user_id,'awo', champs, ctx.message)
 		
-	@mcoc_profile.command(pass_context=True)
+	@mcoc_profile.command(no_pm=True, pass_context=True)
 	async def aq(self, ctx, *, champs : ChampConverterMult):
 		"""
 		Set your Alliance Quest team."""	
@@ -353,7 +368,7 @@ class mcocProfile:
 #		else:
 #			user = await MemberFinder(ctx, user_string).convert()
 #		
-	@mcoc_profile.command(pass_context=True)
+	@mcoc_profile.command(no_pm=True, pass_context=True)
 	async def view(self, ctx, *, user: discord.Member=None):
 		"""
 		View a users profile."""			
@@ -459,8 +474,8 @@ class mcocProfile:
 			em.add_field(name="**"+field_names["awd"]+"**", value='\n'.join(awd_list))
 		await self.bot.say(embed=em)
 		
-	@mcoc_profile.command(pass_context=True, name="make")
-	async def _newprofile(self, ctx):
+	@mcoc_profile.command(no_pm=True, pass_context=True)
+	async def make(self, ctx):
 		"""Create a new profile"""
 		message = ctx.message
 		author = message.author
