@@ -213,7 +213,7 @@ class mcocProfile:
 		return image
 	
 	@mcoc_profile.command(pass_context=True)
-	async def gamename(self, ctx, *, game_name : str, user : str=None):
+	async def gamename(self, ctx, game_name : str, user : str=None):
 		"""
 		Set your In-Game Name."""
 		author = ctx.message.author
