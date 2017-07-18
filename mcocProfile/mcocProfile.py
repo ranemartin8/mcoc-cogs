@@ -220,7 +220,7 @@ class mcocProfile:
 			await self.bot.say('**{}** is not a valid field. Try again with a valid'
 							   'field from the following list: \n- {}'.format(field,'\n- '.join(fields_list)))
 			return
-		if field is "awd" or field is "awo" or field is "aq":
+		if field == "awd" or field == "awo" or field == "aq":
 			hook = await self.hook_file(author.id)
 			if field in hook:
 				del hook[field]
