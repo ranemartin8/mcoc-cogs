@@ -320,7 +320,7 @@ class mcocProfile:
 			i = 1
 			current_champs = []
 			for champ in existing_champs:
-				current_champs.append(i + '. ' + champ.rank_sig_str + ' ' + champ.full_name)
+				current_champs.append(str(i) + '. ' + champ.rank_sig_str + ' ' + champ.full_name)
 				i += 1
 			await self.bot.say('Reply with the # (1 - {}) of the champion you\'d like to replace.\n{}'.format(max_int,'\n'.join(current_champs)))
 			check = lambda m: isinstance(m, int) == True
