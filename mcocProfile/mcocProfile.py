@@ -226,11 +226,11 @@ class mcocProfile:
 							   'field from the following list: \n- {}'.format(field,'\n- '.join(fields_list)))
 			return
 		if field not in hook_fields:
-			await self.edit_field(user_id, field, ctx, value,)
+			await self.edit_field(user_id, field, ctx, value,'owner')
 			return
 		else:
 			champs = await ChampConverter(ctx, value).convert()
-			await self.hook_update(user_id, field, value, ctx.message)
+			await self.hook_update(user_id, field, value, ctx.message,'owner')
 			return
 		
 	@mcoc_profile.command(no_pm=True, pass_context=True,aliases=['del',])
