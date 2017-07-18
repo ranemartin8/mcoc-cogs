@@ -315,6 +315,9 @@ class mcocProfile:
 		if len(champ_list)< max_int and len(champ_list) > 1:
 			await self.bot.say('You can only swap out one champion at a time or replace all {} at once.'.format(max_int))
 			return
+		if len(champ_list) > max_int:
+			await self.bot.say('You can only set a maximum of **{}** champions for this team.'.format(max_int))
+			return
 		if len(champ_list) == 1:
 			existing_champs = hook[team]
 			i = 1
@@ -332,10 +335,8 @@ class mcocProfile:
 			del existing_champs[pos]
 			newchamps = existing_champs.extend(champ_list)
 			hook.update({team : newchamps})
+			dataIO.save_json(self.hookJSON.format(user_id), hook)
 			await self.bot.say('Your **{} team** is now:\n{}'.format(team_name,'\n'.join(newchamps)))	
-		if len(champ_list) > max_int:
-			await self.bot.say('You can only set a maximum of **{}** champions for this team.'.format(max_int))
-			return
 		else:
 			hook.update({team : champ_list})
 			dataIO.save_json(self.hookJSON.format(user_id), hook)
