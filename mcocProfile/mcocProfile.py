@@ -152,7 +152,6 @@ class mcocProfile:
 	
 	async def is_number(self,s):
 		try:
-			s.replace(',','')
 			float(s)
 			return True
 		except ValueError:
@@ -164,8 +163,8 @@ class mcocProfile:
 		if field not in field_checks:
 			return validity
 		if field == 'summonerlevel':
-			if value.find(',') != -1:
-				value.replace(',','')
+			if str(value).find(',') != -1:
+				value = str(value).replace(',','')
 			is_number = await self.is_number(value)
 			if is_number is False:
 				validity.update({'status':'invalid','reason':'Summoner Level must be a number. Summoner Level not set.'})
@@ -174,6 +173,8 @@ class mcocProfile:
 			else:
 				pass
 		if field == 'herorating':
+			if str(value).find(',') != -1:
+				value = str(value).replace(',','')
 			is_number = await self.is_number(value)
 			if is_number is False:
 				validity.update({'status':'invalid','reason':'Hero Rating must be a number. Hero Rating not set.'})
