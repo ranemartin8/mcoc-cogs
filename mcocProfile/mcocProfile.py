@@ -126,7 +126,7 @@ class mcocProfile:
 	async def edit_field(self,user_id,field, ctx, value):
 		identifier = 'Your'
 		if user_id != ctx.message.author.id:
-			get_mem = message.server.get_member(user_id)
+			get_mem = ctx.message.server.get_member(user_id)
 			identifier = get_mem.display_name + "'s"
 		check = await self.check_field(field,value)
 		if check['status'] == 'invalid':
