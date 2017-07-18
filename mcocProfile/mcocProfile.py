@@ -13,7 +13,8 @@ from .mcoc import ChampConverter, ChampConverterMult, QuietUserError
 field_names = {'summonerlevel':'Summoner Level','herorating':'Total Base Hero Rating','timezone':'Timezone','game_name':'In-Game Name','aq':'Alliance Quest','awd':'AW Defense','awo':'AW Offense','alliance':'Alliance'}
 fields_list = field_names.keys()
 valid_fields = set(fields_list)
-
+valid_int = {'1','2','3','4','5'}
+valid_stop = {'stop','end','cancel'}
 remote_data_basepath = 'https://raw.githubusercontent.com/JasonJW/mcoc-cogs/master/mcoc/data/'
 
 def getLocalTime(datetime_obj,timezone):
@@ -254,12 +255,13 @@ class mcocProfile:
 
 			await self.bot.say('New Team Member: **{}**\n\nReply with the # (1 - {}) of the '
 							   'champion you\'d like to replace:\n{}\n\nReply **stop** to cancel.'.format(champ_list[0],max_int,'\n'.join(current_champs)))
-			check = lambda m: isinstance(int(m.content), int) == True or m.content == 'stop'
+			check lambda m: m.content in valid_int or m.content in valid_stop
+#			check = lambda m: valid_int isinstance(int(m.content), int) == True or m.content == 'stop'
 			response = await self.bot.wait_for_message(channel=channel, author=author, check=check, timeout=60.0)
 			if response is None:
 				await self.bot.say('Request timed out.')
 				return
-			if response.content == 'stop':
+			if response.content in valid_stop:
 				await self.bot.say('Request cancelled.')
 				return
 			resp_int = int(response.content)
@@ -270,8 +272,6 @@ class mcocProfile:
 			existing_champs[pos] = champ_list[0]
 			newchamps = existing_champs
 			hook.update({team : newchamps})
-			print(hook)
-			print(newchamps)
 			dataIO.save_json(self.hookJSON.format(user_id), hook)
 			await self.bot.say('Your **{} team** is now:\n{}'.format(team_name,'\n'.join(newchamps)))	
 		else: #updating the whole team
