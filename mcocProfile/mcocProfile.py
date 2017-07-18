@@ -253,12 +253,16 @@ class mcocProfile:
 				i += 1
 
 			await self.bot.say('New Team Member: **{}**\n\nReply with the # (1 - {}) of the '
-							   'champion you\'d like to replace:\n{}'.format(champ_list[0],max_int,'\n'.join(current_champs)))
-			check = lambda m: isinstance(int(m.content), int) == True
+							   'champion you\'d like to replace:\n{}\n\nReply **stop** to cancel.'.format(champ_list[0],max_int,'\n'.join(current_champs)))
+			check = lambda m: isinstance(int(m.content), int) == True or m.content == 'stop'
 			response = await self.bot.wait_for_message(channel=channel, author=author, check=check, timeout=60.0)
-			resp_int = int(response.content)
 			if response is None:
-				await self.bot.say('Request timeout.')
+				await self.bot.say('Request timed out.')
+				return
+			if response.content == 'stop':
+				await self.bot.say('Request cancelled.')
+				return
+			resp_int = int(response.content)
 			if resp_int > max_int or resp_int < 1:
 				await self.bot.say('Number must fall between 1 and {}. Team not updated.'.format(max_int))
 				return
