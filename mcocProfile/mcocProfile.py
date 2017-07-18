@@ -218,7 +218,7 @@ class mcocProfile:
 	
 	@mcoc_profile.command(no_pm=True, pass_context=True,hidden=True)
 	@checks.is_owner()
-	async def edit(self, ctx, user : str, field : str, value : str):
+	async def edit(self, ctx, user : str, field : str, *, value : str):
 		"""
 		OWNER ONLY. Update member profile fields."""
 		user = await MemberFinder(ctx, user).convert()
@@ -236,7 +236,7 @@ class mcocProfile:
 			return
 		
 	@mcoc_profile.command(no_pm=True, pass_context=True)
-	async def gamename(self, ctx, game_name : str, user : str=None):
+	async def gamename(self, ctx, *, game_name : str):
 		"""
 		Set your In-Game Name."""
 		author = ctx.message.author
