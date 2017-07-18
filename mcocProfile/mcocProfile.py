@@ -331,7 +331,7 @@ class mcocProfile:
 			resp_int = int(response.content)
 			if response is None:
 				await self.bot.say('Request timeout.')
-			if resp_int < max_int or resp_int == 0:
+			if resp_int > max_int or resp_int < 1:
 				await self.bot.say('Number must fall between 1 and {}. Team not updated.'.format(max_int))
 				return
 			pos = resp_int-1
