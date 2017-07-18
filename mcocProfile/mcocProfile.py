@@ -51,9 +51,6 @@ class mcocProfile:
 		self.mcocProf = dataIO.load_json(self.profJSON)
 		self.hookJSON = "data/hook/users/{}/champs.json"
 		
-
-
-#    @checks.is_owner()
 	@commands.group(pass_context=True, name="profiler",aliases=['account','prof',])
 	async def mcoc_profile(self, ctx):
 		"""mcocProfile allows you to create and manage your MCOC Profile."""
@@ -61,8 +58,6 @@ class mcocProfile:
 			await self.bot.send_cmd_help(ctx)
 			return
 		
-
-	
 	async def is_number(self,s):
 		try:
 			float(s)
@@ -124,8 +119,8 @@ class mcocProfile:
 			dataIO.save_json(f, data)
 		return dataIO.load_json(f)
 		
-	@mcoc_profile.command(pass_context=True)
-	async def delete(self, ctx, *, field : str,aliases=['del',]):
+	@mcoc_profile.command(pass_context=True,aliases=['del',])
+	async def delete(self, ctx, *, field : str):
 		"""
 		Delete a field from your profile."""
 		author = ctx.message.author
@@ -156,8 +151,46 @@ class mcocProfile:
 				await self.bot.say('Your **{}** has been deleted.'.format(field_name))
 			else: 
 				await self.bot.say('No **{}** available to delete.'.format(field_name))
-
-
+				
+	@mcoc_profile.command(pass_context=True)
+	async def display(self, ctx, *, field: str, setting : str):
+		"""
+		Toggle the visibility of a field on your profile."""	
+		author = ctx.message.author
+		user_id = author.id
+		toggles = {'show','hide'}
+		toggle.lower()
+		field.lower()
+		if field not in valid_fields:
+			await self.bot.say('**{}** is not a valid field. Try again with a valid'
+							   'field from the following list: \n- {}'.format(field,'\n- '.join(fields_list)))
+			return
+		if toggle not in toggles:
+			await self.bot.say('Display setting must equal "show" or "hide".')
+			return	
+		field_name = field_names[field]
+		if author.id not in self.mcocProf or self.mcocProf[author.id] == False:
+			self.mcocProf[author.id] = {}
+			dataIO.save_json(self.profJSON, self.mcocProf)	
+		if 'hidden_fields' not in self.mcocProf[author.id]:
+			self.mcocProf[author.id]['hidden_fields'] = []
+		if toggle == 'hide':
+			if field not in self.mcocProf[author.id]['hidden_fields']:
+				self.mcocProf[author.id]['hidden_fields'].append(field)
+				dataIO.save_json(self.profJSON, self.mcocProf)
+				await self.bot.say('**{}** is now hidden from your profile.'.format(field_name))
+			else:
+				await self.bot.say(('**{}** was already hidden from your profile.'.format(field_name))
+				return					
+		else:
+			if field not in self.mcocProf[author.id]['hidden_fields']:
+				await self.bot.say(('**{}** is already visible on your profile.'.format(field_name))
+				return	
+			else:
+				self.mcocProf[author.id]['hidden_fields'].remove(field)
+				dataIO.save_json(self.profJSON, self.mcocProf)
+				await self.bot.say('**{}** is now visible on your profile.'.format(field_name))
+				
 	async def gettimezone(self, query):
 		geolocator = Nominatim()
 		try:
@@ -176,9 +209,6 @@ class mcocProfile:
 		print(image)
 		return image
 	
-
-		
-
 	@mcoc_profile.command(pass_context=True)
 	async def gamename(self, ctx, *, game_name : str):
 		"""
@@ -256,7 +286,6 @@ class mcocProfile:
 			await self.bot.say('New Team Member: **{}**\n\nReply with the # (1 - {}) of the '
 							   'champion you\'d like to replace:\n{}\n\nReply **stop** to cancel.'.format(champ_list[0],max_int,'\n'.join(current_champs)))
 			check = lambda m: m.content in valid_int or m.content in valid_stop
-#			check = lambda m: valid_int isinstance(int(m.content), int) == True or m.content == 'stop'
 			response = await self.bot.wait_for_message(channel=channel, author=author, check=check, timeout=60.0)
 			if response is None:
 				await self.bot.say('Request timed out.')
@@ -285,7 +314,6 @@ class mcocProfile:
 		"""
 		Set your Alliance War Defense team."""	
 		user_id = ctx.message.author.id
-		print(champs)
 		await self.hook_update(user_id,'awd', champs, ctx.message)
 
 	@mcoc_profile.command(pass_context=True)
@@ -301,12 +329,13 @@ class mcocProfile:
 		Set your Alliance Quest team."""	
 		user_id = ctx.message.author.id
 		await self.hook_update(user_id,'aq', champs, ctx.message)
-				
+
+
 		
 	@mcoc_profile.command(pass_context=True)
 	async def view(self, ctx, *, user: discord.Member=None):
 		"""
-		View a users profile.."""			
+		View a users profile."""			
 		author = ctx.message.author
 		if not user:
 			user = author
@@ -315,27 +344,30 @@ class mcocProfile:
 			await self.bot.say('No profile has been created for that user.')
 			return
 		profile = self.mcocProf[user_id]
+		if 'hidden_fields' not in profile:
+			profile['hidden_fields'] = []
+		hidden_fields = profile['hidden_fields']
 		em = discord.Embed(color=user.color)
-		if "game_name" not in profile:
+		if "game_name" not in profile or "game_name" in hidden_fields:
 			pass
 		else:
 			game_name = profile["game_name"]
 			em.add_field(name="**"+field_names["game_name"]+"**", value=game_name,inline=False)
 			
-		if "summonerlevel" not in profile:
+		if "summonerlevel" not in profile or "summonerlevel" in hidden_fields:
 			pass
 		else:
 			summonerlevel = profile["summonerlevel"]
 			summonerlevel = int(summonerlevel)
 			em.add_field(name="**"+field_names["summonerlevel"]+"**", value='{:,}'.format(summonerlevel),inline=False)
-		if "herorating" not in profile:
+		if "herorating" not in profile or "herorating" in hidden_fields:
 			pass
 		else:
 			herorating = profile["herorating"]
 			herorating = int(herorating)
 			em.add_field(name="**"+field_names["herorating"]+"**", value='{:,}'.format(herorating),inline=False)
 			
-		if "timezone" not in profile:
+		if "timezone" not in profile or "timezone" in hidden_fields:
 			pass
 		else:
 			timezone = profile["timezone"]
@@ -346,7 +378,7 @@ class mcocProfile:
 			clockemoji = clock_emoji(get_time)		
 			em.add_field(name="Time", value='Timezone: ' + timezone + '\nLocal Time: ' + localtime + '  ' + clockemoji,inline=False)	
 		
-		if "profilechamp" not in profile:
+		if "profilechamp" not in profile or "profilechamp" in hidden_fields:
 			if user.avatar_url:
 				em.set_thumbnail(url=user.avatar_url)
 		else:
@@ -355,17 +387,17 @@ class mcocProfile:
 			em.set_thumbnail(url=champ.get_avatar())
 			
 		hook = await self.hook_file(user_id)
-		if 	"aq" not in hook:
+		if 	"aq" not in hook or "aq" in hidden_fields:
 			pass
 		else:
 			aq_list = hook["aq"]
 			em.add_field(name="**"+field_names["aq"]+"**", value='\n'.join(aq_list))
-		if 	"awo" not in hook:
+		if 	"awo" not in hook or "awo" in hidden_fields:
 			pass
 		else:
 			awo_list = hook["awo"]
 			em.add_field(name="**"+field_names["awo"]+"**", value='\n'.join(awo_list))
-		if 	"awd" not in hook:
+		if 	"awd" not in hook or "awd" in hidden_fields:
 			pass
 		else:
 			awd_list = hook["awd"]
