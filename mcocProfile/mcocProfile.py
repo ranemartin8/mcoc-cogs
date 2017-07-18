@@ -10,6 +10,7 @@ from datetime import tzinfo, timedelta, datetime
 import pytz
 from .mcoc import ChampConverter, ChampConverterMult, QuietUserError
 from .gsheeter import MemberFinder
+import re
 
 field_names = {'summonerlevel':'Summoner Level','herorating':'Total Base Hero Rating','timezone':'Timezone','gamename':'In-Game Name','aq':'Alliance Quest','awd':'AW Defense','awo':'AW Offense','alliance':'Alliance','bg':'Battlegroup','achievements':'Achievements'}
 hook_fields = {'awo','awd','aq'}
