@@ -10,8 +10,8 @@ from datetime import tzinfo, timedelta, datetime
 import pytz
 from .mcoc import ChampConverter, ChampConverterMult, QuietUserError
 
-field_names = {'summonerlevel':'Summoner Level','herorating':'Total Base Hero Rating','timezone':'Timezone','game_name':'In-Game Name','aq':'Alliance Quest','awd':'AW Defense','awo':'AW Offense'}
-fields_list = ['summonerlevel','herorating','timezone','game_name','aq','awd','awo']
+field_names = {'summonerlevel':'Summoner Level','herorating':'Total Base Hero Rating','timezone':'Timezone','game_name':'In-Game Name','aq':'Alliance Quest','awd':'AW Defense','awo':'AW Offense','alliance':'Alliance'}
+fields_list = field_names.keys()
 valid_fields = set(fields_list)
 
 remote_data_basepath = 'https://raw.githubusercontent.com/JasonJW/mcoc-cogs/master/mcoc/data/'
@@ -60,95 +60,7 @@ class mcocProfile:
 			await self.bot.send_cmd_help(ctx)
 			return
 		
-	@mcoc_profile.command(pass_context=True, name="make")
-	async def _newprofile(self, ctx):
-		"""Create a new profile"""
-		message = ctx.message
-		author = message.author
-		channel = message.channel
-		
-#		if author.id not in self.mcocProf or self.mcocProf[author.id] == False:
-#			data = discord.Embed(colour=author.colour)
-#			data.add_field(name="Error:warning:",value="Oops, it seems like you already have a profile, {}.".format(author.mention))
-#			await self.bot.say(embed=data)
-#		else:
-		self.mcocProf[author.id] = {}
-		dataIO.save_json(self.profJSON, self.mcocProf)
-		await self.bot.say("Hi **{}**! Let's begin setting up your Summonor profile!\n - You can reply **skip** to"
-						   " skip a question or **stop** to exit this session. \n - This session will automatically "
-						   "end after *3 minutes* without a response.\n\nNow, start by telling me your **in-game name**.".format(author))
 
-		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
-		
-		if response.content is None:
-			await self.bot.say('{0.mention}, your session has timed out.'.format(author))
-			return
-		if response.content.lower() == 'stop':
-			await self.bot.say('You\'ve exited this profile-making session.')
-			return
-		elif response.content.lower() == 'skip':
-			await self.bot.say('Question skipped!')
-		else: 
-			await self.edit_field('game_name', ctx, response.content)
-
-		await self.bot.say("Now let's set your timezone. Where do you live? (City/State/Country)")
-		
-		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
-		if response.content is None:
-			await self.bot.say('{0.mention}, your session has timed out.'.format(author))
-			return
-		if response.content.lower() == 'stop':
-			await self.bot.say('You\'ve exited this profile-making session.')
-			return
-		elif response.content.lower() == 'skip':
-			await self.bot.say('Question skipped!')
-		else:
-			timezone = await self.gettimezone(response.content)
-			await self.edit_field('timezone', ctx, timezone)
-
-		await self.bot.say("What is your Summonor Level? (0-60)")	
-		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
-		if response.content is None:
-			await self.bot.say('{0.mention}, your session has timed out.'.format(author))
-			return
-		if response.content.lower() == 'stop':
-			await self.bot.say('You\'ve exited this profile-making session.')
-			return
-		elif response.content.lower() == 'skip':
-			await self.bot.say('Question skipped!')
-		else: 
-			await self.edit_field('summonerlevel', ctx, response.content)		
-			
-		await self.bot.say("What is your Total Base Here Rating?")	
-		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
-		if response.content is None:
-			await self.bot.say('{0.mention}, your session has timed out.'.format(author))
-			return
-		if response.content.lower() == 'stop':
-			await self.bot.say('You\'ve exited this profile-making session.')
-			return
-		elif response.content.lower() == 'skip':
-			await self.bot.say('Question skipped!')
-		else: 
-			content = response.content
-			if content.find(',') != -1:
-				content.replace(',','')
-			await self.edit_field('herorating', ctx, content)			
-
-		await self.bot.say("Who is your Profile Champion?")	
-		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
-		if response.content is None:
-			await self.bot.say('{0.mention}, your session has timed out.'.format(author))
-			return
-		if response.content.lower() == 'stop':
-			await self.bot.say('You\'ve exited this profile-making session.')
-			return
-		elif response.content.lower() == 'skip':
-			await self.bot.say('Question skipped!')
-		else: 
-			await self.edit_field('profilechamp', ctx, response.content)	
-			
-		return await self.bot.say("All done!")
 	
 	async def is_number(self,s):
 		try:
@@ -297,7 +209,12 @@ class mcocProfile:
 		Set your profile champ."""
 		name = champ.hookid
 		await self.edit_field('profilechamp', ctx, name)
-		
+
+	@mcoc_profile.command(pass_context=True)
+	async def alliance(self, ctx, *, alliance:str):
+		"""
+		Set your Alliance Name."""
+		await self.edit_field('alliance', ctx, alliance)
 
 
 	async def hook_update(self,user_id,team,champs, message):
@@ -318,18 +235,27 @@ class mcocProfile:
 			await self.bot.say('You can only set a maximum of **{}** champions for this team.'.format(max_int))
 			return
 		
-		if len(champ_list) == 1:
-			existing_champs = hook[team]
+		if len(champ_list) == 1: #updating one champion
+			try:
+				existing_champs = hook[team]
+				ext_len = len(existing_champs) #extlen = 3, max = 5. if 3 < 5
+				if ext_len < max_int: 
+					count = ext_len
+					while count < max_int:
+						existing_champs.extend('[empty slot]')
+						count += 1
+			except KeyError:
+				existing_champs = placeholders[team]
 			i = 1
 			current_champs = []
 			for champ in existing_champs:
 				current_champs.append('**'+ str(i) +'.**    ' +champ)
 				i += 1
 
-			await self.bot.say('New Team Member: {}\n\nReply with the # (1 - {}) of the'
+			await self.bot.say('New Team Member: **{}**\n\nReply with the # (1 - {}) of the '
 							   'champion you\'d like to replace:\n{}'.format(champ_list[0],max_int,'\n'.join(current_champs)))
 			check = lambda m: isinstance(int(m.content), int) == True
-			response = await self.bot.wait_for_message(channel=channel, author=author, check=check, timeout=30.0)
+			response = await self.bot.wait_for_message(channel=channel, author=author, check=check, timeout=60.0)
 			resp_int = int(response.content)
 			if response is None:
 				await self.bot.say('Request timeout.')
@@ -344,7 +270,7 @@ class mcocProfile:
 			print(newchamps)
 			dataIO.save_json(self.hookJSON.format(user_id), hook)
 			await self.bot.say('Your **{} team** is now:\n{}'.format(team_name,'\n'.join(newchamps)))	
-		else:
+		else: #updating the whole team
 			hook.update({team : champ_list})
 			dataIO.save_json(self.hookJSON.format(user_id), hook)
 			await self.bot.say('Your **{} team** is now:\n{}'.format(team_name,'\n'.join(champ_list)))		
@@ -441,47 +367,112 @@ class mcocProfile:
 			awd_list = hook["awd"]
 			em.add_field(name="**"+field_names["awd"]+"**", value='\n'.join(awd_list))
 		await self.bot.say(embed=em)
+		
+	@mcoc_profile.command(pass_context=True, name="make")
+	async def _newprofile(self, ctx):
+		"""Create a new profile"""
+		message = ctx.message
+		author = message.author
+		channel = message.channel
+		
+		self.mcocProf[author.id] = {}
+		dataIO.save_json(self.profJSON, self.mcocProf)
+		await self.bot.say("Hi **{}**! Let's begin setting up your Summonor profile!\n - You can reply **skip** to"
+						   " skip a question or **stop** to exit this session. \n - This session will automatically "
+						   "end after *3 minutes* without a response.\n\nNow, start by telling me your **in-game name**.".format(author))
+
+		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
+		
+		if response.content is None:
+			await self.bot.say('{0.mention}, your session has timed out.'.format(author))
+			return
+		if response.content.lower() == 'stop':
+			await self.bot.say('You\'ve exited this profile-making session.')
+			return
+		elif response.content.lower() == 'skip':
+			await self.bot.say('Question skipped!')
+		else: 
+			await self.edit_field('game_name', ctx, response.content)
+
+		await self.bot.say("Now let's set your timezone. Where do you live? (City/State/Country)")
+		
+		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
+		if response.content is None:
+			await self.bot.say('{0.mention}, your session has timed out.'.format(author))
+			return
+		if response.content.lower() == 'stop':
+			await self.bot.say('You\'ve exited this profile-making session.')
+			return
+		elif response.content.lower() == 'skip':
+			await self.bot.say('Question skipped!')
+		else:
+			timezone = await self.gettimezone(response.content)
+			await self.edit_field('timezone', ctx, timezone)
+
+		await self.bot.say("What is your Summonor Level? (0-60)")	
+		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
+		if response.content is None:
+			await self.bot.say('{0.mention}, your session has timed out.'.format(author))
+			return
+		if response.content.lower() == 'stop':
+			await self.bot.say('You\'ve exited this profile-making session.')
+			return
+		elif response.content.lower() == 'skip':
+			await self.bot.say('Question skipped!')
+		else: 
+			await self.edit_field('summonerlevel', ctx, response.content)		
 			
-#    def get_champion(self, cdict):
-#        mcoc = self.bot.get_cog('MCOC')
-#        champ_attr = {self.attr_map[k]: cdict[k] for k in self.attr_map.keys()}
-#        return mcoc.get_champion(cdict['Id'], champ_attr)			
-#		if author.id not in self.mcocProf or self.mcocProf[author.id] == False:
-#			self.mcocProf[author.id] = {}
-#			dataIO.save_json(self.profJSON, self.mcocProf)
-#		
-#		self.mcocProf[author.id].update({"game_name" : game_name})
-#		dataIO.save_json(self.profJSON, self.mcocProf)
-#		game_name = self.mcocProf[author.id]["game_name"]
-#
-#		await self.bot.say("Your in-game name is set to: **{}**.".format(game_name))
-#
-#		await self.bot.say("Take your time and tell me, what do you want in your help embed footer!")
-#
-#		message = await self.bot.wait_for_message(channel=channel, author=author)
-#
-#		if message is not None:
-#			self.customhelp["embedFooter"] = message.content
-#			dataIO.save_json(self.file, self.customhelp)
-#			await self.bot.say("Congrats, the help embed footer has been set to: ```{}```".format(message.content))
-#		else:
-#			await self.bot.say("There was an error.")		
-#			
-#		if author.id not in self.mcocProf or self.mcocProf[author.id] == False:
-#			self.mcocProf[author.id] = {}
-#			dataIO.save_json(self.profJSON, self.mcocProf)
-#			
-#		if user.id not in self.nerdie[server.id]:
-#			self.nerdie[server.id][user.id] = {}
-#			dataIO.save_json(self.profile, self.nerdie)
-#			data = discord.Embed(colour=user.colour)
-#			data.add_field(name="Congrats!:sparkles:", value="You have officaly created your acconut for **{}**, {}.".format(server, user.mention))
-#			await self.bot.say(embed=data)
-#		else: 
-#			data = discord.Embed(colour=user.colour)
-#			data.add_field(name="Error:warning:",value="Opps, it seems like you already have an account, {}.".format(user.mention))
-#			await self.bot.say(embed=data)
-#		
+		await self.bot.say("What is your Total Base Here Rating?")	
+		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
+		if response.content is None:
+			await self.bot.say('{0.mention}, your session has timed out.'.format(author))
+			return
+		if response.content.lower() == 'stop':
+			await self.bot.say('You\'ve exited this profile-making session.')
+			return
+		elif response.content.lower() == 'skip':
+			await self.bot.say('Question skipped!')
+		else: 
+			content = response.content
+			if content.find(',') != -1:
+				content.replace(',','')
+			await self.edit_field('herorating', ctx, content)			
+
+		await self.bot.say("Who is your Profile Champion?")	
+		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
+		if response.content is None:
+			await self.bot.say('{0.mention}, your session has timed out.'.format(author))
+			return
+		if response.content.lower() == 'stop':
+			await self.bot.say('You\'ve exited this profile-making session.')
+			return
+		elif response.content.lower() == 'skip':
+			await self.bot.say('Question skipped!')
+		else: 
+			await self.edit_field('profilechamp', ctx, response.content)	
+			
+		return await self.bot.say("All done!")			
+
+placeholders = {
+"aq" : [
+	"[empty slot]",
+	"[empty slot]",
+	"[empty slot]"
+],
+"awd" : [
+	"[empty slot]",
+	"[empty slot]",
+	"[empty slot]",
+	"[empty slot]",
+	"[empty slot]"
+],
+	"awo" : [
+		"[empty slot]",
+		"[empty slot]",
+		"[empty slot]"
+	]
+}
+
 def check_folder():
 	if not os.path.exists("data/mcocProfile"):
 		print("Creating data/mcocProfile folder...")
