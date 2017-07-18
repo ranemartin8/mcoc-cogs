@@ -287,18 +287,10 @@ class mcocProfile:
 		if not dataIO.is_valid_json(f):
 			dataIO.save_json(f, data)
 		return dataIO.load_json(f)
-		
-	@mcoc_profile.command(pass_context=True,aliases=['awd',])
-	async def teams(self, ctx, *, team:str , champs : ChampConverterMult):
-		"""
-		Set your Alliance War Defenders."""	
-		user_id = ctx.message.author.id
+
+	async def hook_update(self,user_id,team,champs)
 		hook = await self.hook_file(user_id)
 		team_types = {"awd":5,"awo":3,"aq":3}
-		if team.lower() not in team_types:
-			await self.bot.say('**{}** is not a valid team. Try again with a'
-							   'team from the following options\n- {}'.format(team,'\n- '.join(team_types.keys())))
-			return
 		max_int = team_types[team]
 		champ_list = []
 		for champ in champs:
@@ -307,12 +299,36 @@ class mcocProfile:
 			await self.bot.say('You can only set a maximum of **{}** champions for this team.'.format(max_int))
 			return
 		else:
-			hook.update({team.lower() : champ_list})
+			hook.update({team : champ_list})
 			dataIO.save_json(self.hookJSON.format(user_id), hook)
 			team_name = fieldnames[team]
-			await self.bot.say('Your **{} team** is now:\n{}'.format(team_name,'\n'.join(champ_list)))
-							  
+			await self.bot.say('Your **{} team** is now:\n{}'.format(team_name,'\n'.join(champ_list)))		
+			
+#		if team.lower() not in team_types:
+#			await self.bot.say('**{}** is not a valid team. Try again with a'
+#							   'team from the following options\n- {}'.format(team,'\n- '.join(team_types.keys())))
+#			return		
+	@mcoc_profile.command(pass_context=True)
+	async def defense(self, ctx, *, champs : ChampConverterMult):
+		"""
+		Set your Alliance War Defense team."""	
+		user_id = ctx.message.author.id
+		await self.hook_update(user_id,'awd', champs)
+
+	@mcoc_profile.command(pass_context=True)
+	async def offense(self, ctx, *, champs : ChampConverterMult):
+		"""
+		Set your Alliance War Offense team."""	
+		user_id = ctx.message.author.id
+		await self.hook_update(user_id,'awo', champs)
 		
+	@mcoc_profile.command(pass_context=True)
+	async def aq(self, ctx, *, champs : ChampConverterMult):
+		"""
+		Set your Alliance Quest team."""	
+		user_id = ctx.message.author.id
+		await self.hook_update(user_id,'aq', champs)
+				
 		
 	@mcoc_profile.command(pass_context=True)
 	async def view(self, ctx, *, user: discord.Member=None):
