@@ -382,7 +382,7 @@ class mcocProfile:
 			pass
 		else:
 			roles = user.roles
-			role_names = {}
+			role_names = set()
 			for role in roles:
 				role_names.add(role.name.lower())
 			achievements = role_names & achievements_set
@@ -395,7 +395,7 @@ class mcocProfile:
 			pass
 		else:
 			roles = user.roles
-			role_names = {}
+			role_names = set()
 			for role in roles:
 				role_names.add(role.name.lower())
 			bg = role_names & bg_set
