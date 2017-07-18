@@ -203,7 +203,13 @@ class mcocProfile:
 		else:
 			await self.bot.say('Something went wrong. **{}** not set'.format(field_name))
 			return
-
+		
+	async def hook_file(self, userid):
+		data = {}
+		f = self.hookJSON.format(userid)
+		if not dataIO.is_valid_json(f):
+			dataIO.save_json(f, data)
+		return dataIO.load_json(f)
 		
 	@mcoc_profile.command(pass_context=True)
 	async def delete(self, ctx, *, field : str,aliases=['del',]):
@@ -219,8 +225,10 @@ class mcocProfile:
 			if field in hook:
 				del hook[field]
 				dataIO.save_json(self.hookJSON.format(author.id), hook)
-			await self.bot.say('Your **{}** team has been deleted.'.format(field_names[field]))
-			return
+				await self.bot.say('Your **{}** team has been deleted.'.format(field_names[field]))
+				return
+			else:
+				await self.bot.say('No **{}** team available to delete.'.format(field_names[field]))
 		else:
 			if author.id not in self.mcocProf or self.mcocProf[author.id] == False:
 				self.mcocProf[author.id] = {}
@@ -232,7 +240,9 @@ class mcocProfile:
 			if field in self.mcocProf[author.id]:
 				del self.mcocProf[author.id][field]
 				dataIO.save_json(self.profJSON, self.mcocProf)
-			await self.bot.say('Your **{}** has been deleted.'.format(field_name))
+				await self.bot.say('Your **{}** has been deleted.'.format(field_name))
+			else: 
+				await self.bot.say('No **{}** available to delete.'.format(field_name))
 
 
 	async def gettimezone(self, query):
@@ -288,12 +298,7 @@ class mcocProfile:
 		name = champ.hookid
 		await self.edit_field('profilechamp', ctx, name)
 		
-	async def hook_file(self, userid):
-		data = {}
-		f = self.hookJSON.format(userid)
-		if not dataIO.is_valid_json(f):
-			dataIO.save_json(f, data)
-		return dataIO.load_json(f)
+
 
 	async def hook_update(self,user_id,team,champs):
 		hook = await self.hook_file(user_id)
