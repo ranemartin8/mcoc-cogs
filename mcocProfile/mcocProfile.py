@@ -300,14 +300,39 @@ class mcocProfile:
 		
 
 
-	async def hook_update(self,user_id,team,champs):
+	async def hook_update(self,user_id,team,champs, message):
 		hook = await self.hook_file(user_id)
-		team_types = {"awd":5,"awo":3,"aq":3}
-		max_int = team_types[team]
+		author = message.author
+		channel = message.channel
+		team_max = {"awd":5,"awo":3,"aq":3}
+#		team_min = {"awd":5,"awo":3,"aq":3} 432 32 32
+		max_int = team_max[team]
+#		min_int = team_min[team]
 		champ_list = []
 		for champ in champs:
 			entry = champ.rank_sig_str + ' ' + champ.full_name
 			champ_list.append(entry)
+		if len(champ_list)< max_int and len(champ_list) > 1:
+			await self.bot.say('You can only swap out one champion at a time or replace all {} at once.'.format(max_int))
+			return
+		if len(champ_list) == 1:
+			existing_champs = hook[team]
+			i = 1
+			current_champs = []
+			for champ in existing_champs:
+				current_champs.append(i + '. ' + champ.rank_sig_str + ' ' + champ.full_name)
+				i += 1
+			await self.bot.say('Reply with the # (1 - {}) of the champion you\'d like to replace.\n{}'.format(max_int,'\n'.join(current_champs)))
+			check = lambda m: isinstance(m, int) == True
+			response = await self.bot.wait_for_message(channel=channel, author=author, check=check, timeout=180.0)
+			if response < max_int or response == 0:
+				await self.bot.say('Number must fall between 1 and {}. Team not updated.'.format(max_int))
+				return
+			pos = int(response)-1
+			del existing_champs[pos]
+			newchamps = existing_champs.extend(champ_list)
+			hook.update({team : newchamps})
+			await self.bot.say('Your **{} team** is now:\n{}'.format(team_name,'\n'.join(newchamps)))	
 		if len(champ_list) > max_int:
 			await self.bot.say('You can only set a maximum of **{}** champions for this team.'.format(max_int))
 			return
@@ -317,30 +342,27 @@ class mcocProfile:
 			team_name = field_names[team]
 			await self.bot.say('Your **{} team** is now:\n{}'.format(team_name,'\n'.join(champ_list)))		
 			
-#		if team.lower() not in team_types:
-#			await self.bot.say('**{}** is not a valid team. Try again with a'
-#							   'team from the following options\n- {}'.format(team,'\n- '.join(team_types.keys())))
-#			return		
+	
 	@mcoc_profile.command(pass_context=True)
 	async def defense(self, ctx, *, champs : ChampConverterMult):
 		"""
 		Set your Alliance War Defense team."""	
 		user_id = ctx.message.author.id
-		await self.hook_update(user_id,'awd', champs)
+		await self.hook_update(user_id,'awd', champs, ctx.message)
 
 	@mcoc_profile.command(pass_context=True)
 	async def offense(self, ctx, *, champs : ChampConverterMult):
 		"""
 		Set your Alliance War Offense team."""	
 		user_id = ctx.message.author.id
-		await self.hook_update(user_id,'awo', champs)
+		await self.hook_update(user_id,'awo', champs, ctx.message)
 		
 	@mcoc_profile.command(pass_context=True)
 	async def aq(self, ctx, *, champs : ChampConverterMult):
 		"""
 		Set your Alliance Quest team."""	
 		user_id = ctx.message.author.id
-		await self.hook_update(user_id,'aq', champs)
+		await self.hook_update(user_id,'aq', champs, ctx.message)
 				
 		
 	@mcoc_profile.command(pass_context=True)
