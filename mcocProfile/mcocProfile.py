@@ -214,20 +214,27 @@ class mcocProfile:
 			await self.bot.say('**{}** is not a valid field. Try again with a valid'
 							   'field from the following list: \n- {}'.format(field,'\n- '.join(fields_list)))
 			return
-		if author.id not in self.mcocProf or self.mcocProf[author.id] == False:
-			self.mcocProf[author.id] = {}
-			dataIO.save_json(self.profJSON, self.mcocProf)	
-		if field not in field_names:
-			field_name = field
-		else:
-			field_name = field_names[field]
-		if field in self.mcocProf[author.id]:
-			del self.mcocProf[author.id][field]
-			await self.bot.say('Your **{}** has been deleted.'.format(field_name))
-		else:
-			await self.bot.say('Something went wrong. **{}** not deleted'.format(field_name))
+		if field is "awd" or field is "awo" or field is "aq":
+			hook = await self.hook_file(author.id)
+			if field in hook:
+				del hook[field]
+				dataIO.save_json(self.hookJSON.format(author.id), hook)
+			await self.bot.say('Your **{}** team has been deleted.'.format(field_names[field]))
 			return
-		
+		else:
+			if author.id not in self.mcocProf or self.mcocProf[author.id] == False:
+				self.mcocProf[author.id] = {}
+				dataIO.save_json(self.profJSON, self.mcocProf)	
+			if field not in field_names:
+				field_name = field
+			else:
+				field_name = field_names[field]
+			if field in self.mcocProf[author.id]:
+				del self.mcocProf[author.id][field]
+				dataIO.save_json(self.profJSON, self.mcocProf)
+			await self.bot.say('Your **{}** has been deleted.'.format(field_name))
+
+
 	async def gettimezone(self, query):
 		geolocator = Nominatim()
 		try:
