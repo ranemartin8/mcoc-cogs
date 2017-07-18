@@ -284,7 +284,7 @@ class mcocProfile:
 #			rating.replace(',','')
 		try:
 			rating = int(rating.replace(',',''))
-			await self.edit_field('herorating', ctx, content)
+			await self.edit_field('herorating', ctx, rating)
 		except ValueError:
 			await self.bot.say('Hero Rating must be a number. Hero Rating not set.')
 			
