@@ -294,7 +294,8 @@ class mcocProfile:
 		max_int = team_types[team]
 		champ_list = []
 		for champ in champs:
-			champ_list.append(champ.verbose_str)
+			entry = champ.rank_sig_str + ' ' + champ.full_name
+			champ_list.append(entry)
 		if len(champ_list) > max_int:
 			await self.bot.say('You can only set a maximum of **{}** champions for this team.'.format(max_int))
 			return
