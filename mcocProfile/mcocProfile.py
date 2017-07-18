@@ -216,9 +216,9 @@ class mcocProfile:
 		print(image)
 		return image
 	
-	@command.command(no_pm=True, pass_context=True)
+	@mcoc_profile.command(no_pm=True, pass_context=True,hidden=True)
 	@checks.is_owner()
-	async def profedit(self, ctx, user : str, field : str, value : str):
+	async def edit(self, ctx, user : str, field : str, value : str):
 		"""
 		OWNER ONLY. Update member profile fields."""
 		user = await MemberFinder(ctx, user).convert()
