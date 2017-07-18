@@ -158,7 +158,7 @@ class mcocProfile:
 			return False
 		
 	async def check_field(self, field, value):
-		field_checks = {'summonerlevel','herorating','profilechamp'}
+		field_checks = {'summonerlevel','herorating'}
 		validity = {'status':'valid','reason':'n/a'}
 		if field not in field_checks:
 			return validity
@@ -178,10 +178,6 @@ class mcocProfile:
 			is_number = await self.is_number(value)
 			if is_number is False:
 				validity.update({'status':'invalid','reason':'Hero Rating must be a number. Hero Rating not set.'})
-		if field == 'profilechamp':
-			champ = await ChampConverter(self.ctx, profilechamp).convert()
-			if not champ.mcocportrait:
-				validity.update({'status':'invalid','reason':'Champion could not be found.'})
 		return validity
 			
 
