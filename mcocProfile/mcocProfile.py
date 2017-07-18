@@ -288,7 +288,7 @@ class mcocProfile:
 			dataIO.save_json(f, data)
 		return dataIO.load_json(f)
 		
-	@mcoc_profile.command(pass_context=True,aliases=['awd',]
+	@mcoc_profile.command(pass_context=True,aliases=['awd',])
 	async def defense(self, ctx, *, champs : ChampConverterMult):
 		"""
 		Set your Alliance War Defenders."""	
