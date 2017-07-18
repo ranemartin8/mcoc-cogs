@@ -336,9 +336,8 @@ class mcocProfile:
 				await self.bot.say('Number must fall between 1 and {}. Team not updated.'.format(max_int))
 				return
 			pos = resp_int-1
-			del existing_champs[pos]
-			newchamps = existing_champs.extend(champ_list)
-			
+			existing_champs[pos] = champ_list[0]
+			newchamps = existing_champs
 			hook.update({team : newchamps})
 			print(hook)
 			print(newchamps)
@@ -355,6 +354,7 @@ class mcocProfile:
 		"""
 		Set your Alliance War Defense team."""	
 		user_id = ctx.message.author.id
+		print(champs)
 		await self.hook_update(user_id,'awd', champs, ctx.message)
 
 	@mcoc_profile.command(pass_context=True)
