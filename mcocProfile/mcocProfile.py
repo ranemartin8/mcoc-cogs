@@ -305,7 +305,6 @@ class mcocProfile:
 		author = message.author
 		channel = message.channel
 		team_max = {"awd":5,"awo":3,"aq":3}
-#		team_min = {"awd":5,"awo":3,"aq":3} 432 32 32
 		max_int = team_max[team]
 		team_name = field_names[team]
 		champ_list = []
@@ -326,7 +325,9 @@ class mcocProfile:
 			for champ in existing_champs:
 				current_champs.append('**'+ str(i) +'.**    ' +champ)
 				i += 1
-			await self.bot.say('Reply with the # (1 - {}) of the champion you\'d like to replace:\n{}'.format(max_int,'\n'.join(current_champs)))
+
+			await self.bot.say('New Team Member: {}\n\nReply with the # (1 - {}) of the'
+							   'champion you\'d like to replace:\n{}'.format(champ_list[0],max_int,'\n'.join(current_champs)))
 			check = lambda m: isinstance(int(m.content), int) == True
 			response = await self.bot.wait_for_message(channel=channel, author=author, check=check, timeout=30.0)
 			resp_int = int(response.content)
