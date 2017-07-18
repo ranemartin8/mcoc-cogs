@@ -288,7 +288,7 @@ class mcocProfile:
 			dataIO.save_json(f, data)
 		return dataIO.load_json(f)
 
-	async def hook_update(self,user_id,team,champs)
+	async def hook_update(self,user_id,team,champs):
 		hook = await self.hook_file(user_id)
 		team_types = {"awd":5,"awo":3,"aq":3}
 		max_int = team_types[team]
