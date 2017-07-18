@@ -9,6 +9,7 @@ from geopy.geocoders import Nominatim
 from datetime import tzinfo, timedelta, datetime
 import pytz
 from .mcoc import ChampConverter, ChampConverterMult, QuietUserError
+from .gsheeter import MemberFinder
 
 field_names = {'summonerlevel':'Summoner Level','herorating':'Total Base Hero Rating','timezone':'Timezone','game_name':'In-Game Name','aq':'Alliance Quest','awd':'AW Defense','awo':'AW Offense','alliance':'Alliance','bg':'Battlegroup','achievements':'Achievements'}
 fields_list = field_names.keys()
@@ -91,24 +92,23 @@ class mcocProfile:
 		return validity
 			
 
-	async def edit_field(self, field, ctx, value):
+	async def edit_field(user_id,self, field, ctx, value):
 		check = await self.check_field(field,value)
 		if check['status'] == 'invalid':
 			await self.bot.say(check['reason'])
 			return
-		author = ctx.message.author
-		if author.id not in self.mcocProf or self.mcocProf[author.id] == False:
-			self.mcocProf[author.id] = {}
+		if user_id not in self.mcocProf or self.mcocProf[user_id] == False:
+			self.mcocProf[user_id] = {}
 			dataIO.save_json(self.profJSON, self.mcocProf)
-		self.mcocProf[author.id].update({field : value})
+		self.mcocProf[user_id].update({field : value})
 		dataIO.save_json(self.profJSON, self.mcocProf)
 		if field not in field_names:
 			field_name = field
 		else:
 			field_name = field_names[field]
 			
-		if field in self.mcocProf[author.id]:
-			value = self.mcocProf[author.id][field]
+		if field in self.mcocProf[user_id]:
+			value = self.mcocProf[user_id][field]
 			await self.bot.say('Your **{}** is set to **{}**.'.format(field_name, value))
 		else:
 			await self.bot.say('Something went wrong. **{}** not set'.format(field_name))
@@ -213,10 +213,16 @@ class mcocProfile:
 		return image
 	
 	@mcoc_profile.command(pass_context=True)
-	async def gamename(self, ctx, *, game_name : str):
+	async def gamename(self, ctx, *, game_name : str, user : str=None):
 		"""
-		Set your In-Game Name."""			
-		await self.edit_field('game_name', ctx, game_name)
+		Set your In-Game Name."""
+		author = ctx.message.author
+		if not user:
+			user = author
+		else:
+			user = await MemberFinder(ctx, user).convert()
+		user_id = user.id
+		await self.edit_field(user_id,'game_name', ctx, game_name)
 	
 	@mcoc_profile.command(pass_context=True)
 	async def timezone(self, ctx, *, location : str):
@@ -313,10 +319,15 @@ class mcocProfile:
 			
 	
 	@mcoc_profile.command(pass_context=True)
-	async def defense(self, ctx, *, champs : ChampConverterMult):
+	async def defense(self, ctx, *, champs : ChampConverterMult, user:str=None):
 		"""
 		Set your Alliance War Defense team."""	
-		user_id = ctx.message.author.id
+		author = ctx.message.author
+		if not user:
+			user = author
+		else:
+			user = await MemberFinder(ctx, user).convert()
+		user_id = user.id
 		await self.hook_update(user_id,'awd', champs, ctx.message)
 
 	@mcoc_profile.command(pass_context=True)
@@ -333,8 +344,12 @@ class mcocProfile:
 		user_id = ctx.message.author.id
 		await self.hook_update(user_id,'aq', champs, ctx.message)
 
-
-		
+##champ = await ChampConverter(ctx, profilechamp).convert()
+#		if not user_string:
+#			user = author
+#		else:
+#			user = await MemberFinder(ctx, user_string).convert()
+#		
 	@mcoc_profile.command(pass_context=True)
 	async def view(self, ctx, *, user: discord.Member=None):
 		"""
