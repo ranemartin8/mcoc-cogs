@@ -10,7 +10,7 @@ from datetime import tzinfo, timedelta, datetime
 import pytz
 from .mcoc import ChampConverter, ChampConverterMult, QuietUserError
 
-field_names = {'summonerlevel':'Summoner Level','herorating':'Total Base Hero Rating','timezone':'Timezone','game_name':'In-Game Name','aq':'Alliance Quest','awd':'Alliance War Defense','awo':'Alliance War Defense'}
+field_names = {'summonerlevel':'Summoner Level','herorating':'Total Base Hero Rating','timezone':'Timezone','game_name':'In-Game Name','aq':'Alliance Quest','awd':'AW Defense','awo':'AW Offense'}
 fields_list = ['summonerlevel','herorating','timezone','game_name']
 valid_fields = set(fields_list)
 
@@ -130,7 +130,10 @@ class mcocProfile:
 		elif response.content.lower() == 'skip':
 			await self.bot.say('Question skipped!')
 		else: 
-			await self.edit_field('herorating', ctx, response.content)			
+			content = response.content
+			if content.find(',') != -1:
+				content.replace(',','')
+			await self.edit_field('herorating', ctx, content)			
 
 		await self.bot.say("Who is your Profile Champion?")	
 		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
@@ -149,17 +152,20 @@ class mcocProfile:
 	
 	async def is_number(self,s):
 		try:
+			s.replace(',','')
 			float(s)
 			return True
 		except ValueError:
 			return False
 		
 	async def check_field(self, field, value):
-		field_checks = {'summonerlevel':'yes','herorating':'yes'}
+		field_checks = {'summonerlevel','herorating','profilechamp'}
 		validity = {'status':'valid','reason':'n/a'}
 		if field not in field_checks:
 			return validity
 		if field == 'summonerlevel':
+			if value.find(',') != -1:
+				value.replace(',','')
 			is_number = await self.is_number(value)
 			if is_number is False:
 				validity.update({'status':'invalid','reason':'Summoner Level must be a number. Summoner Level not set.'})
@@ -271,11 +277,18 @@ class mcocProfile:
 		await self.edit_field('summonerlevel', ctx, summonerlevel)
 		
 	@mcoc_profile.command(pass_context=True)
-	async def rating(self, ctx, *, rating : int):
+	async def rating(self, ctx, *, rating : str):
 		"""
 		Set your Total Base Hero Rating."""			
-		await self.edit_field('herorating', ctx, rating)
-
+		if rating.find(',') != -1:
+			rating.replace(',','')
+		try:
+			rating = int(rating)
+			await self.edit_field('herorating', ctx, content)
+		except TypeError:
+			await self.bot.say('Hero Rating must be a number. Hero Rating not set.')
+			
+		
 	@mcoc_profile.command(pass_context=True)
 	async def profilechamp(self, ctx, *, champ: ChampConverter):
 		"""
@@ -307,12 +320,14 @@ class mcocProfile:
 			pass
 		else:
 			summonerlevel = profile["summonerlevel"]
-			em.add_field(name="**"+field_names["summonerlevel"]+"**", value=summonerlevel,inline=False)
+			summonerlevel = int(summonerlevel)
+			em.add_field(name="**"+field_names["summonerlevel"]+"**", value='{:,}'.format(summonerlevel),inline=False)
 		if "herorating" not in profile:
 			pass
 		else:
 			herorating = profile["herorating"]
-			em.add_field(name="**"+field_names["herorating"]+"**", value=herorating,inline=False)
+			herorating = int(herorating)
+			em.add_field(name="**"+field_names["herorating"]+"**", value='{:,}'.format(herorating),inline=False)
 			
 		if "timezone" not in profile:
 			pass
@@ -338,17 +353,17 @@ class mcocProfile:
 			pass
 		else:
 			aq_list = hook["aq"]
-			em.add_field(name="**"+field_names["aq"]+"**", value='\n'.join(aq_list),inline=False)
+			em.add_field(name="**"+field_names["aq"]+"**", value='\n'.join(aq_list))
 		if 	"awo" not in hook:
 			pass
 		else:
 			awo_list = hook["awo"]
-			em.add_field(name="**"+field_names["awo"]+"**", value='\n'.join(awo_list),inline=False)
+			em.add_field(name="**"+field_names["awo"]+"**", value='\n'.join(awo_list))
 		if 	"awd" not in hook:
 			pass
 		else:
 			awd_list = hook["awd"]
-			em.add_field(name="**"+field_names["awd"]+"**", value='\n'.join(awd_list),inline=False)
+			em.add_field(name="**"+field_names["awd"]+"**", value='\n'.join(awd_list))
 		await self.bot.say(embed=em)
 			
 #    def get_champion(self, cdict):
