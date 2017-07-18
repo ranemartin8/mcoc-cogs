@@ -153,14 +153,14 @@ class mcocProfile:
 				await self.bot.say('No **{}** available to delete.'.format(field_name))
 				
 	@mcoc_profile.command(pass_context=True)
-	async def display(self, ctx, field: str, setting : str):
+	async def display(self, ctx, field: str, show_or_hide : str):
 		"""
 		Toggle the visibility of a field on your profile."""	
 		author = ctx.message.author
 		user_id = author.id
 		
 		toggles = {'show','hide'}
-		toggle.lower()
+		toggle = show_or_hide.lower()
 		field.lower()
 		if field not in valid_fields:
 			await self.bot.say('**{}** is not a valid field. Try again with a valid'
