@@ -307,7 +307,7 @@ class mcocProfile:
 		team_max = {"awd":5,"awo":3,"aq":3}
 #		team_min = {"awd":5,"awo":3,"aq":3} 432 32 32
 		max_int = team_max[team]
-#		min_int = team_min[team]
+		team_name = field_names[team]
 		champ_list = []
 		for champ in champs:
 			entry = champ.rank_sig_str + ' ' + champ.full_name
@@ -318,6 +318,7 @@ class mcocProfile:
 		if len(champ_list) > max_int:
 			await self.bot.say('You can only set a maximum of **{}** champions for this team.'.format(max_int))
 			return
+		
 		if len(champ_list) == 1:
 			existing_champs = hook[team]
 			i = 1
@@ -337,13 +338,15 @@ class mcocProfile:
 			pos = resp_int-1
 			del existing_champs[pos]
 			newchamps = existing_champs.extend(champ_list)
+			
 			hook.update({team : newchamps})
+			print(hook)
+			print(newchamps)
 			dataIO.save_json(self.hookJSON.format(user_id), hook)
 			await self.bot.say('Your **{} team** is now:\n{}'.format(team_name,'\n'.join(newchamps)))	
 		else:
 			hook.update({team : champ_list})
 			dataIO.save_json(self.hookJSON.format(user_id), hook)
-			team_name = field_names[team]
 			await self.bot.say('Your **{} team** is now:\n{}'.format(team_name,'\n'.join(champ_list)))		
 			
 	
