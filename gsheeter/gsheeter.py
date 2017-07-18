@@ -78,10 +78,12 @@ class MemberFinder(commands.Converter):
 		matches = []
 		if message.mentions:
 			user = message.mentions[0]
-			find_method = 'User found by mention.'
+			print('Search Method: User found by mention.')
+			return user
 		elif server.get_member_named(str(user_string)):
 			user = server.get_member_named(str(user_string))
-			find_method = 'User found by "get_member_named"'
+			print('Search Method: User found by "get_member_named"')
+			return user
 		else:
 			mem_dict = {}
 			for member in server.members:
@@ -99,14 +101,14 @@ class MemberFinder(commands.Converter):
 						ser_mem = server.get_member(mem_id)
 						result_names.append(ser_mem.display_name)
 					firstfour = ', '.join(result_names[0:4])
-					user = 'user_toomany'
+#					user = 'user_toomany'
 					await self.ctx.bot.say("Too many possible matches found: ```{} and {} others.```"
 										   "\nPlease be more specific and try again.".format(firstfour,results_count))
+					return 'user_toomany'
 				#Less than 4 results
 				else:
 					firstresult = results[0]
 					user = server.get_member(firstresult)
-					find_method = 'User found by partial string matching'
 					if len(results) > 1: 
 						for mem_id in results:
 							ser_mem = server.get_member(mem_id)
@@ -114,23 +116,27 @@ class MemberFinder(commands.Converter):
 						await self.ctx.bot.say("A few possible matches were found: ```{}```\n\n"
 											   "So I just went with first match: **{}**"
 											   " ".format(', '.join(result_names),user.display_name))
+						print('Search Method: User found by partial string matching')
+						return user
+					
 			else:
 				matches = difflib.get_close_matches(user_string,mem_dict.keys(), n=3, cutoff=0.5)
 				if matches:
 					bestmatch = matches[0]
 					match_id = mem_dict[bestmatch]
 					user = server.get_member(match_id)
-					find_method = 'User found by fuzzy matching'
 					if len(matches) > 1:
 						await self.ctx.bot.say("A few fuzzy matches were found: ```{}```\n\n"
 											   "So I just went with closest match:"
 											   " **{}**".format(', '.join(matches),user.display_name))
+						print('Search Method: User found by fuzzy matching')
+						return user
 				else:
-					user = 'user_error'
-		if find_method: print('Search Method: '+find_method)
-		if len(result_names) > 0: print('Result(s): '+', '.join(result_names))
-		if len(matches) > 0: print('Match(es): '+', '.join(matches))
-		return user
+					return 'user_error'
+#		if find_method: print('Search Method: '+find_method)
+#		if len(result_names) > 0: print('Result(s): '+', '.join(result_names))
+#		if len(matches) > 0: print('Match(es): '+', '.join(matches))
+#		return user
 #class SplatoonWeapon(commands.Converter):x
 #	async def convert(self, ctx, argument):
 #		cog = ctx.bot.get_cog('Splatoon')	
