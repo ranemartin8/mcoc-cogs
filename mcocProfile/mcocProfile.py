@@ -11,7 +11,7 @@ import pytz
 from .mcoc import ChampConverter, ChampConverterMult, QuietUserError
 
 field_names = {'summonerlevel':'Summoner Level','herorating':'Total Base Hero Rating','timezone':'Timezone','game_name':'In-Game Name','aq':'Alliance Quest','awd':'AW Defense','awo':'AW Offense'}
-fields_list = ['summonerlevel','herorating','timezone','game_name']
+fields_list = ['summonerlevel','herorating','timezone','game_name','aq','awd','awo']
 valid_fields = set(fields_list)
 
 remote_data_basepath = 'https://raw.githubusercontent.com/JasonJW/mcoc-cogs/master/mcoc/data/'
@@ -289,19 +289,29 @@ class mcocProfile:
 		return dataIO.load_json(f)
 		
 	@mcoc_profile.command(pass_context=True,aliases=['awd',])
-	async def defense(self, ctx, *, champs : ChampConverterMult):
+	async def teams(self, ctx, *, team, champs : ChampConverterMult):
 		"""
 		Set your Alliance War Defenders."""	
 		user_id = ctx.message.author.id
 		hook = await self.hook_file(user_id)
-		def_list = []
+		team_types = {"awd":5,"awo":3,"aq":3}
+		if team.lower() not in team_types:
+			await self.bot.say('**{}** is not a valid team. Try again with a'
+							   'team from the following options\n- {}'.format(team,'\n- '.join(team_types.keys())))
+			return
+		max_int = team_types[team]
+		champ_list = []
 		for champ in champs:
-			def_list.append(champ.verbose_str)
-		if len(def_list) > 5:
-			await self.bot.say('Max: 5 Champs')
+			champ_list.append(champ.verbose_str)
+		if len(champ_list) > max_int:
+			await self.bot.say('You can only set a maximum of **{}** champions for this team.'.format(max_int))
+			return
 		else:
-			hook.update({"awd" : def_list})
+			hook.update({team.lower() : champ_list})
 			dataIO.save_json(self.hookJSON.format(user_id), hook)
+			team_name = fieldnames[team]
+			await self.bot.say('Your **{} team** is now:\n{}'.format(team_name,'\n'.join(champ_list)))
+							  
 		
 		
 	@mcoc_profile.command(pass_context=True)
