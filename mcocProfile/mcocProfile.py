@@ -326,7 +326,7 @@ class mcocProfile:
 		user_id = ctx.message.author.id
 		await self.edit_field(user_id, 'summonerlevel', ctx, summonerlevel)
 		
-	@mcoc_profile.command(no_pm=True, pass_context=True,aliases=['herorating',])
+	@mcoc_profile.command(no_pm=True, pass_context=True,aliases=['rating',])
 	async def herorating(self, ctx, *, herorating : str):
 		"""
 		Set your Total Base Hero Rating."""	
