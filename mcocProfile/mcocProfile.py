@@ -255,7 +255,7 @@ class mcocProfile:
 
 			await self.bot.say('New Team Member: **{}**\n\nReply with the # (1 - {}) of the '
 							   'champion you\'d like to replace:\n{}\n\nReply **stop** to cancel.'.format(champ_list[0],max_int,'\n'.join(current_champs)))
-			check lambda m: m.content in valid_int or m.content in valid_stop
+			check = lambda m: m.content in valid_int or m.content in valid_stop
 #			check = lambda m: valid_int isinstance(int(m.content), int) == True or m.content == 'stop'
 			response = await self.bot.wait_for_message(channel=channel, author=author, check=check, timeout=60.0)
 			if response is None:
