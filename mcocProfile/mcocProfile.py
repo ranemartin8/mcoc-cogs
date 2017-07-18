@@ -92,7 +92,7 @@ class mcocProfile:
 		return validity
 			
 
-	async def edit_field(user_id,self, field, ctx, value):
+	async def edit_field(self,user_id,field, ctx, value):
 		check = await self.check_field(field,value)
 		if check['status'] == 'invalid':
 			await self.bot.say(check['reason'])
