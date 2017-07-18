@@ -301,7 +301,7 @@ class mcocProfile:
 		else:
 			hook.update({team : champ_list})
 			dataIO.save_json(self.hookJSON.format(user_id), hook)
-			team_name = fieldnames[team]
+			team_name = field_names[team]
 			await self.bot.say('Your **{} team** is now:\n{}'.format(team_name,'\n'.join(champ_list)))		
 			
 #		if team.lower() not in team_types:
