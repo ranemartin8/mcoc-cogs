@@ -395,14 +395,14 @@ class mcocProfile:
 			pass
 		else:
 			roles = user.roles
-			role_names = set()
+			bg_names = []
 			for role in roles:
-				role_names.add(role.name.lower())
-			bg = role_names & bg_set
-			if len(bg) == 0:
+				if role.name in bg_set:
+					bg_names.append(role.name)
+			if len(bg_names) == 0:
 				pass
 			else:
-				em.add_field(name="**"+field_names["bg"]+"**", value=bg[0].upper(),inline=False)
+				em.add_field(name="**"+field_names["bg"]+"**", value=bg_names[0].upper(),inline=False)
 	
 		if "timezone" not in profile or "timezone" in hidden_fields:
 			pass
