@@ -323,10 +323,10 @@ class mcocProfile:
 			i = 1
 			current_champs = []
 			for champ in existing_champs:
-				current_champs.append(str(i) + champ)
+				current_champs.append(str(i) +'. ' +champ)
 				i += 1
 			await self.bot.say('Reply with the # (1 - {}) of the champion you\'d like to replace.\n{}'.format(max_int,'\n'.join(current_champs)))
-			check = lambda m: isinstance(m, int) == True
+			check = lambda m: isinstance(int(m), int) == True
 			response = await self.bot.wait_for_message(channel=channel, author=author, check=check, timeout=180.0)
 			if response < max_int or response == 0:
 				await self.bot.say('Number must fall between 1 and {}. Team not updated.'.format(max_int))
