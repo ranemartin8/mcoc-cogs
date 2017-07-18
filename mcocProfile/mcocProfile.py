@@ -280,12 +280,12 @@ class mcocProfile:
 	async def rating(self, ctx, *, rating : str):
 		"""
 		Set your Total Base Hero Rating."""			
-		if rating.find(',') != -1:
-			rating.replace(',','')
+#		if rating.find(',') != -1:
+#			rating.replace(',','')
 		try:
-			rating = int(rating)
+			rating = int(rating.replace(',',''))
 			await self.edit_field('herorating', ctx, content)
-		except TypeError:
+		except ValueError:
 			await self.bot.say('Hero Rating must be a number. Hero Rating not set.')
 			
 		
