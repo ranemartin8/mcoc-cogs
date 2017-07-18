@@ -125,7 +125,7 @@ class mcocProfile:
 		Delete a field from your profile."""
 		author = ctx.message.author
 		if field not in valid_fields:
-			await self.bot.say('**{}** is not a valid field. Try again with a valid'
+			await self.bot.say('**{}** is not a valid field. Try again with a valid '
 							   'field from the following list: \n- {}'.format(field,'\n- '.join(fields_list)))
 			return
 		if field == "awd" or field == "awo" or field == "aq":
@@ -153,7 +153,7 @@ class mcocProfile:
 				await self.bot.say('No **{}** available to delete.'.format(field_name))
 				
 	@mcoc_profile.command(pass_context=True)
-	async def display(self, ctx, field: str, show_or_hide : str):
+	async def display(self, ctx, show_or_hide : str, field: str):
 		"""
 		Toggle the visibility of a field on your profile."""	
 		author = ctx.message.author
@@ -163,7 +163,7 @@ class mcocProfile:
 		toggle = show_or_hide.lower()
 		field.lower()
 		if field not in valid_fields:
-			await self.bot.say('**{}** is not a valid field. Try again with a valid'
+			await self.bot.say('**{}** is not a valid field. Try again with a valid '
 							   'field from the following list: \n- {}'.format(field,'\n- '.join(fields_list)))
 			return
 		if toggle not in toggles:
