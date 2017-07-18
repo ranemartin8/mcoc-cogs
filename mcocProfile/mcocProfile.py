@@ -11,7 +11,7 @@ import pytz
 from .mcoc import ChampConverter, ChampConverterMult, QuietUserError
 from .gsheeter import MemberFinder
 
-field_names = {'summonerlevel':'Summoner Level','herorating':'Total Base Hero Rating','timezone':'Timezone','game_name':'In-Game Name','aq':'Alliance Quest','awd':'AW Defense','awo':'AW Offense','alliance':'Alliance','bg':'Battlegroup','achievements':'Achievements'}
+field_names = {'summonerlevel':'Summoner Level','herorating':'Total Base Hero Rating','timezone':'Timezone','gamename':'In-Game Name','aq':'Alliance Quest','awd':'AW Defense','awo':'AW Offense','alliance':'Alliance','bg':'Battlegroup','achievements':'Achievements'}
 hook_fields = {'awo','awd','aq'}
 fields_list = field_names.keys()
 valid_fields = set(fields_list)
@@ -94,28 +94,6 @@ class mcocProfile:
 		return validity
 			
 
-	async def edit_field(self,user_id,field, ctx, value):
-		check = await self.check_field(field,value)
-		if check['status'] == 'invalid':
-			await self.bot.say(check['reason'])
-			return
-		if user_id not in self.mcocProf or self.mcocProf[user_id] == False:
-			self.mcocProf[user_id] = {}
-			dataIO.save_json(self.profJSON, self.mcocProf)
-		self.mcocProf[user_id].update({field : value})
-		dataIO.save_json(self.profJSON, self.mcocProf)
-		if field not in field_names:
-			field_name = field
-		else:
-			field_name = field_names[field]
-			
-		if field in self.mcocProf[user_id]:
-			value = self.mcocProf[user_id][field]
-			await self.bot.say('Your **{}** is set to **{}**.'.format(field_name, value))
-		else:
-			await self.bot.say('Something went wrong. **{}** not set'.format(field_name))
-			return
-		
 	async def hook_file(self, userid):
 		data = {}
 		if not os.path.exists(self.hookPath.format(userid)):
@@ -125,78 +103,6 @@ class mcocProfile:
 			dataIO.save_json(f, data)
 		return dataIO.load_json(f)
 		
-	@mcoc_profile.command(no_pm=True, pass_context=True,aliases=['del',])
-	async def delete(self, ctx, *, field : str):
-		"""
-		Delete a field from your profile."""
-		author = ctx.message.author
-		if field not in valid_fields:
-			await self.bot.say('**{}** is not a valid field. Try again with a valid '
-							   'field from the following list: \n- {}'.format(field,'\n- '.join(fields_list)))
-			return
-		if field == "awd" or field == "awo" or field == "aq":
-			hook = await self.hook_file(author.id)
-			if field in hook:
-				del hook[field]
-				dataIO.save_json(self.hookJSON.format(author.id), hook)
-				await self.bot.say('Your **{}** team has been deleted.'.format(field_names[field]))
-				return
-			else:
-				await self.bot.say('No **{}** team available to delete.'.format(field_names[field]))
-		else:
-			if author.id not in self.mcocProf or self.mcocProf[author.id] == False:
-				self.mcocProf[author.id] = {}
-				dataIO.save_json(self.profJSON, self.mcocProf)	
-			if field not in field_names:
-				field_name = field
-			else:
-				field_name = field_names[field]
-			if field in self.mcocProf[author.id]:
-				del self.mcocProf[author.id][field]
-				dataIO.save_json(self.profJSON, self.mcocProf)
-				await self.bot.say('Your **{}** has been deleted.'.format(field_name))
-			else: 
-				await self.bot.say('No **{}** available to delete.'.format(field_name))
-				
-	@mcoc_profile.command(no_pm=True, pass_context=True)
-	async def display(self, ctx, show_or_hide : str, field: str):
-		"""
-		Toggle the visibility of a field on your profile."""	
-		author = ctx.message.author
-		user_id = author.id
-		
-		toggles = {'show','hide'}
-		toggle = show_or_hide.lower()
-		field.lower()
-		if field not in valid_fields:
-			await self.bot.say('**{}** is not a valid field. Try again with a valid '
-							   'field from the following list: \n- {}'.format(field,'\n- '.join(fields_list)))
-			return
-		if toggle not in toggles:
-			await self.bot.say('Display setting must equal "show" or "hide".')
-			return	
-		field_name = field_names[field]
-		if author.id not in self.mcocProf or self.mcocProf[author.id] == False:
-			self.mcocProf[author.id] = {}
-			dataIO.save_json(self.profJSON, self.mcocProf)	
-		if 'hidden_fields' not in self.mcocProf[author.id]:
-			self.mcocProf[author.id]['hidden_fields'] = []
-		if toggle == 'hide':
-			if field not in self.mcocProf[author.id]['hidden_fields']:
-				self.mcocProf[author.id]['hidden_fields'].append(field)
-				dataIO.save_json(self.profJSON, self.mcocProf)
-				await self.bot.say('**{}** is now hidden from your profile.'.format(field_name))
-			else:
-				await self.bot.say('**{}** was already hidden from your profile.'.format(field_name))
-				return					
-		else:
-			if field not in self.mcocProf[author.id]['hidden_fields']:
-				await self.bot.say('**{}** is already visible on your profile.'.format(field_name))
-				return	
-			else:
-				self.mcocProf[author.id]['hidden_fields'].remove(field)
-				dataIO.save_json(self.profJSON, self.mcocProf)
-				await self.bot.say('**{}** is now visible on your profile.'.format(field_name))
 				
 	async def gettimezone(self, query):
 		geolocator = Nominatim()
@@ -216,71 +122,37 @@ class mcocProfile:
 		print(image)
 		return image
 	
-	@mcoc_profile.command(no_pm=True, pass_context=True,hidden=True)
-	@checks.is_owner()
-	async def edit(self, ctx, user : str, field : str, *, value : str):
-		"""
-		OWNER ONLY. Update member profile fields."""
-		user = await MemberFinder(ctx, user).convert()
-		user_id = user.id
-		if field not in valid_fields:
-			await self.bot.say('**{}** is not a valid field. Try again with a valid '
-							   'field from the following list: \n- {}'.format(field,'\n- '.join(fields_list)))
+	async def edit_field(self,user_id,field, ctx, value,src='author'):
+		identifier = 'Your'
+		if src != 'author':
+			get_mem = ctx.server.get_member(user_id)
+			identifier = get_mem.display_name + "'s"
+		check = await self.check_field(field,value)
+		if check['status'] == 'invalid':
+			await self.bot.say(check['reason'])
 			return
-		if field not in hook_fields:
-			await self.edit_field(user_id, field, ctx, value)
-			return
+		if user_id not in self.mcocProf or self.mcocProf[user_id] == False:
+			self.mcocProf[user_id] = {}
+			dataIO.save_json(self.profJSON, self.mcocProf)
+		self.mcocProf[user_id].update({field : value})
+		dataIO.save_json(self.profJSON, self.mcocProf)
+		if field not in field_names:
+			field_name = field
 		else:
-			champs = await ChampConverter(ctx, value).convert()
-			await self.hook_update(user_id, field, value, ctx.message)
+			field_name = field_names[field]
+			
+		if field in self.mcocProf[user_id]:
+			value = self.mcocProf[user_id][field]
+			await self.bot.say('{} **{}** is set to **{}**.'.format(identifier,field_name, value))
+		else:
+			await self.bot.say('Something went wrong. **{}** not set'.format(field_name))
 			return
 		
-	@mcoc_profile.command(no_pm=True, pass_context=True)
-	async def gamename(self, ctx, *, game_name : str):
-		"""
-		Set your In-Game Name."""
-		author = ctx.message.author
-		if not user:
-			user = author
-		else:
-			user = await MemberFinder(ctx, user).convert()
-		user_id = user.id
-		await self.edit_field(user_id,'game_name', ctx, game_name)
-	
-	@mcoc_profile.command(no_pm=True, pass_context=True)
-	async def timezone(self, ctx, *, location : str):
-		"""
-		Provide your location to set your timezone."""			
-		timezone = await self.gettimezone(location)
-		await self.edit_field('timezone', ctx, timezone)
-	
-	@mcoc_profile.command(no_pm=True, pass_context=True,aliases=['summonerlevel',])
-	async def level(self, ctx, *, summonerlevel : str):
-		"""
-		Set your Summonor Level."""			
-		await self.edit_field('summonerlevel', ctx, summonerlevel)
-		
-	@mcoc_profile.command(no_pm=True, pass_context=True,aliases=['herorating',])
-	async def rating(self, ctx, *, rating : str):
-		"""
-		Set your Total Base Hero Rating."""	
-		await self.edit_field('herorating', ctx, rating)
-		
-	@mcoc_profile.command(no_pm=True, pass_context=True)
-	async def profilechamp(self, ctx, *, champ: ChampConverter):
-		"""
-		Set your Profile champion."""
-		name = champ.hookid
-		await self.edit_field('profilechamp', ctx, name)
-
-	@mcoc_profile.command(no_pm=True, pass_context=True)
-	async def alliance(self, ctx, *, alliance:str):
-		"""
-		Set your Alliance Name."""
-		await self.edit_field('alliance', ctx, alliance)
-
-
-	async def hook_update(self,user_id,team,champs, message):
+	async def hook_update(self,user_id,team,champs, message,src='author'):
+		identifier = 'Your'
+		if src != 'author':
+			get_mem = message.server.get_member(user_id)
+			identifier = get_mem.display_name + "'s"
 		hook = await self.hook_file(user_id)
 		author = message.author
 		channel = message.channel
@@ -334,12 +206,147 @@ class mcocProfile:
 			newchamps = existing_champs
 			hook.update({team : newchamps})
 			dataIO.save_json(self.hookJSON.format(user_id), hook)
-			await self.bot.say('Your **{} team** is now:\n{}'.format(team_name,'\n'.join(newchamps)))	
+			await self.bot.say(':white_check_mark:  {} updated **{}** team:\n{}'.format(identifier,team_name,'\n'.join(newchamps)))	
 		else: #updating the whole team
 			hook.update({team : champ_list})
 			dataIO.save_json(self.hookJSON.format(user_id), hook)
-			await self.bot.say('Your **{} team** is now:\n{}'.format(team_name,'\n'.join(champ_list)))		
-			
+			await self.bot.say(':white_check_mark:  {} updated **{}** team:\n{}'.format(identifier,team_name,'\n'.join(champ_list)))		
+
+	
+	@mcoc_profile.command(no_pm=True, pass_context=True,hidden=True)
+	@checks.is_owner()
+	async def edit(self, ctx, user : str, field : str, *, value : str):
+		"""
+		OWNER ONLY. Update member profile fields."""
+		user = await MemberFinder(ctx, user).convert()
+		user_id = user.id
+		if field not in valid_fields:
+			await self.bot.say('**{}** is not a valid field. Try again with a valid '
+							   'field from the following list: \n- {}'.format(field,'\n- '.join(fields_list)))
+			return
+		if field not in hook_fields:
+			await self.edit_field(user_id, field, ctx, value,)
+			return
+		else:
+			champs = await ChampConverter(ctx, value).convert()
+			await self.hook_update(user_id, field, value, ctx.message)
+			return
+		
+	@mcoc_profile.command(no_pm=True, pass_context=True,aliases=['del',])
+	async def delete(self, ctx, *, field : str):
+		"""
+		Delete a field from your profile."""
+		author = ctx.message.author
+		if field not in valid_fields:
+			await self.bot.say('**{}** is not a valid field. Try again with a valid '
+							   'field from the following list: \n- {}'.format(field,'\n- '.join(fields_list)))
+			return
+		if field == "awd" or field == "awo" or field == "aq":
+			hook = await self.hook_file(author.id)
+			if field in hook:
+				del hook[field]
+				dataIO.save_json(self.hookJSON.format(author.id), hook)
+				await self.bot.say(':white_check_mark:  Your **{}** team has been deleted.'.format(field_names[field]))
+				return
+			else:
+				await self.bot.say('No **{}** team available to delete.'.format(field_names[field]))
+		else:
+			if author.id not in self.mcocProf or self.mcocProf[author.id] == False:
+				self.mcocProf[author.id] = {}
+				dataIO.save_json(self.profJSON, self.mcocProf)	
+			if field not in field_names:
+				field_name = field
+			else:
+				field_name = field_names[field]
+			if field in self.mcocProf[author.id]:
+				del self.mcocProf[author.id][field]
+				dataIO.save_json(self.profJSON, self.mcocProf)
+				await self.bot.say(':white_check_mark:  Your **{}** has been deleted.'.format(field_name))
+			else: 
+				await self.bot.say('No **{}** available to delete.'.format(field_name))
+				
+	@mcoc_profile.command(no_pm=True, pass_context=True)
+	async def display(self, ctx, show_or_hide : str, field: str):
+		"""
+		Toggle the visibility of a field on your profile."""	
+		author = ctx.message.author
+		user_id = author.id
+		toggles = {'show','hide'}
+		toggle = show_or_hide.lower()
+		field.lower()
+		if field not in valid_fields:
+			await self.bot.say('**{}** is not a valid field. Try again with a valid '
+							   'field from the following list: \n- {}'.format(field,'\n- '.join(fields_list)))
+			return
+		if toggle not in toggles:
+			await self.bot.say('Display setting must equal "show" or "hide".')
+			return	
+		field_name = field_names[field]
+		if author.id not in self.mcocProf or self.mcocProf[author.id] == False:
+			self.mcocProf[author.id] = {}
+			dataIO.save_json(self.profJSON, self.mcocProf)	
+		if 'hidden_fields' not in self.mcocProf[author.id]:
+			self.mcocProf[author.id]['hidden_fields'] = []
+		if toggle == 'hide':
+			if field not in self.mcocProf[author.id]['hidden_fields']:
+				self.mcocProf[author.id]['hidden_fields'].append(field)
+				dataIO.save_json(self.profJSON, self.mcocProf)
+				await self.bot.say(':white_check_mark:  **{}** is now hidden from your profile.'.format(field_name))
+			else:
+				await self.bot.say('**{}** was already hidden from your profile.'.format(field_name))
+				return					
+		else:
+			if field not in self.mcocProf[author.id]['hidden_fields']:
+				await self.bot.say('**{}** is already visible on your profile.'.format(field_name))
+				return	
+			else:
+				self.mcocProf[author.id]['hidden_fields'].remove(field)
+				dataIO.save_json(self.profJSON, self.mcocProf)
+				await self.bot.say(':white_check_mark:  **{}** is now visible on your profile.'.format(field_name))
+				
+	@mcoc_profile.command(no_pm=True, pass_context=True)
+	async def gamename(self, ctx, *, gamename : str):
+		"""
+		Set your In-Game Name."""
+		user_id = ctx.message.author.id
+		await self.edit_field(user_id, 'gamename', ctx, gamename)
+	
+	@mcoc_profile.command(no_pm=True, pass_context=True)
+	async def timezone(self, ctx, *, location : str):
+		"""
+		Provide your location to set your timezone."""	
+		user_id = ctx.message.author.id		
+		timezone = await self.gettimezone(location)
+		await self.edit_field(user_id, 'timezone', ctx, timezone)
+	
+	@mcoc_profile.command(no_pm=True, pass_context=True,aliases=['summonerlevel',])
+	async def level(self, ctx, *, summonerlevel : str):
+		"""
+		Set your Summonor Level (0 - 60)."""		
+		user_id = ctx.message.author.id
+		await self.edit_field(user_id, 'summonerlevel', ctx, summonerlevel)
+		
+	@mcoc_profile.command(no_pm=True, pass_context=True,aliases=['herorating',])
+	async def herorating(self, ctx, *, herorating : str):
+		"""
+		Set your Total Base Hero Rating."""	
+		user_id = ctx.message.author.id
+		await self.edit_field(user_id, 'herorating', ctx, herorating)
+		
+	@mcoc_profile.command(no_pm=True, pass_context=True)
+	async def profilechamp(self, ctx, *, champ: ChampConverter):
+		"""
+		Set your Profile champion."""
+		name = champ.hookid
+		user_id = ctx.message.author.id
+		await self.edit_field(user_id, 'profilechamp', ctx, name)
+
+	@mcoc_profile.command(no_pm=True, pass_context=True)
+	async def alliance(self, ctx, *, alliance:str):
+		"""
+		Set your Alliance Name."""
+		user_id = ctx.message.author.id
+		await self.edit_field(user_id, 'alliance', ctx, alliance)			
 	
 	@mcoc_profile.command(no_pm=True, pass_context=True)
 	async def defense(self, ctx, *, champs : ChampConverterMult):
@@ -362,37 +369,43 @@ class mcocProfile:
 		user_id = ctx.message.author.id
 		await self.hook_update(user_id,'aq', champs, ctx.message)
 
-##champ = await ChampConverter(ctx, profilechamp).convert()
-#		if not user_string:
-#			user = author
-#		else:
-#			user = await MemberFinder(ctx, user_string).convert()
-#		
+
 	@mcoc_profile.command(no_pm=True, pass_context=True)
-	async def view(self, ctx, *, user: discord.Member=None):
+	async def view(self, ctx, *, user: str):
 		"""
 		View a users profile."""			
 		author = ctx.message.author
 		if not user:
 			user = author
+		else:
+			user = await MemberFinder(ctx, user).convert()
 		user_id = user.id
+		
 		if user_id not in self.mcocProf or self.mcocProf[user_id] == False:
-			await self.bot.say('No profile has been created for that user.')
-			return
+			self.mcocProf[user_id] = {}
+			dataIO.save_json(self.profJSON, self.mcocProf)
+		
 		profile = self.mcocProf[user_id]
 		if 'hidden_fields' not in profile:
 			profile['hidden_fields'] = []
 		hidden_fields = profile['hidden_fields']
+		
 		em = discord.Embed(color=user.color)
 		
-		if "game_name" not in profile or "game_name" in hidden_fields:
+		if "gamename" not in profile or "gamename" in hidden_fields:
 			em.add_field(name="**Summoner**", value=user.display_name,inline=False)
 		else:
-			game_name = profile["game_name"]
-			em.add_field(name="**"+field_names["game_name"]+"**", value=game_name,inline=False)
+			gamename = profile["gamename"]
+			em.add_field(name="**"+field_names["gamename"]+"**", value=gamename,inline=False)
 			
 		if "alliance" not in profile or "alliance" in hidden_fields:
-			pass
+			display_name = user.display_name
+			ally_pattern = re.compile(r'\[.*\]')
+			if not ally_pattern.search(display_name):
+				pass
+			else:
+				alliance = ally_pattern.search(display_name)
+				em.add_field(name="**"+field_names["alliance"]+"**", value=alliance,inline=False)
 		else:
 			alliance = profile["alliance"]
 			em.add_field(name="**"+field_names["alliance"]+"**", value=alliance,inline=False)
@@ -498,7 +511,7 @@ class mcocProfile:
 		elif response.content.lower() == 'skip':
 			await self.bot.say('Question skipped!')
 		else: 
-			await self.edit_field('game_name', ctx, response.content)
+			await self.edit_field('gamename', ctx, response.content)
 
 		await self.bot.say("Now let's set your timezone. Where do you live? (City/State/Country)")
 		
