@@ -246,12 +246,7 @@ class mcocProfile:
 		print(image)
 		return image
 	
-	async def hook_file(self, userid):
-		data = {}
-		f = self.hookJSON.format(userid)
-		if not dataIO.is_valid_json(f):
-			dataIO.save_json(f, data)
-		return dataIO.load_json(f)
+
 		
 
 	@mcoc_profile.command(pass_context=True)
@@ -267,24 +262,17 @@ class mcocProfile:
 		timezone = await self.gettimezone(location)
 		await self.edit_field('timezone', ctx, timezone)
 	
-	@mcoc_profile.command(pass_context=True)
-	async def level(self, ctx, *, summonerlevel : float):
+	@mcoc_profile.command(pass_context=True,aliases=['summonerlevel',])
+	async def level(self, ctx, *, summonerlevel : str):
 		"""
 		Set your Summonor Level."""			
 		await self.edit_field('summonerlevel', ctx, summonerlevel)
 		
-	@mcoc_profile.command(pass_context=True)
+	@mcoc_profile.command(pass_context=True,aliases=['herorating',])
 	async def rating(self, ctx, *, rating : str):
 		"""
-		Set your Total Base Hero Rating."""			
-#		if rating.find(',') != -1:
-#			rating.replace(',','')
-		try:
-			rating = int(rating.replace(',',''))
-			await self.edit_field('herorating', ctx, rating)
-		except ValueError:
-			await self.bot.say('Hero Rating must be a number. Hero Rating not set.')
-			
+		Set your Total Base Hero Rating."""	
+		await self.edit_field('herorating', ctx, rating)
 		
 	@mcoc_profile.command(pass_context=True)
 	async def profilechamp(self, ctx, *, champ: ChampConverter):
@@ -292,6 +280,28 @@ class mcocProfile:
 		Set your profile champ."""
 		name = champ.hookid
 		await self.edit_field('profilechamp', ctx, name)
+		
+	async def hook_file(self, userid):
+		data = {}
+		f = self.hookJSON.format(userid)
+		if not dataIO.is_valid_json(f):
+			dataIO.save_json(f, data)
+		return dataIO.load_json(f)
+		
+	@mcoc_profile.command(pass_context=True,aliases=['awd',]
+	async def defense(self, ctx, *, champs : ChampConverterMult):
+		"""
+		Set your Alliance War Defenders."""	
+		user_id = ctx.message.author.id
+		hook = await self.hook_file(user_id)
+		def_list = []
+		for champ in champs:
+			def_list.append(champ.verbose_str)
+		if len(def_list) > 5:
+			await self.bot.say('Max: 5 Champs')
+		else:
+			hook.update({"awd" : def_list})
+			dataIO.save_json(self.hookJSON.format(user_id), hook)
 		
 		
 	@mcoc_profile.command(pass_context=True)
