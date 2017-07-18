@@ -242,7 +242,7 @@ class mcocProfile:
 				if ext_len < max_int: 
 					count = ext_len
 					while count < max_int:
-						existing_champs.extend('[empty slot]')
+						existing_champs.append('[empty slot]')
 						count += 1
 			except KeyError:
 				existing_champs = placeholders[team]
