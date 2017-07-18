@@ -52,6 +52,7 @@ class mcocProfile:
 		self.bot = bot
 		self.profJSON = "data/mcocProfile/profiles.json"
 		self.mcocProf = dataIO.load_json(self.profJSON)
+		self.hookPath = "data/hook/users/{}"
 		self.hookJSON = "data/hook/users/{}/champs.json"
 		
 	@commands.group(pass_context=True, name="profiler",aliases=['account','prof',])
@@ -116,6 +117,8 @@ class mcocProfile:
 		
 	async def hook_file(self, userid):
 		data = {}
+		if not os.path.exists(self.hookPath):
+			os.makedirs(hookPath.format(userid))
 		f = self.hookJSON.format(userid)
 		if not dataIO.is_valid_json(f):
 			dataIO.save_json(f, data)
@@ -566,6 +569,7 @@ def check_folder():
 		print("Creating data/mcocProfile folder...")
 		os.makedirs("data/mcocProfile")
 		print("Profiles Folder created!")
+		
 	if not os.path.exists("data/hook/users"):
 		print("Creating data/hook/users folder...")
 		os.makedirs("data/hook/users")
