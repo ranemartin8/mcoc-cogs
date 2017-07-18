@@ -123,10 +123,10 @@ class mcocProfile:
 		print(image)
 		return image
 	
-	async def edit_field(self,user_id,field, ctx, value,src='author'):
+	async def edit_field(self,user_id,field, ctx, value):
 		identifier = 'Your'
-		if src != 'author':
-			get_mem = ctx.server.get_member(user_id)
+		if user_id != ctx.message.author.id:
+			get_mem = message.server.get_member(user_id)
 			identifier = get_mem.display_name + "'s"
 		check = await self.check_field(field,value)
 		if check['status'] == 'invalid':
@@ -149,13 +149,12 @@ class mcocProfile:
 			await self.bot.say('Something went wrong. **{}** not set'.format(field_name))
 			return
 		
-	async def hook_update(self,user_id,team,champs, message,src='author'):
+	async def hook_update(self,user_id,team,champs, message):
 		identifier = 'Your'
-		if src != 'author':
+		if user_id != message.author.id:
 			get_mem = message.server.get_member(user_id)
 			identifier = get_mem.display_name + "'s"
 		hook = await self.hook_file(user_id)
-		author = message.author
 		channel = message.channel
 		team_max = {"awd":5,"awo":3,"aq":3}
 		max_int = team_max[team]
@@ -226,11 +225,11 @@ class mcocProfile:
 							   'field from the following list: \n- {}'.format(field,'\n- '.join(fields_list)))
 			return
 		if field not in hook_fields:
-			await self.edit_field(user_id, field, ctx, value,'owner')
+			await self.edit_field(user_id, field, ctx, value)
 			return
 		else:
 			champs = await ChampConverter(ctx, value).convert()
-			await self.hook_update(user_id, field, value, ctx.message,'owner')
+			await self.hook_update(user_id, field, value, ctx.message)
 			return
 		
 	@mcoc_profile.command(no_pm=True, pass_context=True,aliases=['del',])
