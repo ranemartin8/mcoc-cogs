@@ -180,11 +180,11 @@ class mcocProfile:
 				dataIO.save_json(self.profJSON, self.mcocProf)
 				await self.bot.say('**{}** is now hidden from your profile.'.format(field_name))
 			else:
-				await self.bot.say(('**{}** was already hidden from your profile.'.format(field_name))
+				await self.bot.say('**{}** was already hidden from your profile.'.format(field_name))
 				return					
 		else:
 			if field not in self.mcocProf[author.id]['hidden_fields']:
-				await self.bot.say(('**{}** is already visible on your profile.'.format(field_name))
+				await self.bot.say('**{}** is already visible on your profile.'.format(field_name))
 				return	
 			else:
 				self.mcocProf[author.id]['hidden_fields'].remove(field)
