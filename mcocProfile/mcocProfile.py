@@ -494,7 +494,23 @@ class mcocProfile:
 			em.add_field(name="**"+field_names["awd"]+"**", value='\n'.join(awd_list))
 		await self.bot.say(embed=em)
 		await self.bot.delete_message(search_msg)
+
+	async def answer(self,msg,response):
+		author = msg.author
+		if response is None:
+			await self.bot.say('{0.mention}, your session has timed out.'.format(author))
+			return 'stop'
+		content = response.content
+		if content.lower() == 'stop':
+			await self.bot.say('You\'ve exited this profile-making session.')
+			return 'stop'
+		elif content.lower() == 'skip':
+			await self.bot.say('Question skipped!')	
+			return 'skip'
+		else: 
+			return content
 		
+					 
 	@mcoc_profile.command(no_pm=True, pass_context=True)
 	async def make(self, ctx):
 		"""Create a new profile"""
@@ -509,76 +525,127 @@ class mcocProfile:
 						   "end after *3 minutes* without a response.\n\nNow, start by telling me your **in-game name**.".format(author))
 
 		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
-		
-		if response.content is None:
-			await self.bot.say('{0.mention}, your session has timed out.'.format(author))
+		answer = await self.answer(ctx.message,response)
+		if answer == 'stop':
 			return
-		if response.content.lower() == 'stop':
-			await self.bot.say('You\'ve exited this profile-making session.')
-			return
-		elif response.content.lower() == 'skip':
-			await self.bot.say('Question skipped!')
-		else: 
-			await self.edit_field('gamename', ctx, response.content)
-
-		await self.bot.say("Now let's set your timezone. Where do you live? (City/State/Country)")
-		
-		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
-		if response.content is None:
-			await self.bot.say('{0.mention}, your session has timed out.'.format(author))
-			return
-		if response.content.lower() == 'stop':
-			await self.bot.say('You\'ve exited this profile-making session.')
-			return
-		elif response.content.lower() == 'skip':
-			await self.bot.say('Question skipped!')
+		elif answer == 'skip':
+			pass
 		else:
-			timezone = await self.gettimezone(response.content)
+			await self.edit_field('gamename', ctx, answer)
+			
+		await self.bot.say("Now let's set your timezone. Where do you live? (City/State/Country)")
+		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
+		answer = await self.answer(ctx.message,response)
+		if answer == 'stop':
+			return
+		elif answer == 'skip':
+			pass
+		else:
+			timezone = await self.gettimezone(answer)
 			await self.edit_field('timezone', ctx, timezone)
-
+			
 		await self.bot.say("What is your Summonor Level? (0-60)")	
 		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
-		if response.content is None:
-			await self.bot.say('{0.mention}, your session has timed out.'.format(author))
+		answer = await self.answer(ctx.message,response)
+		if answer == 'stop':
 			return
-		if response.content.lower() == 'stop':
-			await self.bot.say('You\'ve exited this profile-making session.')
-			return
-		elif response.content.lower() == 'skip':
-			await self.bot.say('Question skipped!')
-		else: 
-			await self.edit_field('summonerlevel', ctx, response.content)		
+		elif answer == 'skip':
+			pass
+		else:
+			await self.edit_field('summonerlevel', ctx, answer)		
 			
 		await self.bot.say("What is your Total Base Here Rating?")	
 		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
-		if response.content is None:
-			await self.bot.say('{0.mention}, your session has timed out.'.format(author))
+		answer = await self.answer(ctx.message,response)
+		if answer == 'stop':
 			return
-		if response.content.lower() == 'stop':
-			await self.bot.say('You\'ve exited this profile-making session.')
-			return
-		elif response.content.lower() == 'skip':
-			await self.bot.say('Question skipped!')
-		else: 
-			content = response.content
-			if content.find(',') != -1:
-				content.replace(',','')
-			await self.edit_field('herorating', ctx, content)			
+		elif answer == 'skip':
+			pass
+		else:
+			if answer.find(',') != -1:
+				answer.replace(',','')
+			await self.edit_field('herorating', ctx, answer)			
 
 		await self.bot.say("Who is your Profile Champion?")	
 		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
-		if response.content is None:
-			await self.bot.say('{0.mention}, your session has timed out.'.format(author))
+		answer = await self.answer(ctx.message,response)
+		if answer == 'stop':
 			return
-		if response.content.lower() == 'stop':
-			await self.bot.say('You\'ve exited this profile-making session.')
-			return
-		elif response.content.lower() == 'skip':
-			await self.bot.say('Question skipped!')
-		else: 
-			await self.edit_field('profilechamp', ctx, response.content)	
-			
+		elif answer == 'skip':
+			pass
+		else:
+			await self.edit_field('profilechamp', ctx, answer)	
 		return await self.bot.say("All done!")			
+#			
+##		if response.content is None:
+##			await self.bot.say('{0.mention}, your session has timed out.'.format(author))
+##			return
+##		if response.content.lower() == 'stop':
+##			await self.bot.say('You\'ve exited this profile-making session.')
+##			return
+##		elif response.content.lower() == 'skip':
+##			await self.bot.say('Question skipped!')
+##		else: 
+##			await self.edit_field('gamename', ctx, response.content)
+#
+#		await self.bot.say("Now let's set your timezone. Where do you live? (City/State/Country)")
+#		
+#		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
+##		if response.content is None:
+##			await self.bot.say('{0.mention}, your session has timed out.'.format(author))
+##			return
+##		if response.content.lower() == 'stop':
+##			await self.bot.say('You\'ve exited this profile-making session.')
+##			return
+##		elif response.content.lower() == 'skip':
+##			await self.bot.say('Question skipped!')
+##		else:
+##			timezone = await self.gettimezone(response.content)
+##			await self.edit_field('timezone', ctx, timezone)
+#
+#		await self.bot.say("What is your Summonor Level? (0-60)")	
+#		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
+#		if response.content is None:
+#			await self.bot.say('{0.mention}, your session has timed out.'.format(author))
+#			return
+#		if response.content.lower() == 'stop':
+#			await self.bot.say('You\'ve exited this profile-making session.')
+#			return
+#		elif response.content.lower() == 'skip':
+#			await self.bot.say('Question skipped!')
+#		else: 
+#			await self.edit_field('summonerlevel', ctx, response.content)		
+#			
+#		await self.bot.say("What is your Total Base Here Rating?")	
+#		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
+#		if response.content is None:
+#			await self.bot.say('{0.mention}, your session has timed out.'.format(author))
+#			return
+#		if response.content.lower() == 'stop':
+#			await self.bot.say('You\'ve exited this profile-making session.')
+#			return
+#		elif response.content.lower() == 'skip':
+#			await self.bot.say('Question skipped!')
+#		else: 
+#			content = response.content
+#			if content.find(',') != -1:
+#				content.replace(',','')
+#			await self.edit_field('herorating', ctx, content)			
+#
+#		await self.bot.say("Who is your Profile Champion?")	
+#		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
+#		if response.content is None:
+#			await self.bot.say('{0.mention}, your session has timed out.'.format(author))
+#			return
+#		if response.content.lower() == 'stop':
+#			await self.bot.say('You\'ve exited this profile-making session.')
+#			return
+#		elif response.content.lower() == 'skip':
+#			await self.bot.say('Question skipped!')
+#		else: 
+#			await self.edit_field('profilechamp', ctx, response.content)	
+			
+			
 
 placeholders = {
 "aq" : [
