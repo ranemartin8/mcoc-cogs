@@ -371,14 +371,24 @@ class mcocProfile:
 
 
 	@mcoc_profile.command(no_pm=True, pass_context=True)
-	async def view(self, ctx, *, user: str):
+	async def view(self, ctx, *, member: str):
 		"""
-		View a users profile."""			
+		View a users profile."""	
+		search_msg = await self.bot.say('Searching...')
 		author = ctx.message.author
-		if not user:
+		if not member:
 			user = author
 		else:
-			user = await MemberFinder(ctx, user).convert()
+			user = await MemberFinder(ctx, member).convert()
+			
+		if user == 'user_toomany':
+			await self.bot.delete_message(search_msg)
+			return
+		if user == 'user_error':
+			await self.bot.delete_message(search_msg)
+			await self.bot.say("No users found matching: `{}`. Please try again.".format(member))
+			return
+		
 		user_id = user.id
 		
 		if user_id not in self.mcocProf or self.mcocProf[user_id] == False:
@@ -486,6 +496,7 @@ class mcocProfile:
 			awd_list = hook["awd"]
 			em.add_field(name="**"+field_names["awd"]+"**", value='\n'.join(awd_list))
 		await self.bot.say(embed=em)
+		await self.bot.delete_message(search_msg)
 		
 	@mcoc_profile.command(no_pm=True, pass_context=True)
 	async def make(self, ctx):
