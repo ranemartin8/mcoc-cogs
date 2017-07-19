@@ -229,7 +229,7 @@ class mcocProfile:
 			return
 		else:
 			champs = await ChampConverterMult(ctx, value).convert()
-			await self.hook_update(user_id, field, value, ctx.message)
+			await self.hook_update(user_id, field, champs, ctx.message)
 			return
 		
 
