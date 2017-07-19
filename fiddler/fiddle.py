@@ -26,7 +26,7 @@ numbs = {
 
 
 
-COLORS = {
+COLORS = { 
     'spells' : discord.Color.purple(),
     'equipment': discord.Color.blue(),
     # 'starting-equipment':discord.Color.blue(),
