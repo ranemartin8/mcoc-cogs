@@ -215,6 +215,7 @@ class DND:
             category=category.lower()
             img_available = ['monsters','equipment']
             if category in img_available:
+				name = json_file['name']
                 if category == 'equipment':
                     gettype = json_file['equipment_category']
                 else:	
