@@ -237,7 +237,7 @@ class DND:
                         em=discord.Embed(color=COLORS[category],title='',description=page)
                         await self.bot.say(embed=em)
             else:
-                em=discord.Embed(color=COLORS[category],title='',description=page)
+                em=discord.Embed(color=COLORS[category],title='',description='something')
             for key in keys:
                 if key not in {'_id','index','name','desc'}:
                     key2 = key.replace('_',' ').title()
