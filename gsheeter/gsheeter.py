@@ -70,12 +70,21 @@ def clock_emoji(datetime_obj):
 class MemberFinder(commands.Converter):
 	async def convert(self):
 		message = self.ctx.message
-		user_string = self.argument
+		try:
+			user_string = self.argument
+		except AttributeError:
+			user = message.author
+			print('Search Method: User author.')
+			return user
 		server = self.ctx.message.server
 		user = None
 		find_method = None
 		result_names = []
 		matches = []
+		if user_string is None:
+			user = message.author
+			print('Search Method: User author.')
+			return user
 		if message.mentions:
 			user = message.mentions[0]
 			print('Search Method: User found by mention.')

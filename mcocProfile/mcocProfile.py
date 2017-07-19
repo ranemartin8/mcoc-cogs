@@ -215,12 +215,12 @@ class mcocProfile:
 	
 	@mcoc_profile.command(no_pm=True, pass_context=True,hidden=True)
 	@checks.is_owner()
-	async def edit(self, ctx, user='null', field : str, *, value : str):
+	async def edit(self, ctx, field : str, user : MemberFinder, *, value : str):
 		"""
 		OWNER ONLY. Update fields."""
-		if user == 'null':
-			user = ctx.message.author
-		user = await MemberFinder(ctx, user).convert()
+#		if user == 'null':
+#			user = ctx.message.author
+#		user = await MemberFinder(ctx, user).convert()
 		user_id = user.id
 		if field not in valid_fields:
 			await self.bot.say('**{}** is not a valid field. Try again with a valid '
