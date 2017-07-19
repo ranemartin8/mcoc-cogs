@@ -195,7 +195,6 @@ class DND:
             image_url = soupObject.find(class_='monster-icon').find('a').get('href')
             return image_url
         except:
-            try:
             type_dash = gettype.replace(' ','-')
             url_2 = 'https://static-waterdeep.cursecdn.com/1-0-6409-23253/Skins/Waterdeep/images/icons/{}/{}.jpg'
             try:
