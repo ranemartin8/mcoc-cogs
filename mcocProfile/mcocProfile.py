@@ -452,8 +452,8 @@ class mcocProfile:
 				pass
 			else:
 				achievements_list = []
-				for role_name in role_names:
-					achievements_list.append(achievements_dict[role_name])
+				for achievement in achievements:
+					achievements_list.append(achievements_dict[achievement])
 				em.add_field(name="**"+field_names["achievements"]+"**", value=', '.join(achievements_list),inline=False)
 	
 		if "bg" in hidden_fields:
