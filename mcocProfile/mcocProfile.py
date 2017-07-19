@@ -216,7 +216,7 @@ class mcocProfile:
 	
 	@mcoc_profile.command(no_pm=True, pass_context=True,hidden=True)
 	@checks.is_owner()
-	async def edit(self, ctx, field : str, user : MemberFinder='', *, value : str):
+	async def edit(self, ctx, field : str, user : MemberFinder=None, *, value : str):
 		"""
 		OWNER ONLY. Update fields."""
 #		if user == 'null':
