@@ -441,7 +441,7 @@ class mcocProfile:
 			pass
 		else:
 			herorating = profile["herorating"]
-			herorating = int(herorating)
+			herorating = int(herorating.replace(',',''))
 			em.add_field(name="**"+field_names["herorating"]+"**", value='{:,}'.format(herorating),inline=False)
 			
 		if "achievements" in hidden_fields:
