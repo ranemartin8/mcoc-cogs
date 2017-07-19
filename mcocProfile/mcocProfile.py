@@ -150,6 +150,7 @@ class mcocProfile:
 			return
 		
 	async def hook_update(self,user_id,team,champs, message):
+		author = message.author
 		identifier = 'Your'
 		if user_id != message.author.id:
 			get_mem = message.server.get_member(user_id)
@@ -215,7 +216,7 @@ class mcocProfile:
 	
 	@mcoc_profile.command(no_pm=True, pass_context=True,hidden=True)
 	@checks.is_owner()
-	async def edit(self, ctx, field : str, user : MemberFinder, *, value : str):
+	async def edit(self, ctx, field : str, user : MemberFinder='', *, value : str):
 		"""
 		OWNER ONLY. Update fields."""
 #		if user == 'null':
