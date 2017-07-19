@@ -378,7 +378,7 @@ class mcocProfile:
 		user_id = ctx.message.author.id
 		await self.hook_update(user_id,'awo', champs, ctx.message)
 		
-	@mcoc_profile.command(no_pm=True, pass_context=True,aliases=['aq',])
+	@mcoc_profile.command(no_pm=True, pass_context=True)
 	async def aq(self, ctx, *, champs : ChampConverterMult):
 		"""
 		Set your Alliance Quest team."""	
