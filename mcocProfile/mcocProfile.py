@@ -207,11 +207,11 @@ class mcocProfile:
 			newchamps = existing_champs
 			hook.update({team : newchamps})
 			dataIO.save_json(self.hookJSON.format(user_id), hook)
-			await self.bot.say(':white_check_mark:  {} updated **{}** team:\n{}'.format(identifier,team_name,'\n'.join(newchamps)))	
+			await self.bot.say(':white_check_mark:  Done!\n{} updated **{}** team:\n{}'.format(identifier,team_name,'\n'.join(newchamps)))	
 		else: #updating the whole team
 			hook.update({team : champ_list})
 			dataIO.save_json(self.hookJSON.format(user_id), hook)
-			await self.bot.say(':white_check_mark:  {} updated **{}** team:\n{}'.format(identifier,team_name,'\n'.join(champ_list)))		
+			await self.bot.say(':white_check_mark:  Done!\n{} updated **{}** team:\n{}'.format(identifier,team_name,'\n'.join(champ_list)))		
 
 	
 	@mcoc_profile.command(no_pm=True, pass_context=True,hidden=True)
@@ -243,9 +243,9 @@ class mcocProfile:
 			await self.hook_update(user_id, field, champs, ctx.message)
 			return
 
-		await self.bot.say("What is your Base Hero Rating?")	
-		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
-#		elif action == 'display':
+#		await self.bot.say("What is your Base Hero Rating?")	
+#		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
+##		elif action == 'display':
 #			await ctx.invoke(self.display,show_or_hide=value,field=field)
 #		else:
 #			await ctx.invoke(self.delete,field=field)
@@ -284,7 +284,7 @@ class mcocProfile:
 			if field in hook:
 				del hook[field]
 				dataIO.save_json(self.hookJSON.format(author.id), hook)
-				await self.bot.say(':white_check_mark:  Your **{}** team has been deleted.'.format(field_names[field]))
+				await self.bot.say(':white_check_mark:  Done!\nYour **{}** team has been deleted.'.format(field_names[field]))
 				return
 			else:
 				await self.bot.say('No **{}** team available to delete.'.format(field_names[field]))
@@ -299,7 +299,7 @@ class mcocProfile:
 			if field in self.mcocProf[author.id]:
 				del self.mcocProf[author.id][field]
 				dataIO.save_json(self.profJSON, self.mcocProf)
-				await self.bot.say(':white_check_mark:  Your **{}** has been deleted.'.format(field_name))
+				await self.bot.say(':white_check_mark:  Done!\nYour **{}** has been deleted.'.format(field_name))
 			else: 
 				await self.bot.say('No **{}** available to delete.'.format(field_name))
 				
