@@ -216,13 +216,21 @@ class mcocProfile:
 	
 	@mcoc_profile.command(no_pm=True, pass_context=True,hidden=True)
 	@checks.is_owner()
-	async def edit(self, ctx, field : str, user : MemberFinder=None, *, value : str):
+	async def edit(self, ctx, field : str, *, value : str):
 		"""
 		OWNER ONLY. Update fields."""
-#		if user == 'null':
-#			user = ctx.message.author
-#		user = await MemberFinder(ctx, user).convert()
+		message = ctx.message
+		await self.bot.say("Whose profile do you want to update?")	
+		response = await self.bot.wait_for_message(channel=message.channel, author=message.author, timeout=20.0)
+		if response is None:
+			await self.bot.say("Request timed out.")	
+		member = response.content
+		if member == 'me':
+			user = message.author
+		else:
+			user = await MemberFinder(ctx, member).convert()
 		user_id = user.id
+		
 		if field not in valid_fields:
 			await self.bot.say('**{}** is not a valid field. Try again with a valid '
 							   'field from the following list: \n- {}'.format(field,'\n- '.join(fields_list)))
@@ -234,7 +242,9 @@ class mcocProfile:
 			champs = await ChampConverterMult(ctx, value).convert()
 			await self.hook_update(user_id, field, champs, ctx.message)
 			return
-		
+
+		await self.bot.say("What is your Base Hero Rating?")	
+		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
 #		elif action == 'display':
 #			await ctx.invoke(self.display,show_or_hide=value,field=field)
 #		else:
