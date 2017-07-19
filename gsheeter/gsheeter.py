@@ -132,6 +132,8 @@ class MemberFinder(commands.Converter):
 					print('Search Method: User found by fuzzy matching')
 					return user
 				else:
+					await self.ctx.bot.say("No users found matching: `{}`. Please try again.".format(user_string))
+					print("No users found matching: `{}`.".format(user_string))
 					return 'user_error'
 #		if find_method: print('Search Method: '+find_method)
 #		if len(result_names) > 0: print('Result(s): '+', '.join(result_names))
