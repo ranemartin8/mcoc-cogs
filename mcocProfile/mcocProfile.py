@@ -12,7 +12,7 @@ from .mcoc import ChampConverter, ChampConverterMult, QuietUserError
 from .gsheeter import MemberFinder
 import re
 
-field_names = {'summonerlevel':'Summoner Level','herorating':'Total Base Hero Rating','timezone':'Timezone','gamename':'In-Game Name','aq':'Alliance Quest','awd':'AW Defense','awo':'AW Offense','alliance':'Alliance','bg':'Battlegroup','achievements':'Achievements'}
+field_names = {'summonerlevel':'Summoner Level','herorating':'Base Hero Rating','timezone':'Timezone','gamename':'In-Game Name','aq':'Alliance Quest','awd':'AW Defense','awo':'AW Offense','alliance':'Alliance','bg':'Battlegroup','achievements':'Achievements'}
 hook_fields = {'awo','awd','aq'}
 fields_list = field_names.keys()
 valid_fields = set(fields_list)
@@ -56,7 +56,6 @@ class mcocProfile:
 		self.mcocProf = dataIO.load_json(self.profJSON)
 		self.hookPath = "data/hook/users/{}"
 		self.hookJSON = "data/hook/users/{}/champs.json"
-#		self.view = kwargs.get('member')
 		
 	@commands.group(no_pm=True, pass_context=True, name="profiler",aliases=['account','prof',], invoke_without_command=True)
 	async def mcoc_profile(self, ctx):
@@ -216,15 +215,17 @@ class mcocProfile:
 	
 	@mcoc_profile.command(no_pm=True, pass_context=True,hidden=True)
 	@checks.is_owner()
-	async def edit(self, ctx, user : str, field : str, *, value : str):
+	async def edit(self, ctx, user : str='null', field : str, *, value : str):
 		"""
-		OWNER ONLY. Update member profile fields."""
+		OWNER ONLY. Update fields."""
+		if user == 'null':
+			user = ctx.message.author
 		user = await MemberFinder(ctx, user).convert()
 		user_id = user.id
 		if field not in valid_fields:
 			await self.bot.say('**{}** is not a valid field. Try again with a valid '
 							   'field from the following list: \n- {}'.format(field,'\n- '.join(fields_list)))
-			return
+			return	
 		if field not in hook_fields:
 			await self.edit_field(user_id, field, ctx, value)
 			return
@@ -233,11 +234,35 @@ class mcocProfile:
 			await self.hook_update(user_id, field, champs, ctx.message)
 			return
 		
+#		elif action == 'display':
+#			await ctx.invoke(self.display,show_or_hide=value,field=field)
+#		else:
+#			await ctx.invoke(self.delete,field=field)
+	
+#	@mcoc_profile.command(no_pm=True, pass_context=True)
+#	async def delete(self, ctx, member: str=None, *, field : str):	
+#		"""
+#		Delete a field from your profile."""
+#		author = ctx.message.author
+#		if not member:
+#			user = author
+#		else:
+#			user = await MemberFinder(ctx, member).convert()
+#		if user == 'user_toomany' or user == 'user_error':
+#			await self.bot.delete_message(search_msg)
+#			return
+#		
+#		user_id = user.id		
 
 	@mcoc_profile.command(no_pm=True, pass_context=True,aliases=['del',])
 	async def delete(self, ctx, *, field : str):
 		"""
 		Delete a field from your profile."""
+		identifier = 'Your'
+		if user_id != ctx.message.author.id:
+			get_mem = ctx.message.server.get_member(user_id)
+			identifier = get_mem.display_name + "'s"
+			
 		author = ctx.message.author
 		if field not in valid_fields:
 			await self.bot.say('**{}** is not a valid field. Try again with a valid '
@@ -581,9 +606,6 @@ class mcocProfile:
 		await self.bot.say("All done!")	
 		await ctx.invoke(self.view, member=author.name)
 		return
-			
-#    async def nnid(self, ctx, *, NNID : str):
-#	ctx.invoke(self.nnid, NNID=nnid.content)
 
 placeholders = {
 "aq" : [
