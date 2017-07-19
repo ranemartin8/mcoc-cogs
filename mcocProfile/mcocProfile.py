@@ -371,7 +371,7 @@ class mcocProfile:
 
 
 	@mcoc_profile.command(no_pm=True, pass_context=True)
-	async def view(self, ctx, *, member: str):
+	async def view(self, ctx, *, member: str=None):
 		"""
 		View a users profile."""	
 		search_msg = await self.bot.say('Searching...')
@@ -380,15 +380,15 @@ class mcocProfile:
 			user = author
 		else:
 			user = await MemberFinder(ctx, member).convert()
-			
-		if user == 'user_toomany':
-			await self.bot.delete_message(search_msg)
-			return
-		if user == 'user_error':
-			await self.bot.delete_message(search_msg)
-			await self.bot.say("No users found matching: `{}`. Please try again.".format(member))
-			return
-		
+#		if user == 'user_toomany':
+#			await self.bot.delete_message(search_msg)
+#			return
+#		if user == 'user_error':
+#			await self.bot.delete_message(search_msg)
+#			await self.bot.say("No users found matching: `{}`. Please try again.".format(member))
+#			return
+#		if not user:
+#			wait self.bot.say("Something went wrong")
 		user_id = user.id
 		
 		if user_id not in self.mcocProf or self.mcocProf[user_id] == False:
