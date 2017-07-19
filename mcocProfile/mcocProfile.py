@@ -232,6 +232,7 @@ class mcocProfile:
 			await self.hook_update(user_id, field, value, ctx.message)
 			return
 		
+
 	@mcoc_profile.command(no_pm=True, pass_context=True,aliases=['del',])
 	async def delete(self, ctx, *, field : str):
 		"""
@@ -354,7 +355,7 @@ class mcocProfile:
 		Set your Alliance War Defense team."""	
 		user_id = ctx.message.author.id
 		await self.hook_update(user_id,'awd', champs, ctx.message)
-
+		
 	@mcoc_profile.command(no_pm=True, pass_context=True)
 	async def offense(self, ctx, *, champs : ChampConverterMult):
 		"""
