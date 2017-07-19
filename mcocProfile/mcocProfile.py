@@ -579,7 +579,7 @@ class mcocProfile:
 			await self.edit_field(user_id,'profilechamp', ctx, answer)	
 			
 		await self.bot.say("All done!")	
-		await ctx.invoke(self.view, member=author.mention)
+		await ctx.invoke(self.view, member=author.username)
 		return
 			
 #    async def nnid(self, ctx, *, NNID : str):
