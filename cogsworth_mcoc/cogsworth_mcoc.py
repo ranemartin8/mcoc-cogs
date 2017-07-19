@@ -88,7 +88,7 @@ class anothercog:
             self.save_shell_file(hookjson,file_name)
             return print('hook json file saved!')
 
-    @commands.command(pass_context=True,aliases=['updatesyn','synjson','pull_syn','ps',])
+    @commands.command(pass_context=True,aliases=['updatesyn'],hidden=True)
     async def synergy_json(self,ctx):
         """This command translates Hooks JS synergies file into a readable json file"""
         url = 'https://raw.githubusercontent.com/hook/champions/master/src/data/synergies.js'

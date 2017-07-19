@@ -12,10 +12,11 @@ from .mcoc import ChampConverter, ChampConverterMult, QuietUserError
 from .gsheeter import MemberFinder
 import re
 
-field_names = {'summonerlevel':'Summoner Level','herorating':'Base Hero Rating','timezone':'Timezone','gamename':'In-Game Name','aq':'Alliance Quest','awd':'AW Defense','awo':'AW Offense','alliance':'Alliance','bg':'Battlegroup','achievements':'Achievements'}
+field_names = {'summonerlevel':'Summoner Level','herorating':'Base Hero Rating','timezone':'Timezone','gamename':'In-Game Name','aq':'Alliance Quest','awd':'AW Defense','awo':'AW Offense','alliance':'Alliance','bg':'Battlegroup','achievements':'Achievements','profilechamp':'Profile Champion'}
 hook_fields = {'awo','awd','aq'}
 fields_list = field_names.keys()
 valid_fields = set(fields_list)
+
 valid_int = {'1','2','3','4','5'}
 valid_stop = {'stop','end','cancel'}
 achievements_set = {'rol','lol','RTL','100%act4','legend'}
@@ -171,7 +172,6 @@ class mcocProfile:
 		if len(champ_list) > max_int:
 			await self.bot.say('You can only set a maximum of **{}** champions for this team.'.format(max_int))
 			return
-		
 		if len(champ_list) == 1: #updating one champion
 			try:
 				existing_champs = hook[team]
@@ -188,7 +188,6 @@ class mcocProfile:
 			for champ in existing_champs:
 				current_champs.append('**'+ str(i) +'.**    ' +champ)
 				i += 1
-
 			await self.bot.say('New Team Member: **{}**\n\nReply with the # (1 - {}) of the '
 							   'champion you\'d like to replace:\n{}\n\nReply **stop** to cancel.'.format(champ_list[0],max_int,'\n'.join(current_champs)))
 			check = lambda m: m.content in valid_int or m.content in valid_stop
@@ -219,7 +218,7 @@ class mcocProfile:
 	@checks.is_owner()
 	async def edit(self, ctx, field : str, *, value : str):
 		"""
-		OWNER ONLY. Update fields."""
+		OWNER ONLY. Update fields for a specific user."""
 		message = ctx.message
 		await self.bot.say("[Owner Command]: Whose profile do you want to update?")	
 		response = await self.bot.wait_for_message(channel=message.channel, author=message.author, timeout=20.0)
@@ -525,7 +524,10 @@ class mcocProfile:
 					 
 	@mcoc_profile.command(no_pm=True, pass_context=True)
 	async def make(self, ctx):
-		"""Create a new profile"""
+		"""Interactively set up a new profile by answering each prompt.
+		You can reply **skip** to skip a question or **stop** to exit this session.
+		Your session will automatically end after 3 minutes without a response
+		"""
 		message = ctx.message
 		author = message.author
 		channel = message.channel
@@ -535,7 +537,7 @@ class mcocProfile:
 		dataIO.save_json(self.profJSON, self.mcocProf)
 		await self.bot.say("Hi **{}**! Let's begin setting up your Summonor profile!\n - You can reply **skip** to"
 						   " skip a question or **stop** to exit this session. \n - This session will automatically "
-						   "end after *3 minutes* without a response.\n\nNow, start by telling me your **in-game name**.".format(author))
+						   "end after *3 minutes* without a response.\n\nNow, start by telling me your **In-Game Name**.".format(author))
 
 		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
 		answer = await self.answer(ctx.message,response)
