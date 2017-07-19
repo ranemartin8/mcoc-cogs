@@ -114,7 +114,7 @@ class DND:
             json_file = await _get_file(url)
             await self.bot.say('{} search: <{}>'.format(CATEGORY, json_file['results'][0]['url']))
 
-    async def cogs_menu(self, ctx, cog_list: list, category: str='', message: discord.Message=None, page=0, timeout: int=30):
+    async def cogs_menu(self, ctx, cog_list: list, category, message: discord.Message=None, page=0, timeout: int=30):
         """menu control logic for this taken from
            https://github.com/Lunar-Dust/Dusty-Cogs/blob/master/menu/menu.py"""
         cog = cog_list[page]
