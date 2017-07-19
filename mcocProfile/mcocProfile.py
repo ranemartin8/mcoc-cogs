@@ -420,10 +420,10 @@ class mcocProfile:
 				pass
 			else:
 				alliance = ally_pattern.search(display_name)
-				em.add_field(name="**"+field_names["alliance"]+"**", value=alliance,inline=False)
+				em.add_field(name="**"+field_names["alliance"]+"**", value=alliance.group(0),inline=False)
 		else:
 			alliance = profile["alliance"]
-			em.add_field(name="**"+field_names["alliance"]+"**", value=alliance.group(0),inline=False)
+			em.add_field(name="**"+field_names["alliance"]+"**", value=alliance,inline=False)
 			
 		if "summonerlevel" not in profile or "summonerlevel" in hidden_fields:
 			pass
