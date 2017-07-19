@@ -241,29 +241,7 @@ class mcocProfile:
 		else:
 			champs = await ChampConverterMult(ctx, value).convert()
 			await self.hook_update(user_id, field, champs, ctx.message)
-			return
-
-#		await self.bot.say("What is your Base Hero Rating?")	
-#		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
-##		elif action == 'display':
-#			await ctx.invoke(self.display,show_or_hide=value,field=field)
-#		else:
-#			await ctx.invoke(self.delete,field=field)
-	
-#	@mcoc_profile.command(no_pm=True, pass_context=True)
-#	async def delete(self, ctx, member: str=None, *, field : str):	
-#		"""
-#		Delete a field from your profile."""
-#		author = ctx.message.author
-#		if not member:
-#			user = author
-#		else:
-#			user = await MemberFinder(ctx, member).convert()
-#		if user == 'user_toomany' or user == 'user_error':
-#			await self.bot.delete_message(search_msg)
-#			return
-#		
-#		user_id = user.id		
+			return	
 
 	@mcoc_profile.command(no_pm=True, pass_context=True,aliases=['del',])
 	async def delete(self, ctx, *, field : str):
@@ -386,21 +364,21 @@ class mcocProfile:
 		user_id = ctx.message.author.id
 		await self.edit_field(user_id, 'alliance', ctx, alliance)			
 	
-	@mcoc_profile.command(no_pm=True, pass_context=True)
+	@mcoc_profile.command(no_pm=True, pass_context=True,aliases=['awd',])
 	async def defense(self, ctx, *, champs : ChampConverterMult):
 		"""
 		Set your Alliance War Defense team."""	
 		user_id = ctx.message.author.id
 		await self.hook_update(user_id,'awd', champs, ctx.message)
 		
-	@mcoc_profile.command(no_pm=True, pass_context=True)
+	@mcoc_profile.command(no_pm=True, pass_context=True,aliases=['awo',])
 	async def offense(self, ctx, *, champs : ChampConverterMult):
 		"""
 		Set your Alliance War Offense team."""	
 		user_id = ctx.message.author.id
 		await self.hook_update(user_id,'awo', champs, ctx.message)
 		
-	@mcoc_profile.command(no_pm=True, pass_context=True)
+	@mcoc_profile.command(no_pm=True, pass_context=True,aliases=['aq',])
 	async def aq(self, ctx, *, champs : ChampConverterMult):
 		"""
 		Set your Alliance Quest team."""	
@@ -410,15 +388,13 @@ class mcocProfile:
 
 	@mcoc_profile.command(no_pm=True, pass_context=True)
 	async def view(self, ctx, *, member: str=None):
-		"""
-		View a users profile."""	
+		"""View a users profile."""	
 		search_msg = await self.bot.say('Searching...')
 		author = ctx.message.author
 		if not member:
 			user = author
 		else:
 			user = await MemberFinder(ctx, member).convert()
-			
 		if user == 'user_toomany' or user == 'user_error':
 			await self.bot.delete_message(search_msg)
 			return
@@ -613,11 +589,23 @@ class mcocProfile:
 			pass
 		else:
 			await self.edit_field(user_id,'profilechamp', ctx, answer)	
+
+		await self.bot.say("List out your Alliance Quest champs.")	
+		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
+		answer = await self.answer(ctx.message,response)
+		if answer == 'stop':
+			return
+		elif answer == 'skip':
+			pass
+		else:
+			champs = await ChampConverterMult(ctx, answer).convert()
+			wait self.hook_update(user_id, 'aq', champs, ctx.message)	
 			
 		await self.bot.say("All done!")	
 		await ctx.invoke(self.view, member=author.name)
 		return
-
+	
+			
 placeholders = {
 "aq" : [
 	"[empty slot]",
