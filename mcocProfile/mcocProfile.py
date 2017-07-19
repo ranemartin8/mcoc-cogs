@@ -257,7 +257,7 @@ class mcocProfile:
 			if field in hook:
 				del hook[field]
 				dataIO.save_json(self.hookJSON.format(author.id), hook)
-				await self.bot.say(':white_check_mark:  Done!\nYour **{}** team has been deleted.'.format(field_names[field]))
+				await self.bot.say(':white_check_mark:  Done! Your **{}** team has been deleted.'.format(field_names[field]))
 				return
 			else:
 				await self.bot.say('No **{}** team available to delete.'.format(field_names[field]))
@@ -272,7 +272,7 @@ class mcocProfile:
 			if field in self.mcocProf[author.id]:
 				del self.mcocProf[author.id][field]
 				dataIO.save_json(self.profJSON, self.mcocProf)
-				await self.bot.say(':white_check_mark:  Done!\nYour **{}** has been deleted.'.format(field_name))
+				await self.bot.say(':white_check_mark:  Done! Your **{}** has been deleted.'.format(field_name))
 			else: 
 				await self.bot.say('No **{}** available to delete.'.format(field_name))
 				
