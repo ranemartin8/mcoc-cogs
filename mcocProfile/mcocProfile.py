@@ -599,7 +599,7 @@ class mcocProfile:
 			pass
 		else:
 			champs = await ChampConverterMult(ctx, answer).convert()
-			wait self.hook_update(user_id, 'aq', champs, ctx.message)	
+			await self.hook_update(user_id, 'aq', champs, ctx.message)	
 			
 		await self.bot.say("All done!")	
 		await ctx.invoke(self.view, member=author.name)
