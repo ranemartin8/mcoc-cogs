@@ -228,7 +228,7 @@ class mcocProfile:
 			await self.edit_field(user_id, field, ctx, value)
 			return
 		else:
-			champs = await ChampConverter(ctx, value).convert()
+			champs = await ChampConverterMult(ctx, value).convert()
 			await self.hook_update(user_id, field, value, ctx.message)
 			return
 		
