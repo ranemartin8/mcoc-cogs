@@ -517,8 +517,9 @@ class mcocProfile:
 		message = ctx.message
 		author = message.author
 		channel = message.channel
+		user_id = author.id
 		
-		self.mcocProf[author.id] = {}
+		self.mcocProf[user_id] = {}
 		dataIO.save_json(self.profJSON, self.mcocProf)
 		await self.bot.say("Hi **{}**! Let's begin setting up your Summonor profile!\n - You can reply **skip** to"
 						   " skip a question or **stop** to exit this session. \n - This session will automatically "
@@ -531,7 +532,7 @@ class mcocProfile:
 		elif answer == 'skip':
 			pass
 		else:
-			await self.edit_field('gamename', ctx, answer)
+			await self.edit_field(user_id,'gamename', ctx, answer)
 			
 		await self.bot.say("Now let's set your timezone. Where do you live? (City/State/Country)")
 		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
@@ -542,7 +543,7 @@ class mcocProfile:
 			pass
 		else:
 			timezone = await self.gettimezone(answer)
-			await self.edit_field('timezone', ctx, timezone)
+			await self.edit_field(user_id,'timezone', ctx, timezone)
 			
 		await self.bot.say("What is your Summonor Level? (0-60)")	
 		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
@@ -552,7 +553,7 @@ class mcocProfile:
 		elif answer == 'skip':
 			pass
 		else:
-			await self.edit_field('summonerlevel', ctx, answer)		
+			await self.edit_field(user_id,'summonerlevel', ctx, answer)		
 			
 		await self.bot.say("What is your Total Base Here Rating?")	
 		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
@@ -564,7 +565,7 @@ class mcocProfile:
 		else:
 			if answer.find(',') != -1:
 				answer.replace(',','')
-			await self.edit_field('herorating', ctx, answer)			
+			await self.edit_field(user_id,'herorating', ctx, answer)			
 
 		await self.bot.say("Who is your Profile Champion?")	
 		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
@@ -574,7 +575,7 @@ class mcocProfile:
 		elif answer == 'skip':
 			pass
 		else:
-			await self.edit_field('profilechamp', ctx, answer)	
+			await self.edit_field(user_id,'profilechamp', ctx, answer)	
 		return await self.bot.say("All done!")			
 #			
 ##		if response.content is None:
