@@ -205,7 +205,7 @@ class DND:
                 return 'https://static-waterdeep.cursecdn.com/1-0-6409-23253/Skins/Waterdeep/images/dnd-beyond-logo.svg'
 
 		
-	async def _process_item(self, ctx=None, url=None, category=None):
+    async def _process_item(self, ctx=None, url=None, category=None):
         json_file = await _get_file(url)
         if 'count' in json_file:
             menu_pages = await _present_list(self, url, CATEGORY)
@@ -213,13 +213,13 @@ class DND:
             await self.cogs_menu(ctx, menu_pages, CATEGORY, message=None, page=0, timeout=30)
         elif category.lower() in COLORS:
             category=category.lower()
-			img_available = ['monsters','equipment']
-			if category in img_available:
-				if category == 'equipment':
-					gettype = json_file['equipment_category']
-				else:	
-					gettype = json_file['type']
-				image = await self.image_search(category,name.lower(),gettype)
+            img_available = ['monsters','equipment']
+            if category in img_available:
+                if category == 'equipment':
+                    gettype = json_file['equipment_category']
+                else:	
+                    gettype = json_file['type']
+                image = await self.image_search(category,name.lower(),gettype)
             keys = json_file.keys()
             if 'desc' in keys:
                 desc = chat.pagify('\n'.join(json_file['desc']), delims=['\n\n'], escape=True, shorten_by=8, page_length=1000)
