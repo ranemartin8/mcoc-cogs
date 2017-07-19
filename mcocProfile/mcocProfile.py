@@ -380,17 +380,19 @@ class mcocProfile:
 			user = author
 		else:
 			user = await MemberFinder(ctx, member).convert()
-#		if user == 'user_toomany':
-#			await self.bot.delete_message(search_msg)
-#			return
-#		if user == 'user_error':
-#			await self.bot.delete_message(search_msg)
-#			await self.bot.say("No users found matching: `{}`. Please try again.".format(member))
-#			return
-#		if not user:
-#			wait self.bot.say("Something went wrong")
-		user_id = user.id
+		if user == 'user_toomany':
+			await self.bot.delete_message(search_msg)
+			return
+		if user == 'user_error':
+			await self.bot.delete_message(search_msg)
+			await self.bot.say("No users found matching: `{}`. Please try again.".format(member))
+			return
+		if user is None:
+			await self.bot.say("Something went wrong.")
+			return
 		
+		user_id = user.id
+	
 		if user_id not in self.mcocProf or self.mcocProf[user_id] == False:
 			self.mcocProf[user_id] = {}
 			dataIO.save_json(self.profJSON, self.mcocProf)

@@ -116,8 +116,8 @@ class MemberFinder(commands.Converter):
 						await self.ctx.bot.say("A few possible matches were found: ```{}```\n\n"
 											   "So I just went with first match: **{}**"
 											   " ".format(', '.join(result_names),user.display_name))
-						print('Search Method: User found by partial string matching')
-						return user
+					print('Search Method: User found by partial string matching')
+					return user
 					
 			else:
 				matches = difflib.get_close_matches(user_string,mem_dict.keys(), n=3, cutoff=0.5)
@@ -129,8 +129,8 @@ class MemberFinder(commands.Converter):
 						await self.ctx.bot.say("A few fuzzy matches were found: ```{}```\n\n"
 											   "So I just went with closest match:"
 											   " **{}**".format(', '.join(matches),user.display_name))
-						print('Search Method: User found by fuzzy matching')
-						return user
+					print('Search Method: User found by fuzzy matching')
+					return user
 				else:
 					return 'user_error'
 #		if find_method: print('Search Method: '+find_method)
