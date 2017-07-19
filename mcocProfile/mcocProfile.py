@@ -247,11 +247,6 @@ class mcocProfile:
 	async def delete(self, ctx, *, field : str):
 		"""
 		Delete a field from your profile."""
-		identifier = 'Your'
-		if user_id != ctx.message.author.id:
-			get_mem = ctx.message.server.get_member(user_id)
-			identifier = get_mem.display_name + "'s"
-			
 		author = ctx.message.author
 		if field not in valid_fields:
 			await self.bot.say('**{}** is not a valid field. Try again with a valid '
