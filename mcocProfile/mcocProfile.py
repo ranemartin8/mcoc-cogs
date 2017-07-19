@@ -590,7 +590,7 @@ class mcocProfile:
 		else:
 			await self.edit_field(user_id,'profilechamp', ctx, answer)	
 
-		await self.bot.say("List out your Alliance Quest champs.")	
+		await self.bot.say("List out your **3** Alliance Quest champs.")	
 		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
 		answer = await self.answer(ctx.message,response)
 		if answer == 'stop':
@@ -600,8 +600,30 @@ class mcocProfile:
 		else:
 			champs = await ChampConverterMult(ctx, answer).convert()
 			await self.hook_update(user_id, 'aq', champs, ctx.message)	
+
+		await self.bot.say("List out your **3** Alliance War Offense champs.")	
+		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
+		answer = await self.answer(ctx.message,response)
+		if answer == 'stop':
+			return
+		elif answer == 'skip':
+			pass
+		else:
+			champs = await ChampConverterMult(ctx, answer).convert()
+			await self.hook_update(user_id, 'awo', champs, ctx.message)	
 			
-		await self.bot.say("All done!")	
+		await self.bot.say("List out your **5** Alliance War Defense champs.")	
+		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
+		answer = await self.answer(ctx.message,response)
+		if answer == 'stop':
+			return
+		elif answer == 'skip':
+			pass
+		else:
+			champs = await ChampConverterMult(ctx, answer).convert()
+			await self.hook_update(user_id, 'awd', champs, ctx.message)		
+	
+		await self.bot.say("Done! Here is your profile:")	
 		await ctx.invoke(self.view, member=author.name)
 		return
 	
