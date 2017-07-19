@@ -18,7 +18,8 @@ fields_list = field_names.keys()
 valid_fields = set(fields_list)
 valid_int = {'1','2','3','4','5'}
 valid_stop = {'stop','end','cancel'}
-achievements_set = {'ROL','LOL','RTL','100%Act4'}
+achievements_set = {'rol','lol','RTL','100%act4','legend'}
+achievements_dict = {'rol':'Realm of Legends','lol':'Labyrinth of Legends','rtl':'Road to the Labyrinth','100%act4':'100% Act 4','legend':'**Legend**'}
 bg_set = {'bg1','bg2','bg3'}
 remote_data_basepath = 'https://raw.githubusercontent.com/JasonJW/mcoc-cogs/master/mcoc/data/'
 
@@ -445,12 +446,15 @@ class mcocProfile:
 			roles = user.roles
 			role_names = set()
 			for role in roles:
-				role_names.add(role.name)
+				role_names.add(role.name.lower())
 			achievements = role_names & achievements_set
 			if len(achievements) == 0:
 				pass
 			else:
-				em.add_field(name="**"+field_names["achievements"]+"**", value=', '.join(achievements),inline=False)
+				achievements_list = []
+				for role_name in role_names:
+					achievements_list.append(achievements_dict[role_name])
+				em.add_field(name="**"+field_names["achievements"]+"**", value=', '.join(achievements_list),inline=False)
 	
 		if "bg" in hidden_fields:
 			pass
