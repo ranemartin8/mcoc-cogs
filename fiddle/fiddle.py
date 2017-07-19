@@ -236,8 +236,9 @@ class DND:
                     else:
                         em=discord.Embed(color=COLORS[category],title='',description=page)
                         await self.bot.say(embed=em)
-                # em=discord.Embed(color=COLORS[category],title='',description='')
-            for key in keys:
+            else:
+                em=discord.Embed(color=COLORS[category],title='',description=page)
+			for key in keys:
                 if key not in {'_id','index','name','desc'}:
                     key2 = key.replace('_',' ').title()
                     if isinstance(json_file[key],list):
