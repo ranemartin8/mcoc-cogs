@@ -50,14 +50,15 @@ c_times = {
 class mcocProfile:
 	"""Commands for creating and managing your Marvel Contest of Champions Profile"""
 
-	def __init__(self, bot):
+	def __init__(self, bot, **kwargs):
 		self.bot = bot
 		self.profJSON = "data/mcocProfile/profiles.json"
 		self.mcocProf = dataIO.load_json(self.profJSON)
 		self.hookPath = "data/hook/users/{}"
 		self.hookJSON = "data/hook/users/{}/champs.json"
+#		self.view = kwargs.get('member')
 		
-	@commands.group(no_pm=True, pass_context=True, name="profiler",aliases=['account','prof',])
+	@commands.group(no_pm=True, pass_context=True, name="profiler",aliases=['account','prof',], invoke_without_command=True)
 	async def mcoc_profile(self, ctx):
 		"""mcocProfile allows you to create and manage your MCOC Profile."""
 		if ctx.invoked_subcommand is None:
@@ -555,7 +556,7 @@ class mcocProfile:
 		else:
 			await self.edit_field(user_id,'summonerlevel', ctx, answer)		
 			
-		await self.bot.say("What is your Total Base Here Rating?")	
+		await self.bot.say("What is your Base Hero Rating?")	
 		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
 		answer = await self.answer(ctx.message,response)
 		if answer == 'stop':
@@ -576,77 +577,13 @@ class mcocProfile:
 			pass
 		else:
 			await self.edit_field(user_id,'profilechamp', ctx, answer)	
-		return await self.bot.say("All done!")			
-#			
-##		if response.content is None:
-##			await self.bot.say('{0.mention}, your session has timed out.'.format(author))
-##			return
-##		if response.content.lower() == 'stop':
-##			await self.bot.say('You\'ve exited this profile-making session.')
-##			return
-##		elif response.content.lower() == 'skip':
-##			await self.bot.say('Question skipped!')
-##		else: 
-##			await self.edit_field('gamename', ctx, response.content)
-#
-#		await self.bot.say("Now let's set your timezone. Where do you live? (City/State/Country)")
-#		
-#		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
-##		if response.content is None:
-##			await self.bot.say('{0.mention}, your session has timed out.'.format(author))
-##			return
-##		if response.content.lower() == 'stop':
-##			await self.bot.say('You\'ve exited this profile-making session.')
-##			return
-##		elif response.content.lower() == 'skip':
-##			await self.bot.say('Question skipped!')
-##		else:
-##			timezone = await self.gettimezone(response.content)
-##			await self.edit_field('timezone', ctx, timezone)
-#
-#		await self.bot.say("What is your Summonor Level? (0-60)")	
-#		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
-#		if response.content is None:
-#			await self.bot.say('{0.mention}, your session has timed out.'.format(author))
-#			return
-#		if response.content.lower() == 'stop':
-#			await self.bot.say('You\'ve exited this profile-making session.')
-#			return
-#		elif response.content.lower() == 'skip':
-#			await self.bot.say('Question skipped!')
-#		else: 
-#			await self.edit_field('summonerlevel', ctx, response.content)		
-#			
-#		await self.bot.say("What is your Total Base Here Rating?")	
-#		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
-#		if response.content is None:
-#			await self.bot.say('{0.mention}, your session has timed out.'.format(author))
-#			return
-#		if response.content.lower() == 'stop':
-#			await self.bot.say('You\'ve exited this profile-making session.')
-#			return
-#		elif response.content.lower() == 'skip':
-#			await self.bot.say('Question skipped!')
-#		else: 
-#			content = response.content
-#			if content.find(',') != -1:
-#				content.replace(',','')
-#			await self.edit_field('herorating', ctx, content)			
-#
-#		await self.bot.say("Who is your Profile Champion?")	
-#		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
-#		if response.content is None:
-#			await self.bot.say('{0.mention}, your session has timed out.'.format(author))
-#			return
-#		if response.content.lower() == 'stop':
-#			await self.bot.say('You\'ve exited this profile-making session.')
-#			return
-#		elif response.content.lower() == 'skip':
-#			await self.bot.say('Question skipped!')
-#		else: 
-#			await self.edit_field('profilechamp', ctx, response.content)	
 			
+		await self.bot.say("All done!")	
+		await ctx.invoke(self.view, member=author.mention)
+		return
 			
+#    async def nnid(self, ctx, *, NNID : str):
+#	ctx.invoke(self.nnid, NNID=nnid.content)
 
 placeholders = {
 "aq" : [
