@@ -222,7 +222,7 @@ class DND:
                 else:
                     answer.content.lower().strip()
                     answer = int(answer)
-                    await self.bot.say('Processing choice : {}'.format(answer)
+                    await self.bot.say('Processing choice : {}'.format(answer))
                     url = '{}{}/{}'.format(BASEURL,category,answer)
                     await self._process_item(ctx, url, category)
             else:
