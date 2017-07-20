@@ -246,16 +246,20 @@ class DND:
                 name = category
                 print('KeyError: json_file[\'name\']. Category used instead')
 #            embeds = []
-            em = discord.Embed(color=COLORS[category],title=name)
-            img_available = ['monsters', 'equipment']
-            if category in img_available:
-                if category == 'equipment':
-                    gettype = json_file['equipment_category']
-                else:
-                    gettype = json_file['type']
-            image = await self.image_search(category,name.lower(),gettype)
-            em.set_image(url=image)
-            await self.bot.say(embed=em)
+            try:
+                em = discord.Embed(color=COLORS[category],title=name)
+                img_available = ['monsters', 'equipment']
+                if category in img_available:
+                    if category == 'equipment':
+                        gettype = json_file['equipment_category']
+                    else:
+                        gettype = json_file['type']
+#                image = await self.image_search(category,name.lower(),gettype)
+#                em.set_image(url=image)
+                await self.bot.say(embed=em)
+            except:
+                await self.bot.say('Something went wrong in _process_item')
+                raise
 #            messages.append(said)
         else:
             print('_process_item error')
