@@ -169,7 +169,6 @@ class DND:
             json_file = await self._get_file(url)
             await self.bot.say('{} search: <{}>'.format(CATEGORY, json_file['results'][0]['url']))
             await self._process_item(ctx,url,CATEGORY)
-
     async def pages_menu(self, ctx, embed_list, category, message: discord.Message=None, page=0, timeout: int=30):
         """menu control logic for this taken from
            https://github.com/Lunar-Dust/Dusty-Cogs/blob/master/menu/menu.py"""
@@ -204,16 +203,16 @@ class DND:
             react = react.reaction.emoji
             if react == "➡": #next_page
                 next_page = (page + 1) % len(embed_list)
-                return await self.pages_menu(ctx, embed_list, message=message, page=next_page, timeout=timeout)
+                return await self.pages_menu(ctx, embed_list, category, message=message, page=next_page, timeout=timeout)
             elif react == "⬅": #previous_page
                 next_page = (page - 1) % len(cog_list)
-                return await self.pages_menu(ctx, cog_list, message=message, page=next_page, timeout=timeout)
+                return await self.pages_menu(ctx, cog_list, category, message=message, page=next_page, timeout=timeout)
             elif react == "⏪": #rewind
                 next_page = (page - 5) % len(cog_list)
-                return await self.pages_menu(ctx, cog_list, message=message, page=next_page, timeout=timeout)
+                return await self.pages_menu(ctx, cog_list, category, message=message, page=next_page, timeout=timeout)
             elif react == "⏩": # fast_forward
                 next_page = (page + 5) % len(cog_list)
-                return await self.pages_menu(ctx, cog_list, message=message, page=next_page, timeout=timeout)
+                return await self.pages_menu(ctx, cog_list, category, message=message, page=next_page, timeout=timeout)
             elif react == "⏺": #choose
                 await self.bot.say(SELECTION.format(category+' '))
                 answer = await self.bot.wait_for_message(timeout=10, author=ctx.message.author)
