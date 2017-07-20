@@ -213,7 +213,7 @@ class DND:
         equip_type = ['adventuring-gear','ammunition','mount','vehicle','weapon','tool','poison',
                       'potion','pack','armor','holy-symbol','druidic-focus','arcane-focus']
         
-        IMAGE_SEARCH = 'http://www.dnd.beyond.com/{}?filter-search={}'
+        IMAGE_SEARCH = 'https://www.dndbeyond.com/{}?filter-search={}'
         
         if category == 'equipment':
             if type_dash not in equip_type:
