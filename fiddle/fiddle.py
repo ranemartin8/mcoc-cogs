@@ -226,7 +226,7 @@ class DND:
                 url = IMAGE_SEARCH.format(category,plus_name)
                 async with aiohttp.get(url) as response:
                     soupObject = BeautifulSoup(await response.text(), "html.parser")
-                image_url = soupObject.find(class_='row monster-icon').contents[0].get('href')
+                image_url = soupObject.find(class_='monster-icon').contents[0].get('href')
                 return image_url
             except:
                 if type_dash not in monster_types:
