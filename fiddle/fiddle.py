@@ -220,7 +220,8 @@ class DND:
                 if answer is None:
                     await self.bot.say('Request timed out.')
                 else:
-                    answer.content.lower().strip()
+                    answer = answer.content
+                    answer = answer.lower().strip()
                     answer = int(answer)
                     await self.bot.say('Processing choice : {}'.format(answer))
                     url = '{}{}/{}'.format(BASEURL,category,answer)
