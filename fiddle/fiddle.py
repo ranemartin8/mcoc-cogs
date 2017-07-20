@@ -7,7 +7,7 @@ from __main__ import send_cmd_help
 from .utils import chat_formatting as chat
 from discord.ext import commands
 
-IMAGE_SEARCH = 'http://www.dnd.beyond.com/{}?filter-search={}'
+
 
 # numbs = {
 #     "rewind" : "⏪",
@@ -308,21 +308,38 @@ class DND:
 
     async def image_search(self,category,name,gettype):
         plus_name = name.replace(' ','+')
-        url = IMAGE_SEARCH.format(category,plus_name)
-        try:
-            async with aiohttp.get(url) as response:
-                soupObject = BeautifulSoup(await response.text(), "html.parser")
-            image_url = soupObject.find(class_='monster-icon').find('a').get('href')
-            return image_url
-        except:
-            type_dash = gettype.replace(' ','-')
-            url_2 = 'https://static-waterdeep.cursecdn.com/1-0-6409-23253/Skins/Waterdeep/images/icons/{}/{}.jpg'
+        type_dash = gettype.replace(' ','-')
+        icon_url = 'https://static-waterdeep.cursecdn.com/1-0-6409-23253/Skins/Waterdeep/images/icons/{}/{}.jpg'
+        default_url = 'https://static-waterdeep.cursecdn.com/1-0-6409-23253/Skins/Waterdeep/images/dnd-beyond-logo.svg'
+        monster_types = ['aberration','beast','celestial','construct','dragon','elemental','fey',
+                 'humanoid','fiend','giant','ooze','plant','undead','monstrosity']
+        equip_type = ['adventuring-gear','ammunition','mount','vehicle','weapon','tool','poison',
+                      'potion','pack','armor','holy-symbol','druidic-focus','arcane-focus']
+        
+        IMAGE_SEARCH = 'http://www.dnd.beyond.com/{}?filter-search={}'
+        
+        if category == 'equipment':
+            if category not in equip_type:
+                return default_url
+            else:
+                result_url = icon_url.format(category,type_dash)
+                return result_url
+        elif category == 'monsters':
             try:
-                async with aiohttp.get(url_2.format(category,gettype)) as response:
-                    image_url = await response.text()
-                    return image_url
+                url = IMAGE_SEARCH.format(category,plus_name)
+                async with aiohttp.get(url) as response:
+                    soupObject = BeautifulSoup(await response.text(), "html.parser")
+                image_url = soupObject.find(class='row monster-icon').contents[0].get('href')
+                return image_url
             except:
-                return 'https://static-waterdeep.cursecdn.com/1-0-6409-23253/Skins/Waterdeep/images/dnd-beyond-logo.svg'
+                if category not in monster_types:
+                    return default_url
+                else:
+                    result_url = icon_url.format(category,type_dash+'@2x')
+                    return result_url
+        else:
+            return default_url
+        
 
 def setup(bot):
     bot.add_cog(DND(bot))
