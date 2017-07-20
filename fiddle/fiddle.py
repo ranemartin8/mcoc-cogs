@@ -231,7 +231,7 @@ class DND:
 #                print(status)
 #                soupObject = BeautifulSoup(await response.text(), "html.parser")
                     print(soupObject)
-                    image_url = soupObject.find(class_='monster-icon').contents[0].get('href')
+                    image_url = soupObject.find("div",class_="info").contents[0].contents[0].get('href')
                     print(image_url)
                     return image_url
             except:
