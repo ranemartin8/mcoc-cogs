@@ -254,11 +254,11 @@ class DND:
                         gettype = json_file['equipment_category']
                     else:
                         gettype = json_file['type']
-                image = await self.image_search(category,name.lower(),gettype)
+                image = await self.image_search(category,name.lower(),gettype.lower())
                 if not image:
-                    pass
+                    em.set_thumbnail(url='https://static-waterdeep.cursecdn.com/1-0-6409-23253/Skins/Waterdeep/images/dnd-beyond-logo.svg')
                 else:
-                    em.set_image(url=image)
+                    em.set_thumbnail(url=image)
                 await self.bot.say(embed=em)
             except:
                 await self.bot.say('Something went wrong in _process_item')
@@ -322,7 +322,7 @@ class DND:
         IMAGE_SEARCH = 'http://www.dnd.beyond.com/{}?filter-search={}'
         
         if category == 'equipment':
-            if category not in equip_type:
+            if type_dash not in equip_type:
                 return default_url
             else:
                 result_url = icon_url.format(category,type_dash)
@@ -332,10 +332,10 @@ class DND:
                 url = IMAGE_SEARCH.format(category,plus_name)
                 async with aiohttp.get(url) as response:
                     soupObject = BeautifulSoup(await response.text(), "html.parser")
-                image_url = soupObject.find(class='row monster-icon').contents[0].get('href')
+                image_url = soupObject.find(class_='row monster-icon').contents[0].get('href')
                 return image_url
             except:
-                if category not in monster_types:
+                if type_dash not in monster_types:
                     return default_url
                 else:
                     result_url = icon_url.format(category,type_dash+'@2x')
