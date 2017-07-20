@@ -254,8 +254,11 @@ class DND:
                         gettype = json_file['equipment_category']
                     else:
                         gettype = json_file['type']
-#                image = await self.image_search(category,name.lower(),gettype)
-#                em.set_image(url=image)
+                image = await self.image_search(category,name.lower(),gettype)
+                if not image:
+                    pass
+                else:
+                    em.set_image(url=image)
                 await self.bot.say(embed=em)
             except:
                 await self.bot.say('Something went wrong in _process_item')
