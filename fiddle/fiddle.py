@@ -227,6 +227,7 @@ class DND:
                 print(url)
                 async with aiohttp.get(url) as response:
                     html = await response.text()
+                    print(html)
                 soupObject = BeautifulSoup(html, "html.parser")
                 print(soupObject)
                 image_url = soupObject.find(class_='monster-icon').contents[0].get('href')
