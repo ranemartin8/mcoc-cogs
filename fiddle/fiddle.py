@@ -231,9 +231,11 @@ class DND:
 #                print(status)
 #                soupObject = BeautifulSoup(await response.text(), "html.parser")
                     print(soupObject)
-                    image_url = soupObject.find("div",class_="info").contents[0].contents[0].get('href')
-                    print(image_url)
-                    return image_url
+#                    image_url = soupObject.find_all("div",class_="info").contents[0].contents[0].get('href')
+                    image_urls = soupObject.select("div.row.monster-icon a")
+                    image_url = [link.get('href') for link in image_urls]
+                    print(image_url[0])
+                    return image_url[0]
             except:
                 if type_dash not in monster_types:
                     return default_url
