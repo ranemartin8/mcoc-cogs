@@ -234,26 +234,29 @@ class DND:
 
     async def _process_item(self, ctx, url, category):
         json_file = await self._get_file(url)
-        keys = json_file.keys()
-        messages = []
+#        keys = json_file.keys()
+#        messages = []
         if 'count' in json_file: # Present list
-            menu_pages = await _present_list(self, url, CATEGORY)
-            await self.pages_menu(ctx, menu_pages, CATEGORY, message=None, page=0, timeout=30)
-        elif category.lower() in COLORS: #process endpoint
-            category=category.lower()
-            img_available = ['monsters', 'equipment',]
-            embeds = []
-            em = discord.Embed(color=COLORS[category],title=json_file['name'])
-            if category in img_available:
+            menu_pages = await self._present_list(url, category)
+            await self.pages_menu(ctx, menu_pages, category, message=None, page=0, timeout=30)
+        elif category in COLORS: #process endpoint
+            try:
                 name = json_file['name']
+            except KeyError:
+                name = category
+                print('KeyError: json_file[\'name\']. Category used instead')
+#            embeds = []
+            em = discord.Embed(color=COLORS[category],title=name)
+            img_available = ['monsters', 'equipment']
+            if category in img_available:
                 if category == 'equipment':
                     gettype = json_file['equipment_category']
                 else:
                     gettype = json_file['type']
-                    em.set_image(url=await self.image_search(category,name.lower(),gettype))
-            ##
-            said = await self.bot.say(embed=em)
-            messages.append(said)
+            image = await self.image_search(category,name.lower(),gettype)
+            em.set_image(url=image)
+            await self.bot.say(embed=em)
+#            messages.append(said)
         else:
             print('_process_item error')
 
