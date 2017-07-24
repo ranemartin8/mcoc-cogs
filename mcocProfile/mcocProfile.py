@@ -109,11 +109,12 @@ class mcocProfile:
 				
 	async def gettimezone(self, query):
 		geolocator = Nominatim()
-		try:
-			location = geolocator.geocode(query)
-		except:
-			await self.bot.say('Location not found.')
-			return			
+		location = geolocator.geocode(query)
+#		try:
+#			location = geolocator.geocode(query)
+#		except:
+#			await self.bot.say('Location not found.')
+#			return 		
 		latitude = location.latitude 
 		longitude = location.longitude
 		tf = TimezoneFinder()
