@@ -368,7 +368,7 @@ class mcocProfile:
 		try:
 			champs = await ChampConverterMult(ctx, champions).convert()
 			await self.hook_update(user_id, 'awo', champs, ctx.message)	
-		except (commands.BadArgument,cogs.mcoc.AmbiguousArgError):
+		except (commands.BadArgument,AmbiguousArgError):
 			await self.bot.say('\Defense team not set.')
 			return
 		
@@ -380,7 +380,7 @@ class mcocProfile:
 		try:
 			champs = await ChampConverterMult(ctx, champions).convert()
 			await self.hook_update(user_id, 'awo', champs, ctx.message)	
-		except (commands.BadArgument,cogs.mcoc.AmbiguousArgError):
+		except (commands.BadArgument,AmbiguousArgError):
 			await self.bot.say('\nOffense team not set. Please try again')
 			return
 
