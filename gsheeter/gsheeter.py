@@ -67,6 +67,15 @@ def clock_emoji(datetime_obj):
 	else:
 		return ':alarm_clock:'
 	
+class QuietUserError(commands.UserInputError):
+	pass
+
+class TooManyMatches(QuietUserError):
+	pass
+
+class NoMemberFound(QuietUserError):
+	pass
+	
 class MemberFinder(commands.Converter):
 	async def convert(self):
 		message = self.ctx.message
@@ -110,10 +119,11 @@ class MemberFinder(commands.Converter):
 						ser_mem = server.get_member(mem_id)
 						result_names.append(ser_mem.display_name)
 					firstfour = ', '.join(result_names[0:4])
-#					user = 'user_toomany'
 					await self.ctx.bot.say("Too many possible matches found: ```{} and {} others.```"
 										   "\nPlease be more specific and try again.".format(firstfour,results_count))
-					return 'user_toomany'
+					raise TooManyMatches("Too many possible matches found: ```{} and {} others.```"
+										   "\nPlease be more specific and try again.".format(firstfour,results_count))
+#					return 'user_toomany'
 				#Less than 4 results
 				else:
 					firstresult = results[0]
@@ -142,27 +152,10 @@ class MemberFinder(commands.Converter):
 					return user
 				else:
 					await self.ctx.bot.say("No users found matching: `{}`. Please try again.".format(user_string))
+					raise NoMemberFound("No users found matching: `{}`.".format(user_string))
 					print("No users found matching: `{}`.".format(user_string))
-					return 'user_error'
-#		if find_method: print('Search Method: '+find_method)
-#		if len(result_names) > 0: print('Result(s): '+', '.join(result_names))
-#		if len(matches) > 0: print('Match(es): '+', '.join(matches))
-#		return user
-#class SplatoonWeapon(commands.Converter):x
-#	async def convert(self, ctx, argument):
-#		cog = ctx.bot.get_cog('Splatoon')	
-		
-#class SplatoonWeapon(commands.Converter):	
-#	async def convert(self):
-#		"""This does stuff!"""
-#		cog = self.ctx.bot.get_cog('ChampConverterMult')
-#		string = self.argument
-#		if cog is None:
-#			raise commands.BadArgument('Splatoon related commands seemingly disabled.')
-#		champs = cog.convert(string)
-#		print(champs)
-#		return champs
-##			await self.bot.say("I can do stuff!")	
+#					return 'user_error'
+
 
 class gsheet_cog:
 	"""[in progress]. This cog contains commands that interact with Google Sheets."""
@@ -464,14 +457,17 @@ class gsheet_cog:
 		if not user_string:
 			user = author
 		else:
-			user = await MemberFinder(ctx, user_string).convert()
-		if user == 'user_toomany':
-			await self.bot.delete_message(search_msg)
-			return
-		if user == 'user_error':
-			await self.bot.delete_message(search_msg)
-			await self.bot.say("No users found matching: `{}`. Please try again.".format(user_string))
-			return
+			try:
+				user = await MemberFinder(ctx, user_string).convert()
+			except:
+				return
+#		if user == 'user_toomany':
+#			await self.bot.delete_message(search_msg)
+#			return
+#		if user == 'user_error':
+#			await self.bot.delete_message(search_msg)
+#			await self.bot.say("No users found matching: `{}`. Please try again.".format(user_string))
+#			return
 		user_id = user.id
 		avatar = user.avatar_url
 		if not avatar: avatar = user.default_avatar_url 
