@@ -111,7 +111,7 @@ class mcocProfile:
 		
 				
 	async def gettimezone(self, query):
-		geolocator = Nominatim(timeout=10)
+		geolocator = Nominatim(timeout=30)
 #		location = geolocator.geocode(query)
 		try:
 			location = geolocator.geocode(query)
