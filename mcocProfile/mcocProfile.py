@@ -49,6 +49,12 @@ c_times = {
 		'760':'8','800':'8','830':'830','860':'9','900':'9','930':'930'
 		}
 
+class QuietUserError(commands.UserInputError):
+	pass
+
+class AmbiguousArgError(QuietUserError):
+	pass
+
 class mcocProfile:
 	"""Commands for creating and managing your Marvel Contest of Champions Profile"""
 
