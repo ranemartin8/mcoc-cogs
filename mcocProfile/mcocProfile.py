@@ -5,7 +5,7 @@ from cogs.utils.dataIO import dataIO
 import os
 import asyncio
 from timezonefinder import TimezoneFinder
-from geopy.geocoders import Nominatim()
+from geopy.geocoders import Nominatim
 from datetime import tzinfo, timedelta, datetime
 import pytz
 from .mcoc import ChampConverter, ChampConverterMult, QuietUserError
