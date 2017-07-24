@@ -622,18 +622,18 @@ class mcocProfile:
 				pass
 
 		await self.bot.say("List out your **3** Alliance Quest champs.")
-		await self.bot.say("""```Default: 4* r5 Sig 99
-		OPTIONS:
-		- <digit>* specifies Star
-		- r<digit> specifies Rank
-		- s<digit> specifies Sig Level
-		EXAMPLE:
-		- r4s20yj 5*r2s40ironman gr =
-		4* 4/40 sig 20 Yellowjacket
-		5* 2/25 sig 40 Iron Man
-		4* 5/50 sig 99 Ghost Rider
+		await self.bot.say("""Default: **4* r5 Sig 99**
+OPTIONS:
+- <digit>* specifies Star
+- r<digit> specifies Rank
+- s<digit> specifies Sig Level
+EXAMPLE:
+- r4s20yj 5*r2s40ironman gr =
+4* 4/40 sig 20 Yellowjacket
+5* 2/25 sig 40 Iron Man
+4* 5/50 sig 99 Ghost Rider
 
-		* If optional arguments are listed without a champion attached, it changes the default for all remaining champions.```""")	
+* If optional arguments are listed without a champion attached, it changes the default for all remaining champions.""")	
 		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
 		answer = await self.answer(ctx.message,response)
 		if answer == 'stop':
