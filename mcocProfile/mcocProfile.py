@@ -365,7 +365,12 @@ class mcocProfile:
 		"""
 		Set your Alliance War Defense team."""			
 		user_id = ctx.message.author.id
-		await self.hook_update(user_id,'awd', champs, ctx.message)
+		try:
+			champs = await ChampConverterMult(ctx, champions).convert()
+			await self.hook_update(user_id, 'awo', champs, ctx.message)	
+		except (commands.BadArgument,cogs.mcoc.AmbiguousArgError):
+			await self.bot.say('\Defense team not set.')
+			return
 		
 	@mcoc_profile.command(no_pm=True, pass_context=True,aliases=['awo',])
 	async def offense(self, ctx, *, champions):
@@ -375,8 +380,8 @@ class mcocProfile:
 		try:
 			champs = await ChampConverterMult(ctx, champions).convert()
 			await self.hook_update(user_id, 'awo', champs, ctx.message)	
-		except commands.BadArgument:
-			await self.bot.say('\nOffense team not set.')
+		except (commands.BadArgument,cogs.mcoc.AmbiguousArgError):
+			await self.bot.say('\nOffense team not set. Please try again')
 			return
 
 #		user_id = ctx.message.author.id
