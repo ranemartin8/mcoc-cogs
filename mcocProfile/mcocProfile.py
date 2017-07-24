@@ -622,18 +622,17 @@ class mcocProfile:
 				pass
 
 		await self.bot.say("List out your **3** Alliance Quest champs."
-							"""```		
-							Default: 4* r5 Sig 99
-							Optional Args:
-								<digit>* specifies star
-								r<digit> specifies rank
-								s<digit> specifies signature level
-							Examples:
-								r4s20yj 5*r2s40im gr ->  4* 4/40 sig 20 Yellowjacket, 5* 2/25 sig 40 Iron Man, 4* 5/50 sig 99 Ghost Rider
-								r3s0im ims40  ->  4* Ironman r3/30 sig 0, 4* Ironman r5/50 sig 40
-								r4s20 yj ims40 lc -> 4* Yellowjacket r4/40 sig 20, 4* Ironman r4/40 sig 40, 4* Luke Cage r4/40 sig 20
-							* If optional arguments are listed without a champion, it changes the default for all
-							remaining champions.```""")	
+"""```Default: 4* r5 Sig 99
+Optional Args:
+	<digit>* specifies Star
+	r<digit> specifies Rank
+	s<digit> specifies Sig Level
+Examples:
+	r4s20yj 5*r2s40im gr ->  4* 4/40 sig 20 Yellowjacket, 5* 2/25 sig 40 Iron Man, 4* 5/50 sig 99 Ghost Rider
+	r3s0im ims40  ->  4* Ironman r3/30 sig 0, 4* Ironman r5/50 sig 40
+	r4s20 yj ims40 lc -> 4* Yellowjacket r4/40 sig 20, 4* Ironman r4/40 sig 40, 4* Luke Cage r4/40 sig 20
+	
+* If optional arguments are listed without a champion, it changes the default for all remaining champions.```""")	
 		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
 		answer = await self.answer(ctx.message,response)
 		if answer == 'stop':
