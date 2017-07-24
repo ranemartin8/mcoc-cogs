@@ -363,16 +363,24 @@ class mcocProfile:
 	@mcoc_profile.command(no_pm=True, pass_context=True,aliases=['awd',])
 	async def defense(self, ctx, *, champs : ChampConverterMult):
 		"""
-		Set your Alliance War Defense team."""	
+		Set your Alliance War Defense team."""			
 		user_id = ctx.message.author.id
 		await self.hook_update(user_id,'awd', champs, ctx.message)
 		
 	@mcoc_profile.command(no_pm=True, pass_context=True,aliases=['awo',])
-	async def offense(self, ctx, *, champs : ChampConverterMult):
+	async def offense(self, ctx, *, champions):
 		"""
 		Set your Alliance War Offense team."""	
 		user_id = ctx.message.author.id
-		await self.hook_update(user_id,'awo', champs, ctx.message)
+		try:
+			champs = await ChampConverterMult(ctx, champions).convert()
+			await self.hook_update(user_id, 'awo', champs, ctx.message)	
+		except:
+			await self.bot.say('Offense team not set.')
+			return
+
+#		user_id = ctx.message.author.id
+#		await self.hook_update(user_id,'awo', champs, ctx.message)
 		
 	@mcoc_profile.command(no_pm=True, pass_context=True)
 	async def aq(self, ctx, *, champs : ChampConverterMult):
@@ -528,7 +536,7 @@ class mcocProfile:
 	@mcoc_profile.command(no_pm=True, pass_context=True)
 	async def make(self, ctx):
 		"""Interactively set up a new profile by answering each prompt.
-		You can reply **skip** to skip a question or **stop** to exit this session.
+		You can reply SKIP to skip a question or STOP to exit this session.
 		Your session will automatically end after 3 minutes without a response
 		"""
 		message = ctx.message
@@ -602,8 +610,12 @@ class mcocProfile:
 		elif answer == 'skip':
 			pass
 		else:
-			champs = await ChampConverterMult(ctx, answer).convert()
-			await self.hook_update(user_id, 'aq', champs, ctx.message)	
+			try:
+				champs = await ChampConverterMult(ctx, answer).convert()
+				await self.hook_update(user_id, 'aq', champs, ctx.message)	
+			except:
+				await self.bot.say('Team not set. Question skipped.')
+				pass
 
 		await self.bot.say("List out your **3** Alliance War Offense champs.")	
 		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
