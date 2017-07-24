@@ -459,7 +459,7 @@ class gsheet_cog:
 		else:
 			try:
 				user = await MemberFinder(ctx, user_string).convert()
-			except:
+			except (TooManyMatches,NoMemberFound):
 				return
 #		if user == 'user_toomany':
 #			await self.bot.delete_message(search_msg)
