@@ -470,8 +470,8 @@ class mcocProfile:
 	
 		if "timezone" not in profile or "timezone" in hidden_fields:
 			pass
-        elif not profile["timezone"]:
-            pass
+		elif not profile["timezone"]:
+			pass
 		else:
 			timezone = profile["timezone"]
 			utcmoment_naive = datetime.utcnow()
