@@ -364,13 +364,13 @@ class mcocProfile:
 		await self.edit_field(user_id, 'alliance', ctx, alliance)			
 	
 	@mcoc_profile.command(no_pm=True, pass_context=True,aliases=['awd',])
-	async def defense(self, ctx, *, champs : ChampConverterMult):
+	async def defense(self, ctx, *, champions):
 		"""
 		Set your Alliance War Defense team."""			
 		user_id = ctx.message.author.id
 		try:
 			champs = await ChampConverterMult(ctx, champions).convert()
-			await self.hook_update(user_id, 'awo', champs, ctx.message)	
+			await self.hook_update(user_id, 'awd', champs, ctx.message)	
 		except:
 			await self.bot.say('\Defense team not set.')
 			return
