@@ -111,7 +111,7 @@ class mcocProfile:
 		
 				
 	async def gettimezone(self, query):
-		geolocator = Nominatim(timeout=3)
+		geolocator = Nominatim(timeout=10)
 #		location = geolocator.geocode(query)
 		try:
 			location = geolocator.geocode(query)
@@ -612,7 +612,14 @@ class mcocProfile:
 		elif answer == 'skip':
 			pass
 		else:
-			await self.edit_field(user_id,'profilechamp', ctx, answer)	
+#			await self.edit_field(user_id,'profilechamp', ctx, answer)	
+			try:
+				champ_obj = await ChampConverter(ctx, answer).convert()
+				champ = champ_obj.hookid
+				await self.edit_field(user_id,'profilechamp', ctx, champ)	
+			except:
+				await self.bot.say('Profile Champion not set. Question skipped. Use command **-prof profilechamp** to update later.')
+				pass
 
 		await self.bot.say("List out your **3** Alliance Quest champs.")	
 		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
