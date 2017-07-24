@@ -375,8 +375,8 @@ class mcocProfile:
 		try:
 			champs = await ChampConverterMult(ctx, champions).convert()
 			await self.hook_update(user_id, 'awo', champs, ctx.message)	
-		except commands.BadArgument(e):
-			await self.bot.say(e + '\nOffense team not set.')
+		except commands.BadArgument:
+			await self.bot.say('\nOffense team not set.')
 			return
 
 #		user_id = ctx.message.author.id
