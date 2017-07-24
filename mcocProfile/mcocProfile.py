@@ -111,8 +111,7 @@ class mcocProfile:
 		
 				
 	async def gettimezone(self, query):
-		geolocator = Nominatim(timeout=30)
-#		location = geolocator.geocode(query)
+		geolocator = Nominatim(timeout=60)
 		try:
 			location = geolocator.geocode(query)
 		except:
@@ -548,8 +547,8 @@ class mcocProfile:
 	@mcoc_profile.command(no_pm=True, pass_context=True)
 	async def make(self, ctx):
 		"""Interactively set up a new profile by answering each prompt.
+		You have 3 MINUTES to answer each question.
 		You can reply SKIP to skip a question or STOP to exit this session.
-		Your session will automatically end after 3 minutes without a response
 		"""
 		message = ctx.message
 		author = message.author
@@ -558,9 +557,9 @@ class mcocProfile:
 		
 		self.mcocProf[user_id] = {}
 		dataIO.save_json(self.profJSON, self.mcocProf)
-		await self.bot.say("Hi **{}**! Let's begin setting up your Summonor profile!\n - You can reply **skip** to"
-						   " skip a question or **stop** to exit this session. \n - This session will automatically "
-						   "end after *3 minutes* without a response.\n\nNow, start by telling me your **In-Game Name**.".format(author))
+		await self.bot.say("Hi **{}**! Let's begin setting up your Summonor profile!\n - You can reply **SKIP** to"
+						   " skip a question or **STOP** to exit this session. \n - You will have **3 Minutes** to provide an answer for each question."
+						   "\n\nNow, start by telling me your **In-Game Name**.".format(author))
 
 		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
 		answer = await self.answer(ctx.message,response)
@@ -621,7 +620,7 @@ class mcocProfile:
 				await self.bot.say('Profile Champion not set. Question skipped. Use command **-prof profilechamp** to update later.')
 				pass
 
-		await self.bot.say("List out your **3** Alliance Quest champs along with their Star (#*) Rank (r#), and Sig Level (s#) .")
+		await self.bot.say("List out your **3** Alliance Quest champs along with their Star (#*) Rank (r#), and Sig Level (s#).")
 		await self.bot.say("""*DEFAULT*: **4\* r5 Sig 99**
 *EXAMPLE*:
 `r4s20yj 5*r2s40ironman gr`
@@ -640,10 +639,10 @@ class mcocProfile:
 				champs = await ChampConverterMult(ctx, answer).convert()
 				await self.hook_update(user_id, 'aq', champs, ctx.message)	
 			except:
-				await self.bot.say('Team not set. Question skipped. Use command **-prof defense** to update later.')
+				await self.bot.say('Alliance Quest Team not set. Question skipped. Use command **-prof aq** to update later.')
 				pass
 
-		await self.bot.say("List out your **3** Alliance War Offense champs.")	
+		await self.bot.say("List out your **3** Alliance War Offense champs along with their Star (#*) Rank (r#), and Sig Level (s#)")	
 		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
 		answer = await self.answer(ctx.message,response)
 		if answer == 'stop':
@@ -651,10 +650,15 @@ class mcocProfile:
 		elif answer == 'skip':
 			pass
 		else:
-			champs = await ChampConverterMult(ctx, answer).convert()
-			await self.hook_update(user_id, 'awo', champs, ctx.message)	
+			try:
+				champs = await ChampConverterMult(ctx, answer).convert()
+				await self.hook_update(user_id, 'awo', champs, ctx.message)	
+			except:
+				await self.bot.say('AW Offense team not set. Question skipped. Use command **-prof offense** to update later.')
+				pass			
+
 			
-		await self.bot.say("List out your **5** Alliance War Defense champs.")	
+		await self.bot.say("List out your **5** Alliance War Defense champs along with their Star (#*) Rank (r#), and Sig Level (s#)")	
 		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
 		answer = await self.answer(ctx.message,response)
 		if answer == 'stop':
@@ -662,8 +666,12 @@ class mcocProfile:
 		elif answer == 'skip':
 			pass
 		else:
-			champs = await ChampConverterMult(ctx, answer).convert()
-			await self.hook_update(user_id, 'awd', champs, ctx.message)		
+			try:
+				champs = await ChampConverterMult(ctx, answer).convert()
+				await self.hook_update(user_id, 'awd', champs, ctx.message)	
+			except:
+				await self.bot.say('AW Defense team not set. Question skipped. Use command **-prof defense** to update later.')
+				pass		
 	
 		await self.bot.say("Done! Here is your profile:")	
 		await ctx.invoke(self.view, member=author.name)
