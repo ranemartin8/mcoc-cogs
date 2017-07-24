@@ -276,6 +276,7 @@ class mcocProfile:
 		"""View a users path. -path <map> [member|bg]"""	
 		search_msg = await self.bot.say('Searching...')
 		author = ctx.message.author
+		server = ctx.message.server
 		valid_bgs = ['bg1','bg2','bg3']
 		if map_name not in valid_maps:
 			await self.bot.say('**{}** is not a valid map. Try again with a valid '
@@ -324,7 +325,7 @@ class mcocProfile:
 			path_assignment = "No Path Assigned"
 		else:
 			path_assignment = profile[map_name]
-		em.add_field(name="**"+map_names[map_name]+"**", value="No Path Assigned",inline=False)
+		em.add_field(name="**"+map_names[map_name]+"**", value=path_assignment,inline=False)
 		await self.bot.say(embed=em)
 		await self.bot.delete_message(search_msg)
 		return
