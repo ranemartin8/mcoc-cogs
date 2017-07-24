@@ -622,8 +622,10 @@ class mcocProfile:
 				pass
 
 		await self.bot.say("List out your **3** Alliance Quest champs along with their Star (#*) Rank (r#), and Sig Level (s#) .")
-		await self.bot.say("""Default: **4* r5 Sig 99**
-EXAMPLE: `r4s20yj 5\*r2s40ironman gr` =
+		await self.bot.say("""*DEFAULT*: **4\* r5 Sig 99**
+*EXAMPLE*:
+`r4s20yj 5*r2s40ironman gr`
+=
 4\* 4/40 sig 20 Yellowjacket
 5\* 2/25 sig 40 Iron Man
 4\* 5/50 sig 99 Ghost Rider""")	
