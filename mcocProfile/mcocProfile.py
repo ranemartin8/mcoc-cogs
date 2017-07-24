@@ -372,7 +372,7 @@ class mcocProfile:
 			champs = await ChampConverterMult(ctx, champions).convert()
 			await self.hook_update(user_id, 'awd', champs, ctx.message)	
 		except:
-			await self.bot.say('\Defense team not set.')
+			await self.bot.say('AW Defense team not set. Please try again.')
 			return
 		
 	@mcoc_profile.command(no_pm=True, pass_context=True,aliases=['awo',])
@@ -383,19 +383,23 @@ class mcocProfile:
 		try:
 			champs = await ChampConverterMult(ctx, champions).convert()
 			await self.hook_update(user_id, 'awo', champs, ctx.message)	
-		except (commands.BadArgument,AmbiguousArgError):
-			await self.bot.say('\nOffense team not set. Please try again')
+		except:
+			await self.bot.say('AW Offense team not set. Please try again.')
 			return
 
 #		user_id = ctx.message.author.id
 #		await self.hook_update(user_id,'awo', champs, ctx.message)
 		
 	@mcoc_profile.command(no_pm=True, pass_context=True)
-	async def aq(self, ctx, *, champs : ChampConverterMult):
+	async def aq(self, ctx, *, champions):
 		"""
 		Set your Alliance Quest team."""	
-		user_id = ctx.message.author.id
-		await self.hook_update(user_id,'aq', champs, ctx.message)
+		try:
+			champs = await ChampConverterMult(ctx, champions).convert()
+			await self.hook_update(user_id, 'aq', champs, ctx.message)	
+		except:
+			await self.bot.say('Alliance Quest team not set. Please try again.')
+			return
 
 
 	@mcoc_profile.command(no_pm=True, pass_context=True)
@@ -622,7 +626,7 @@ class mcocProfile:
 				champs = await ChampConverterMult(ctx, answer).convert()
 				await self.hook_update(user_id, 'aq', champs, ctx.message)	
 			except:
-				await self.bot.say('Team not set. Question skipped.')
+				await self.bot.say('Team not set. Question skipped. Use command **-prof defense** to update later.')
 				pass
 
 		await self.bot.say("List out your **3** Alliance War Offense champs.")	
