@@ -24,6 +24,9 @@ achievements_dict = {'rol':'Realm of Legends','lol':'Labyrinth of Legends','rtl'
 bg_set = {'bg1','bg2','bg3'}
 remote_data_basepath = 'https://raw.githubusercontent.com/JasonJW/mcoc-cogs/master/mcoc/data/'
 
+map_names = {'map5a':'Map 5 - Section A', 'map5b':'Map 5 - Section B', 'map5c':'Map 5 - Section B', 'aw':'Alliance War', 'map3a':'Map 3 - Section A', 'map3b':'Map 3 - Section B', 'map3c':'Map 3 - Section C', 'map2a':'Map 2 - Section A', 'map2b':'Map 2 - Section B', 'map2c':'Map 2 - Section C'}
+valid_maps = map_names.keys()
+			
 def getLocalTime(datetime_obj,timezone):
 	utcmoment = datetime_obj.replace(tzinfo=pytz.utc)
 	get_time = utcmoment.astimezone(pytz.timezone(timezone))
@@ -245,7 +248,88 @@ class mcocProfile:
 			champs = await ChampConverterMult(ctx, value).convert()
 			await self.hook_update(user_id, field, champs, ctx.message)
 			return	
+		
+		
+	@commands.command(no_pm=True, pass_context=True)
+	@checks.mod_or_permissions(manage_roles=True)
+	async def setpath(self, ctx, member : str, map_name, *, path : str):
+		"""
+		ADMIN or MOD ONLY. Set a path for a specific user. -setpath <member> <map> <path>"""
+		if member == 'me':
+			user = message.author
+		else:
+			try:
+				user = await MemberFinder(ctx, member).convert()
+			except (TooManyMatches,NoMemberFound):
+				return
+		user_id = user.id
+		if map_name not in valid_maps:
+			await self.bot.say('**{}** is not a valid map. Try again with a valid '
+							   'map from the following list: \n- {}'.format(field,'\n- '.join(valid_maps)))
+			return	
+		
+		await self.edit_field(user_id, map_name, ctx, path)
+		return
 
+	@commands.command(no_pm=True, pass_context=True)
+	async def path(self, ctx, map_name, *, member_bg: str=None):
+		"""View a users path. -path <map> [member|bg]"""	
+		search_msg = await self.bot.say('Searching...')
+		author = ctx.message.author
+		valid_bgs = ['bg1','bg2','bg3']
+		if map_name not in valid_maps:
+			await self.bot.say('**{}** is not a valid map. Try again with a valid '
+							   'map from the following list: \n- {}'.format(field,'\n- '.join(valid_maps)))
+			return		
+		if not member_bg: #default to author if nothing is provided
+			user = author
+		elif member_bg not in valid_bgs:
+			try:
+				user = await MemberFinder(ctx, member_bg).convert()
+			except (TooManyMatches,NoMemberFound):
+				await self.bot.delete_message(search_msg)
+				return			
+		else:
+			#get all bg paths
+			bg = member_bg
+			bg_paths = []
+			
+			for member in server.members:
+				roles = []
+				roles.append([role.name for role in member.roles]) #list of roles for member
+				if bg in roles:
+					user_id = member.id
+					if user_id not in self.mcocProf or self.mcocProf[user_id] == False:
+						self.mcocProf[user_id] = {}
+						dataIO.save_json(self.profJSON, self.mcocProf)
+					profile = self.mcocProf[user_id]
+					if map_name not in profile:
+						path_assignment = "No Path Assigned"
+					else:
+						path_assignment = profile[map_name]	
+					bg_paths.append(member.display_name + ':  **' + path_assignment + '**')
+					
+			em = discord.Embed(color=user.color).set_author(name=user.display_name)					
+			em.add_field(name="**"+map_names[map_name]+"**", value="\n".join(bg_paths),inline=False)
+			await self.bot.say(embed=em)
+			await self.bot.delete_message(search_msg)
+			return					
+		user_id = user.id
+		if user_id not in self.mcocProf or self.mcocProf[user_id] == False:
+			self.mcocProf[user_id] = {}
+			dataIO.save_json(self.profJSON, self.mcocProf)				
+		profile = self.mcocProf[user_id]
+		em = discord.Embed(color=user.color).set_author(name=user.display_name)
+		if map_name not in profile:
+			path_assignment = "No Path Assigned"
+		else:
+			path_assignment = profile[map_name]
+		em.add_field(name="**"+map_names[map_name]+"**", value="No Path Assigned",inline=False)
+		await self.bot.say(embed=em)
+		await self.bot.delete_message(search_msg)
+		return
+	
+		
 	@mcoc_profile.command(no_pm=True, pass_context=True,aliases=['del',])
 	async def delete(self, ctx, *, field : str):
 		"""
@@ -409,7 +493,11 @@ class mcocProfile:
 		if not member:
 			user = author
 		else:
-			user = await MemberFinder(ctx, member).convert()
+			try:
+				user = await MemberFinder(ctx, member).convert()
+			except (TooManyMatches,NoMemberFound):
+				await self.bot.delete_message(search_msg)
+				return
 		if user == 'user_toomany' or user == 'user_error':
 			await self.bot.delete_message(search_msg)
 			return
