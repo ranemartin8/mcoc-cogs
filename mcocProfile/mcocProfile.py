@@ -310,8 +310,13 @@ class mcocProfile:
 						path_assignment = profile[map_name]	
 					bg_paths.append(member.display_name + ':  **' + path_assignment + '**')
 					
-			em = discord.Embed(color=ctx.message.author.color).set_author(name=bg)					
+			em = discord.Embed(color=ctx.message.author.color)
+			em.set_author(name=bg)					
 			em.add_field(name="**"+map_names[map_name]+"**", value="\n".join(bg_paths),inline=False)
+			print("print(em): " + em)
+			print("bg: "+bg)
+			print("bg_paths: "+"\n".join(bg_paths))
+			print("map_names[map_name]: "+map_names[map_name])
 			await self.bot.say(embed=em)
 			await self.bot.delete_message(search_msg)
 			return					
