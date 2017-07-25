@@ -300,8 +300,10 @@ class mcocProfile:
 				r_name = [role.name.lower() for role in member.roles]
 				print("r_name: "+str(r_name))
 				roles.append(r_name) #list of roles for member
+				print("roles: "+str(roles))
 				if bg in roles:
 					user_id = member.id
+					print("user_id: "+user_id)
 					if user_id not in self.mcocProf or self.mcocProf[user_id] == False:
 						self.mcocProf[user_id] = {}
 						dataIO.save_json(self.profJSON, self.mcocProf)
@@ -310,6 +312,7 @@ class mcocProfile:
 						path_assignment = "No Path Assigned"
 					else:
 						path_assignment = profile[map_name]	
+					print("path_assignment: "+path_assignment)
 					bg_paths.append(member.display_name + ':  **' + path_assignment + '**')
 					
 			em = discord.Embed(color=ctx.message.author.color)
