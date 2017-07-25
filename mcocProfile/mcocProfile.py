@@ -12,7 +12,7 @@ from .mcoc import ChampConverter, ChampConverterMult, QuietUserError
 from .gsheeter import MemberFinder
 import re
 
-field_names = {'summonerlevel':'Summoner Level','herorating':'Base Hero Rating','timezone':'Timezone','gamename':'In-Game Name','aq':'Alliance Quest','awd':'AW Defense','awo':'AW Offense','alliance':'Alliance','bg':'Battlegroup','achievements':'Achievements','profilechamp':'Profile Champion'}
+field_names = {'summonerlevel':'Summoner Level','herorating':'Base Hero Rating','timezone':'Timezone','gamename':'In-Game Name','aq':'Alliance Quest','awd':'AW Defense','awo':'AW Offense','alliance':'Alliance','bg':'Battlegroup','achievements':'Achievements','profilechamp':'Profile Champion','map5a':'Map5 - A Path', 'map5b':'Map 5 - B Path', 'map5c':'Map 5 - C Path', 'aw':'Alliance War Path', 'map3a':'Map 3 - A Path', 'map3b':'Map 3 - B Path', 'map3c':'Map 3 - C Path', 'map2a':'Map 2 - A Path', 'map2b':'Map 2 - B Path', 'map2c':'Map 2 - C Path'}
 hook_fields = {'awo','awd','aq'}
 fields_list = field_names.keys()
 valid_fields = set(fields_list)
@@ -24,7 +24,7 @@ achievements_dict = {'rol':'Realm of Legends','lol':'Labyrinth of Legends','rtl'
 bg_set = {'bg1','bg2','bg3'}
 remote_data_basepath = 'https://raw.githubusercontent.com/JasonJW/mcoc-cogs/master/mcoc/data/'
 
-map_names = {'map5a':'Map 5 - Section A', 'map5b':'Map 5 - Section B', 'map5c':'Map 5 - Section B', 'aw':'Alliance War', 'map3a':'Map 3 - Section A', 'map3b':'Map 3 - Section B', 'map3c':'Map 3 - Section C', 'map2a':'Map 2 - Section A', 'map2b':'Map 2 - Section B', 'map2c':'Map 2 - Section C'}
+map_names = {'map5a':'Map 5 - Section A', 'map5b':'Map 5 - Section B', 'map5c':'Map 5 - Section C', 'aw':'Alliance War', 'map3a':'Map 3 - Section A', 'map3b':'Map 3 - Section B', 'map3c':'Map 3 - Section C', 'map2a':'Map 2 - Section A', 'map2b':'Map 2 - Section B', 'map2c':'Map 2 - Section C'}
 valid_maps = map_names.keys()
 			
 def getLocalTime(datetime_obj,timezone):
@@ -143,6 +143,10 @@ class mcocProfile:
 		if user_id not in self.mcocProf or self.mcocProf[user_id] == False:
 			self.mcocProf[user_id] = {}
 			dataIO.save_json(self.profJSON, self.mcocProf)
+		if field not in self.mcocProf[user_id]:
+			original_value = "empty"
+		else:
+			original_value = self.mcocProf[user_id][field]
 		self.mcocProf[user_id].update({field : value})
 		dataIO.save_json(self.profJSON, self.mcocProf)
 		if field not in field_names:
@@ -152,7 +156,7 @@ class mcocProfile:
 			
 		if field in self.mcocProf[user_id]:
 			value = self.mcocProf[user_id][field]
-			await self.bot.say('{} **{}** is set to **{}**.'.format(identifier,field_name, value))
+			await self.bot.say(':white_check_mark:  {} **{}** is updated from **{}** to **{}**.'.format(identifier,field_name,original_value,value))
 		else:
 			await self.bot.say('Something went wrong. **{}** not set'.format(field_name))
 			return
