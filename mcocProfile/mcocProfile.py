@@ -296,10 +296,10 @@ class mcocProfile:
 			bg_paths = []
 			
 			for member in server.members:
-				roles = []
-				r_name = [role.name.lower() for role in member.roles]
-				print("r_name: "+str(r_name))
-				roles.append(r_name) #list of roles for member
+#				roles = []
+				roles = [role.name.lower() for role in member.roles] #list of roles for member
+#				print("r_name: "+str(r_name))
+#				roles.extend(r_name) #list of roles for member
 				print("roles: "+str(roles))
 				if bg in roles:
 					user_id = member.id
