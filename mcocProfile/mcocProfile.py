@@ -314,7 +314,7 @@ class mcocProfile:
 			em.set_author(name=bg)					
 			em.add_field(name="**"+map_names[map_name]+"**", value="\n".join(bg_paths),inline=False)
 			pem = em.to_dict()
-			print("print(pem): " + pem)
+			print("print(pem): " + str(pem))
 			print("bg: "+bg)
 			print("bg_paths: "+"\n".join(bg_paths))
 			print("map_names[map_name]: "+map_names[map_name])
