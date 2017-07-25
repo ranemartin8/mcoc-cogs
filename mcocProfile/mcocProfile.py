@@ -340,6 +340,13 @@ class mcocProfile:
 			path_assignment = "No Path Assigned"
 		else:
 			path_assignment = profile[map_name]
+		if "profilechamp" not in profile:
+			if user.avatar_url:
+				em.set_thumbnail(url=user.avatar_url)
+		else:
+			profilechamp = profile["profilechamp"]
+			champ = await ChampConverter(ctx, profilechamp).convert()
+			em.set_thumbnail(url=champ.get_avatar())
 		em.add_field(name="**"+map_names[map_name]+"**", value=path_assignment,inline=False)
 		await self.bot.say(embed=em)
 		await self.bot.delete_message(search_msg)
