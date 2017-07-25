@@ -79,8 +79,8 @@ class mcocProfile:
 		except ValueError:
 			return False
 		
-	async def check_field(self, field, value):
-		field_checks = {'summonerlevel','herorating'}
+	async def check_field(self, field, value,ctx):
+		field_checks = {'summonerlevel','herorating','profilechamp'}
 		validity = {'status':'valid','reason':'n/a'}
 		if field not in field_checks:
 			return validity
@@ -100,6 +100,11 @@ class mcocProfile:
 			is_number = await self.is_number(value)
 			if is_number is False:
 				validity.update({'status':'invalid','reason':'Hero Rating must be a number. Hero Rating not set.'})
+		if field == 'profilechamp':
+			try:
+				champ = await ChampConverter(ctx, value).convert()
+			except:
+				validity.update({'status':'invalid','reason':'Try a different champ alias.'})			
 		return validity
 			
 
@@ -136,7 +141,7 @@ class mcocProfile:
 		if user_id != ctx.message.author.id:
 			get_mem = ctx.message.server.get_member(user_id)
 			identifier = get_mem.display_name + "'s"
-		check = await self.check_field(field,value)
+		check = await self.check_field(field,value,ctx)
 		if check['status'] == 'invalid':
 			await self.bot.say(check['reason'])
 			return
