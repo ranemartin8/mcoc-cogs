@@ -297,7 +297,9 @@ class mcocProfile:
 			
 			for member in server.members:
 				roles = []
-				roles.append([role.name for role in member.roles]) #list of roles for member
+				r_name = [role.name for role in member.roles]
+				print("r_name: "+str(r_name))
+				roles.append(r_name) #list of roles for member
 				if bg in roles:
 					user_id = member.id
 					if user_id not in self.mcocProf or self.mcocProf[user_id] == False:
