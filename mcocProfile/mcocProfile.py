@@ -269,7 +269,7 @@ class mcocProfile:
 		user_id = user.id
 		if map_name not in valid_maps:
 			await self.bot.say('**{}** is not a valid map. Try again with a valid '
-							   'map from the following list: \n- {}'.format(field,'\n- '.join(valid_maps)))
+							   'map from the following list: \n- {}'.format('\n- '.join(valid_maps)))
 			return	
 		
 		await self.edit_field(user_id, map_name, ctx, path)
@@ -284,7 +284,7 @@ class mcocProfile:
 		valid_bgs = ['bg1','bg2','bg3']
 		if map_name not in valid_maps:
 			await self.bot.say('**{}** is not a valid map. Try again with a valid '
-							   'map from the following list: \n- {}'.format(field,'\n- '.join(valid_maps)))
+							   'map from the following list: \n- {}'.format('\n- '.join(valid_maps)))
 			return		
 		if not member_bg: #default to author if nothing is provided
 			user = author
@@ -313,7 +313,7 @@ class mcocProfile:
 						dataIO.save_json(self.profJSON, self.mcocProf)
 					profile = self.mcocProf[user_id]
 					if map_name not in profile:
-						path_assignment = "No Path Assigned"
+						path_assignment = "N/A"
 					else:
 						path_assignment = profile[map_name]	
 					print("path_assignment: "+path_assignment)
