@@ -427,9 +427,11 @@ class mcocProfile:
 						timezone = profile["timezone"]
 						utcmoment_naive = datetime.utcnow()
 						get_time = getLocalTime(utcmoment_naive,timezone)
-						
-#						localtime = get_time.strftime("%I:%M").lstrip('0') + ' ' + get_time.strftime("%p")
-					bg_dict.update({get_time:member.display_name})
+					if get_time != 'none':
+						hour = get_time.strftime("%H")
+					else:
+						hour = '23'
+					bg_dict.update({hour:[member.display_name,get_time]})
 			
 #					mem_time = (get_time,member.display_name)
 #					bg_tuple_list.append(mem_time)
@@ -442,13 +444,14 @@ class mcocProfile:
 			bg_sorted = collections.OrderedDict(sorted(bg_dict.items()))
 			print(str(bg_sorted))
 			bg_times = []
-			for time,name in bg_sorted.items():
-				print(name + ": "+time)
-				if time != 'none':
+			for hour,name_time in bg_sorted.items():
+#				print(name + ": "+time)
+				if name_time[1] != 'none':
+					time = name_time[1]
 					localtime = time.strftime("%I:%M").lstrip('0') + ' ' + time.strftime("%p")
 				else:
 					localtime = 'N/A'
-				bg_times.append(name + ':     **' + localtime + '**')
+				bg_times.append(name_time[0] + ':     **' + localtime + '**')
 			em = discord.Embed(color=ctx.message.author.color)
 			em.set_author(name=bg)					
 			em.add_field(name="**Local Times**", value="\n".join(bg_times),inline=False)
