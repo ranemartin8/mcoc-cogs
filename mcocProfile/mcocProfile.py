@@ -306,8 +306,9 @@ class mcocProfile:
 			valid_img = re.compile(r'[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b(?:[-a-zA-Z0-9@:%_\+.~#?&\/=]*(\.jpg|\.png|\.jpeg|\.gif))')
 			valid_value = valid_img.fullmatch(value)
 			if not valid_value:
-				value = "<" + value + ">"
-				await self.bot.say('**{}** is not a valid Image URL. URL must link to a .jpeg, .png, .gif, or .jpg file. Please try again.'.format(value))						return
+#				value = "<" + value + ">"
+				await self.bot.say('**<{}>** is not a valid Image URL. URL must link to a .jpeg, .png, .gif, or .jpg file. Please try again.'.format(value))	
+				return
 			self.profSettings[server_id].update({field : value})
 			dataIO.save_json(self.settingsJSON, self.profSettings)
 			if field not in self.profSettings[server_id]:
