@@ -460,6 +460,7 @@ class mcocProfile:
 		if "profilechamp" not in profile:
 			if user.avatar_url:
 				em.set_thumbnail(url=user.avatar_url)
+				print(user.avatar_url)
 		else:
 			profilechamp = profile["profilechamp"]
 			champ = await ChampConverter(ctx, profilechamp).convert()
