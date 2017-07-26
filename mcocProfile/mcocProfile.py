@@ -111,7 +111,7 @@ class mcocProfile:
 		needs_processing = {'profilechamp','timezone'}
 		if field not in needs_processing:
 			return {'status':'success','value':value}
-		process = {'status':'failure'} #assume failure
+		process = {'status':'failure','value':'none'} #assume failure
 		if field == 'profilechamp':
 			try:
 				champ = await ChampConverter(ctx, value).convert()
@@ -170,7 +170,7 @@ class mcocProfile:
 		if process['status'] == 'success':
 			value = process['value']
 		else:
-			if process['value']:
+			if process['value'] != 'none':
 				await self.bot.say(process['value'])
 			return
 		if user_id not in self.mcocProf or self.mcocProf[user_id] == False:
