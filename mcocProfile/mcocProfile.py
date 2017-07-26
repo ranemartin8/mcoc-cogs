@@ -149,10 +149,7 @@ class mcocProfile:
 		except:
 			await self.bot.say('Location not found. Timezone not set.')
 			raise 
-			 	
-		
-			
-		
+			 
 	def get_avatar(self):
 		image = '{}portraits/portrait_{}.png'.format(remote_data_basepath, self.mcocportrait)
 		print(image)
@@ -264,16 +261,6 @@ class mcocProfile:
 		"""
 		ADMIN or MOD ONLY. Update profile fields for a specific user.
 		"""
-#		message = ctx.message
-#		await self.bot.say("Whose profile do you want to update?")	
-#		response = await self.bot.wait_for_message(channel=message.channel, author=message.author, timeout=180.0)
-#		if response is None:
-#			await self.bot.say("Request timed out.")	
-#			return
-#		member = response.content
-#		if member == 'me':
-#			user = message.author
-#		else:
 		user = await MemberFinder(ctx, member).convert()
 		user_id = user.id
 		
@@ -313,7 +300,8 @@ class mcocProfile:
 
 	@commands.command(no_pm=True, pass_context=True)
 	async def path(self, ctx, map_name, *, member_bg: str=None):
-		"""View a users path. -path <map> [member|bg]"""	
+		"""View a users path. 
+		Defaults to your own path for the map."""	
 		search_msg = await self.bot.say('Searching...')
 		author = ctx.message.author
 		server = ctx.message.server
@@ -379,7 +367,8 @@ class mcocProfile:
 
 	@commands.command(no_pm=True, pass_context=True)
 	async def time(self, ctx, *, member_bg: str=None):
-		"""View the local time for a member or battlegroup. Defaults to your own battlegroup. """	
+		"""View the local time for a member or battlegroup. 
+		Defaults to your own battlegroup. """	
 		search_msg = await self.bot.say('Searching...')
 		author = ctx.message.author
 		server = ctx.message.server
@@ -406,7 +395,6 @@ class mcocProfile:
 		else:
 			#get all bg times
 			bg = member_bg.lower()
-#			bg_tuple_list = []
 			bg_dict = {}
 			for member in server.members:
 				roles = [role.name.lower() for role in member.roles] #list of roles for member
@@ -418,11 +406,8 @@ class mcocProfile:
 					profile = self.mcocProf[user_id]
 					if "timezone" not in profile:
 						get_time = 'none'
-#						localtime = "N/A"
-
 					elif not profile["timezone"]:
 						get_time = 'none'
-#						localtime = "N/A"
 					else:
 						timezone = profile["timezone"]
 						utcmoment_naive = datetime.utcnow()
@@ -433,20 +418,10 @@ class mcocProfile:
 						hour = '23'
 					key = hour + member.display_name
 					bg_dict.update({key:[member.display_name,get_time]})
-			
-#					mem_time = (get_time,member.display_name)
-#					bg_tuple_list.append(mem_time)
-					
-					#[(timestr_1, name_1),(timestr_2, name_2)]
-#					bg_times.append(member.display_name + ':    **' + localtime + '**')
-#			sorted(bg_tuple_list)
-#			bg_dict = dict(bg_tuple_list)
-			
 			bg_sorted = collections.OrderedDict(sorted(bg_dict.items()))
 			print(str(bg_sorted))
 			bg_times = []
 			for hour,name_time in bg_sorted.items():
-#				print(name + ": "+time)
 				if name_time[1] != 'none':
 					time = name_time[1]
 					localtime = time.strftime("%I:%M").lstrip('0') + ' ' + time.strftime("%p")

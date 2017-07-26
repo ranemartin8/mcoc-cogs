@@ -258,7 +258,7 @@ class gsheet_cog:
 #		print(champs)
 ##		await self.bot.say("I can do stuff!")			
 		
-	@commands.command(pass_context=True,aliases=['loadsheet',], no_pm=True)
+	@commands.command(pass_context=True,aliases=['loadsheet',], no_pm=True, enabled=False)
 	async def savesheet(self, ctx, header_row: str, data_range: str,filename: str,sheet_id: str, groupRowsBy: str=None):
 		"""Save a Google Sheet as a JSON file.
 		Requires a PUBLISHED Google Sheet with Link Sharing turned ON and set to "Anybody with link can edit". 
@@ -452,8 +452,8 @@ class gsheet_cog:
 			await self.bot.say("Something went wrong.")
 			raise
 			
-	@commands.command(pass_context=True,aliases=['getmember',], no_pm=True)
-	async def member(self, ctx, *, user_string: str=None):
+	@commands.command(pass_context=True, no_pm=True, enabled=False)
+	async def memberxxx(self, ctx, *, user_string: str=None):
 		"""Get Member Info"""
 		search_msg = await self.bot.say('Searching...')
 		type = await self.bot.type()
@@ -551,7 +551,7 @@ class gsheet_cog:
 			raise
 	
 	@commands.command(pass_context=True, no_pm=True)
-	async def timexxx(self, ctx, *, user: discord.Member=None):
+	async def timexxx(self, ctx, *, user: discord.Member=None, enabled=False):
 		"""Get the local time of an Alliance Member.
 		This command requires a Google Sheet containing Alliance member info. Set up command coming soon.
 		* = Required
