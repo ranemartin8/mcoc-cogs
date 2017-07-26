@@ -364,7 +364,7 @@ class mcocProfile:
 			path_assignment = profile[map_name]
 		if "profilechamp" not in profile:
 			url = user.avatar_url or user.default_avatar_url
-			url = url.replace("webp","png")
+			url = url.replace("webp","png").replace("1024","")
 			em.set_thumbnail(url=url)
 		else:
 			profilechamp = profile["profilechamp"]
@@ -472,7 +472,7 @@ class mcocProfile:
 			clockemoji = clock_emoji(get_time)
 		if "profilechamp" not in profile:
 			url = user.avatar_url or user.default_avatar_url
-			url = url.replace("webp","png")
+			url = url.replace("webp","png").replace("1024","")
 			em.set_thumbnail(url=url)
 			print(url)
 		else:
@@ -741,7 +741,7 @@ class mcocProfile:
 		
 		if "profilechamp" not in profile or "profilechamp" in hidden_fields:
 			url = user.avatar_url or user.default_avatar_url
-			url = url.replace("webp","png")
+			url = url.replace("webp","png").replace("1024","")
 			em.set_thumbnail(url=url)
 		else:
 			profilechamp = profile["profilechamp"]
