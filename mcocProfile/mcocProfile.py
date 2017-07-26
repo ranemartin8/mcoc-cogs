@@ -549,7 +549,6 @@ class mcocProfile:
 		"""
 		Provide your location to set your timezone."""	
 		user_id = ctx.message.author.id		
-#		timezone = await self.gettimezone(location)
 		await self.edit_field(user_id, 'timezone', ctx, location)
 	
 	@mcoc_profile.command(no_pm=True, pass_context=True,aliases=['summonerlevel',])
@@ -605,9 +604,6 @@ class mcocProfile:
 			await self.bot.say('AW Offense team not set. Please try again.')
 			return
 
-#		user_id = ctx.message.author.id
-#		await self.hook_update(user_id,'awo', champs, ctx.message)
-		
 	@mcoc_profile.command(no_pm=True, pass_context=True)
 	async def aq(self, ctx, *, champions):
 		"""
@@ -637,10 +633,6 @@ class mcocProfile:
 			except (TooManyMatches,NoMemberFound):
 				await self.bot.delete_message(search_msg)
 				return
-		if user == 'user_toomany' or user == 'user_error':
-			await self.bot.delete_message(search_msg)
-			return
-		
 		user_id = user.id
 	
 		if user_id not in self.mcocProf or self.mcocProf[user_id] == False:
@@ -781,9 +773,9 @@ class mcocProfile:
 		author = message.author
 		channel = message.channel
 		user_id = author.id
-		
-		self.mcocProf[user_id] = {}
-		dataIO.save_json(self.profJSON, self.mcocProf)
+		if user_id not in self.mcocProf or self.mcocProf[user_id] == False:
+			self.mcocProf[user_id] = {}
+			dataIO.save_json(self.profJSON, self.mcocProf)		
 		await self.bot.say("Hi **{}**! Let's begin setting up your Summonor profile!\n - You can reply **SKIP** to"
 						   " skip a question or **STOP** to exit this session. \n - You will have **3 Minutes** to provide an answer for each question."
 						   "\n\nNow, start by telling me your **In-Game Name**.".format(author))
