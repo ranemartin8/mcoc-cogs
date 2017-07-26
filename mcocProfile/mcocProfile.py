@@ -411,7 +411,7 @@ class mcocProfile:
 					map_image_name = 'awmap'
 				if map_image_name in self.profSettings[server_id]:
 					map_img = self.profSettings[server_id][map_image_name]
-				bg_thumb = bg = '_thumbnail'
+				bg_thumb = bg + '_thumbnail'
 				if bg_thumb in self.profSettings[server_id]:
 					bg_thumb_img = self.profSettings[server_id][bg_thumb]					
 					
