@@ -300,7 +300,7 @@ class mcocProfile:
 			for item in paths:
 				full_map_name = map_name + sections[i]
 				i +=1
-				await self.edit_field(user_id, map_name, ctx, item)
+				await self.edit_field(user_id, full_map_name, ctx, item)
 			return
 		else:		
 			await self.edit_field(user_id, map_name, ctx, path)
