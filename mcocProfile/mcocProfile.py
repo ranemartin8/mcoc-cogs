@@ -11,6 +11,7 @@ import pytz
 from .mcoc import ChampConverter, ChampConverterMult, QuietUserError
 from .gsheeter import MemberFinder
 import re
+import collections
 
 field_names = {'summonerlevel':'Summoner Level','herorating':'Base Hero Rating','timezone':'Timezone','gamename':'In-Game Name','aq':'Alliance Quest','awd':'AW Defense','awo':'AW Offense','alliance':'Alliance','bg':'Battlegroup','achievements':'Achievements','profilechamp':'Profile Champion','map5a':'Map5 - A Path', 'map5b':'Map 5 - B Path', 'map5c':'Map 5 - C Path', 'aw':'Alliance War Path', 'map3a':'Map 3 - A Path', 'map3b':'Map 3 - B Path', 'map3c':'Map 3 - C Path', 'map2a':'Map 2 - A Path', 'map2b':'Map 2 - B Path', 'map2c':'Map 2 - C Path'}
 hook_fields = {'awo','awd','aq'}
@@ -405,7 +406,8 @@ class mcocProfile:
 		else:
 			#get all bg times
 			bg = member_bg.lower()
-			bg_tuple_list = []
+#			bg_tuple_list = []
+			bg_dict = {}
 			for member in server.members:
 				roles = [role.name.lower() for role in member.roles] #list of roles for member
 				if bg in roles:
@@ -427,14 +429,19 @@ class mcocProfile:
 						get_time = getLocalTime(utcmoment_naive,timezone)
 						
 #						localtime = get_time.strftime("%I:%M").lstrip('0') + ' ' + get_time.strftime("%p")
-					mem_time = (get_time,member.display_name)
-					bg_tuple_list.append(mem_time)
+					bg_dict.update({get_time:member.display_name})
+			
+#					mem_time = (get_time,member.display_name)
+#					bg_tuple_list.append(mem_time)
+					
 					#[(timestr_1, name_1),(timestr_2, name_2)]
 #					bg_times.append(member.display_name + ':    **' + localtime + '**')
-			sorted(bg_tuple_list)
-			bg_dict = dict(bg_tuple_list)
+#			sorted(bg_tuple_list)
+#			bg_dict = dict(bg_tuple_list)
+			
+			bg_sorted = collections.OrderedDict(sorted(bg_dict.items()))
 			bg_times = []
-			for time,name in bg_dict.items():
+			for time,name in bg_sorted.items():
 				if time != 'none':
 					localtime = time.strftime("%I:%M").lstrip('0') + ' ' + time.strftime("%p")
 				else:
