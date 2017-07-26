@@ -258,21 +258,23 @@ class mcocProfile:
 
 	
 	@mcoc_profile.command(no_pm=True, pass_context=True,hidden=True)
-	@checks.is_owner()
-	async def edit(self, ctx, field : str, *, value : str):
+	@checks.mod_or_permissions(manage_roles=True)
+	async def edit(self, ctx, member : str, field : str, *, value : str):
 		"""
-		OWNER ONLY. Update fields for a specific user."""
-		message = ctx.message
-		await self.bot.say("[Owner Command]: Whose profile do you want to update?")	
-		response = await self.bot.wait_for_message(channel=message.channel, author=message.author, timeout=180.0)
-		if response is None:
-			await self.bot.say("Request timed out.")	
-			return
-		member = response.content
-		if member == 'me':
-			user = message.author
-		else:
-			user = await MemberFinder(ctx, member).convert()
+		ADMIN or MOD ONLY. Update profile fields for a specific user.
+		Valid Fields:
+		{}""".format(', '.join(fields_list))
+#		message = ctx.message
+#		await self.bot.say("Whose profile do you want to update?")	
+#		response = await self.bot.wait_for_message(channel=message.channel, author=message.author, timeout=180.0)
+#		if response is None:
+#			await self.bot.say("Request timed out.")	
+#			return
+#		member = response.content
+#		if member == 'me':
+#			user = message.author
+#		else:
+		user = await MemberFinder(ctx, member).convert()
 		user_id = user.id
 		
 		if field not in valid_fields:
