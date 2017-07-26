@@ -65,6 +65,10 @@ class mcocProfile:
 		self.mcocProf = dataIO.load_json(self.profJSON)
 		self.hookPath = "data/hook/users/{}"
 		self.hookJSON = "data/hook/users/{}/champs.json"
+#		self.commandsJSON = "data/customcom/commands.json"
+#		self.customCommands = dataIO.load_json(self.commandsJSON)
+		self.settingsJSON = "data/mcocProfile/settings.json"
+		self.profSettings = dataIO.load_json(self.settingsJSON)
 		
 	@commands.group(no_pm=True, pass_context=True, name="setfield", invoke_without_command=True)
 	async def mcoc_profile(self, ctx):
@@ -270,6 +274,57 @@ class mcocProfile:
 			champs = await ChampConverterMult(ctx, value).convert()
 			await self.hook_update(user_id, field, champs, ctx.message)
 			return	
+	
+	@commands.command(no_pm=True, pass_context=True,hidden=True)
+	@checks.mod_or_permissions(manage_roles=True)
+	async def settings(self, ctx, field : str, *, value : str):
+		"""
+		Update guild settings for Summoner Profile commands.
+		
+		Arg Options: (*Required)
+		[field]* = map5a, map5b, map5c, awmap, bg1_thumbnail, bg2_thumbnail, bg3_thumbnail
+		[value]* = <any string>, delete
+		"""
+		server = ctx.message.server
+		server_id = server.id
+		server_name = server.name
+		setting_fields = ['map5a','map5b','map5c','awmap','bg1_thumbnail','bg2_thumbnail','bg3_thumbnail']
+		if field not in setting_fields:
+			await self.bot.say('**{}** is not a valid field. Try again with a valid '
+							   'field from the following list: \n- {}'.format(field,'\n- '.join(setting_fields)))
+			return	
+		
+		if server_id not in self.profSettings or self.profSettings[server_id] == False:
+			self.profSettings[server_id] = {}
+			dataIO.save_json(self.settingsJSON, self.profSettings)
+		if field not in self.profSettings[server_id]:
+			original_value = "empty"
+		else:
+			original_value = self.profSettings[server_id][field]
+		if value.lower() != 'delete':
+			valid_img = re.compile(r'[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b(?:[-a-zA-Z0-9@:%_\+.~#?&\/=]*(\.jpg|\.png|\.jpeg|\.gif))')
+			valid_value = valid_img.fullmatch(value)
+			if not valid_value:
+				await self.bot.say('**<{}>** is not a valid Image URL. URL must link to a .jpeg, .png, .gif, or .jpg file. Please try again.'.format(field))						return
+			self.profSettings[server_id].update({field : value})
+			dataIO.save_json(self.settingsJSON, self.profSettings)
+			if field not in self.profSettings[server_id]:
+				await self.bot.say('Something went wrong. **{}** not set'.format(field))
+				return
+			value = self.mcocProf[user_id][field]
+			await self.bot.say(":white_check_mark:  The {}'s **{}** setting has been updated "
+							   "from **<{}>** to **<{}>**.".format(server_name,field,original_value,value))
+			return
+		else:
+			if field in self.profSettings[server_id]:
+				del self.profSettings[server_id][field]
+				dataIO.save_json(self.settingsJSON, self.profSettings)
+				await self.bot.say(":white_check_mark:  The {}'s **{}** setting has been updated "
+								   "from **<{}>** to **{}**.".format(server_name,field,original_value,'deleted'))			
+			else: 
+				await self.bot.say('There is no **{}** setting available to delete.'.format(field))
+		
+		
 		
 		
 	@commands.command(no_pm=True, pass_context=True)
@@ -315,6 +370,7 @@ class mcocProfile:
 		search_msg = await self.bot.say('Searching...')
 		author = ctx.message.author
 		server = ctx.message.server
+		server_id = server.id
 		valid_bgs = ['bg1','bg2','bg3']
 		if map_name not in valid_maps:
 			await self.bot.say('**{}** is not a valid map. Try again with a valid '
@@ -345,13 +401,33 @@ class mcocProfile:
 					else:
 						path_assignment = profile[map_name]	
 					bg_paths.append(member.display_name + ':  **' + path_assignment + '**')
-			em = discord.Embed(color=ctx.message.author.color)
+			#server settings
+			map_img = False	
+			bg_thumb_img = False
+			if server_id in self.profSettings or self.profSettings[server_id] == True:
+				map_image_name = map_name
+				if map_image_name == 'aw':
+					map_image_name = 'awmap'
+				if map_image_name in self.profSettings[server_id]:
+					map_img = self.profSettings[server_id][map_image_name]
+				bg_thumb = bg = '_thumbnail'
+				if bg_thumb in self.profSettings[server_id]:
+					bg_thumb_img = self.profSettings[server_id][bg_thumb]					
+					
+			role = discord.utils.get(server.roles, name=bg.upper())
+			color = role.color or author.color
+			em = discord.Embed(color=color)
+			if bg_thumb_img:
+				em.set_thumbnail(url=bg_thumb_img)
 			em.set_author(name=bg)					
 			em.add_field(name="**"+map_names[map_name]+"**", value="\n".join(bg_paths),inline=False)
-			pem = em.to_dict()
 			await self.bot.say(embed=em)
 			await self.bot.delete_message(search_msg)
-			return					
+			
+			if map_img:
+				await self.bot.say('{}'.format(map_img))
+			return
+		#get individual user paths
 		user_id = user.id
 		if user_id not in self.mcocProf or self.mcocProf[user_id] == False:
 			self.mcocProf[user_id] = {}
@@ -440,10 +516,11 @@ class mcocProfile:
 					localtime = 'N/A'
 				bg_times.append(name_time[0] + ':  **' + localtime + '**')
 			role = discord.utils.get(server.roles, name=bg.upper())
-			if not role:
-				color = author.color
-			else:
-				color = role.color
+			color = role.color or author.color
+#			if not role:
+#				color = author.color
+#			else:
+#				color = role.color
 			em = discord.Embed(color=color)
 			em.set_author(name=bg)					
 			em.add_field(name="**:alarm_clock:   Local Times**", value="\n".join(bg_times),inline=False)
@@ -948,14 +1025,20 @@ def check_folder():
 		print("Creating data/hook/users folder...")
 		os.makedirs("data/hook/users")
 		print("Hook Users Folder created!")
+
 		
 def check_file():
 	data = {}
 	f = "data/mcocProfile/profiles.json"
+	g = "data/mcocProfile/settings.json"
 	if not dataIO.is_valid_json(f):
 		print("Creating data/mcocProfile/profiles.json file...")
 		dataIO.save_json(f, data)
-		print("File created!")
+		print("Profiles File created!")
+	if not dataIO.is_valid_json(g):
+		print("Creating data/mcocProfile/settings.json file...")
+		dataIO.save_json(g, data)
+		print("Profile Settings File created!")
 		
 def setup(bot):
 	check_folder()
