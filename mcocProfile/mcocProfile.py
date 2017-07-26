@@ -68,7 +68,7 @@ class mcocProfile:
 		
 	@commands.group(no_pm=True, pass_context=True, name="member", invoke_without_command=True)
 	async def mcoc_profile(self, ctx):
-		"""mcocProfile allows you to create and manage your MCOC Profile."""
+		"""Create and manage your MCOC Profile."""
 		if ctx.invoked_subcommand is None:
 			await self.bot.send_cmd_help(ctx)
 			return
@@ -100,12 +100,7 @@ class mcocProfile:
 				value = str(value).replace(',','')
 			is_number = await self.is_number(value)
 			if is_number is False:
-				validity.update({'status':'invalid','reason':'Hero Rating must be a number. Hero Rating not set.'})
-#		if field == 'profilechamp':
-#			try:
-#				champ = await ChampConverter(ctx, value).convert()
-#			except:
-#				validity.update({'status':'invalid','reason':'Try a different champ alias.'})			
+				validity.update({'status':'invalid','reason':'Hero Rating must be a number. Hero Rating not set.'})	
 		return validity
 	
 	async def process_field(self,field,value,ctx):
@@ -281,14 +276,16 @@ class mcocProfile:
 	@checks.mod_or_permissions(manage_roles=True)
 	async def setpath(self, ctx, member : str, map_name, *, path : str):
 		"""
-		ADMIN or MOD ONLY. Set a path for a specific user. -setpath <member> <map> <path>"""
-		if member == 'me':
-			user = message.author
-		else:
-			try:
-				user = await MemberFinder(ctx, member).convert()
-			except (TooManyMatches,NoMemberFound):
-				return
+		Assign a path for a member on a specific map.
+		ADMIN or MOD ONLY. 
+		
+		Arg Options: (*Required)
+		[member]* = partial username, mention, 'self' 
+		[map_name]* = aw, map5a, map5b, map5c, map3a, map3b, map3c, map2c, map2a, map2b"""	
+		try:
+			user = await MemberFinder(ctx, member).convert()
+		except (TooManyMatches,NoMemberFound):
+			return
 		user_id = user.id
 		if map_name not in valid_maps:
 			await self.bot.say('**{}** is not a valid map. Try again with a valid '
@@ -299,29 +296,31 @@ class mcocProfile:
 		return
 
 	@commands.command(no_pm=True, pass_context=True)
-	async def path(self, ctx, map_name, *, member_bg: str=None):
-		"""View a users path. 
-		Defaults to your own path for the map."""	
+	async def path(self, ctx, map_name, *, member_or_bg: str=None):
+		"""View the assigned paths of a member or BG for a specific map. 
+		
+		Arg Options: (*Required)
+		[map_name]* = aw, map5a, map5b, map5c, map3a, map3b, map3c, map2c, map2a, map2b
+		[member] = None (default->self), partial username, mention, 'self' """	
 		search_msg = await self.bot.say('Searching...')
 		author = ctx.message.author
 		server = ctx.message.server
-		member_bg = member_bg.lower()
 		valid_bgs = ['bg1','bg2','bg3']
 		if map_name not in valid_maps:
 			await self.bot.say('**{}** is not a valid map. Try again with a valid '
 							   'map from the following list: \n- {}'.format(map_name,'\n- '.join(valid_maps)))
 			return		
-		if not member_bg: #default to author if nothing is provided
+		if not member_or_bg: #default to author if nothing is provided
 			user = author
-		elif member_bg not in valid_bgs:
+		elif member_or_bg.lower() not in valid_bgs:
 			try:
-				user = await MemberFinder(ctx, member_bg).convert()
+				user = await MemberFinder(ctx, member_or_bg.lower()).convert()
 			except (TooManyMatches,NoMemberFound):
 				await self.bot.delete_message(search_msg)
 				return			
 		else:
 			#get all bg paths
-			bg = member_bg
+			bg = member_or_bg.lower()
 			bg_paths = []
 			for member in server.members:
 				roles = [role.name.lower() for role in member.roles] #list of roles for member
@@ -367,8 +366,10 @@ class mcocProfile:
 
 	@commands.command(no_pm=True, pass_context=True)
 	async def time(self, ctx, *, member_bg: str=None):
-		"""View the local time for a member or battlegroup. 
-		Defaults to your own battlegroup. """	
+		"""View the local times for a member or BG. 
+		
+		Arg Options: (*Required)
+		[member_bg] = None (default->your BG), bg1, bg2, bg3, partial username, mention, 'self'"""	
 		search_msg = await self.bot.say('Searching...')
 		author = ctx.message.author
 		server = ctx.message.server
@@ -467,7 +468,7 @@ class mcocProfile:
 	@mcoc_profile.command(no_pm=True, pass_context=True,aliases=['del',])
 	async def delete(self, ctx, *, field : str):
 		"""
-		Delete a field from your profile."""
+		Delete a field from your member profile."""
 		author = ctx.message.author
 		if field not in valid_fields:
 			await self.bot.say('**{}** is not a valid field. Try again with a valid '
@@ -500,7 +501,7 @@ class mcocProfile:
 	@mcoc_profile.command(no_pm=True, pass_context=True)
 	async def display(self, ctx, show_or_hide : str, field: str):
 		"""
-		Toggle the visibility of a field on your profile."""	
+		Toggle the visibility of a field on your member profile."""	
 		author = ctx.message.author
 		user_id = author.id
 		toggles = {'show','hide'}
@@ -621,7 +622,11 @@ class mcocProfile:
 
 	@mcoc_profile.command(no_pm=True, pass_context=True)
 	async def view(self, ctx, *, member: str=None):
-		"""View a users profile."""	
+		"""View a members profile.
+		
+		Arg Options: (*Required)
+		[member] = None (default->self), partial username, mention, 'self' 
+		"""
 		search_msg = await self.bot.say('Searching...')
 		author = ctx.message.author
 		if not member:
