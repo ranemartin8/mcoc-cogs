@@ -147,7 +147,7 @@ class mcocProfile:
 			return tz
 		except:
 			await self.bot.say('Location not found. Timezone not set.')
-			return 
+			raise 
 			 	
 		
 			
