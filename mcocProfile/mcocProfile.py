@@ -655,10 +655,10 @@ class mcocProfile:
 		em = discord.Embed(color=user.color)
 		
 		if "gamename" not in profile or "gamename" in hidden_fields:
-			em.add_field(name="**Summoner**", value=user.display_name,inline=False)
+			em.add_field(name="**Summoner Profile**", value=user.display_name,inline=False)
 		else:
 			gamename = profile["gamename"]
-			em.add_field(name="**"+field_names["gamename"]+"**", value=gamename,inline=False)
+			em.add_field(name="**Summoner Profile**", value=gamename,inline=False)
 			
 		if "alliance" not in profile or "alliance" in hidden_fields:
 			display_name = user.display_name
