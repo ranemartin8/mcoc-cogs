@@ -440,8 +440,10 @@ class mcocProfile:
 #			bg_dict = dict(bg_tuple_list)
 			
 			bg_sorted = collections.OrderedDict(sorted(bg_dict.items()))
+			print(str(bg_sorted))
 			bg_times = []
 			for time,name in bg_sorted.items():
+				print(name + ": "+time)
 				if time != 'none':
 					localtime = time.strftime("%I:%M").lstrip('0') + ' ' + time.strftime("%p")
 				else:
