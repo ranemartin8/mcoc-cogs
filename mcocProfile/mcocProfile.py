@@ -431,7 +431,8 @@ class mcocProfile:
 						hour = get_time.strftime("%H")
 					else:
 						hour = '23'
-					bg_dict.update({hour:[member.display_name,get_time]})
+					key = hour + member.display_name
+					bg_dict.update({key:[member.display_name,get_time]})
 			
 #					mem_time = (get_time,member.display_name)
 #					bg_tuple_list.append(mem_time)
