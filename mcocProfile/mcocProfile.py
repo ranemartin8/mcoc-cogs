@@ -529,13 +529,19 @@ class mcocProfile:
 				else:
 					localtime = 'N/A'
 				bg_times.append(name_time[0] + ':  **' + localtime + '**')
+
 			role = discord.utils.get(server.roles, name=bg.upper())
-#			color = role.color or author.color
 			if not role:
 				color = author.color
 			else:
 				color = role.color
 			em = discord.Embed(color=color)
+			
+			if server_id in self.profSettings or self.profSettings[server_id] == True:
+				bg_thumb = bg + '_thumbnail'
+				if bg_thumb in self.profSettings[server_id]:
+					bg_thumb_img = self.profSettings[server_id][bg_thumb]		
+					em.set_thumbnail(url=bg_thumb_img)
 			em.set_author(name=bg)					
 			em.add_field(name="**:alarm_clock:   Local Times**", value="\n".join(bg_times),inline=False)
 			await self.bot.say(embed=em)
