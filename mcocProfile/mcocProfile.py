@@ -434,7 +434,7 @@ class mcocProfile:
 			sorted(bg_tuple_list)
 			bg_dict = dict(bg_tuple_list)
 			bg_times = []
-			for time,name in bg_times.items():
+			for time,name in bg_dict.items():
 				if time != 'none':
 					localtime = time.strftime("%I:%M").lstrip('0') + ' ' + time.strftime("%p")
 				else:
