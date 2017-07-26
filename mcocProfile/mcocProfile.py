@@ -420,7 +420,6 @@ class mcocProfile:
 					key = hour + member.display_name
 					bg_dict.update({key:[member.display_name,get_time]})
 			bg_sorted = collections.OrderedDict(sorted(bg_dict.items()))
-			print(str(bg_sorted))
 			bg_times = []
 			for hour,name_time in bg_sorted.items():
 				if name_time[1] != 'none':
@@ -429,9 +428,11 @@ class mcocProfile:
 				else:
 					localtime = 'N/A'
 				bg_times.append(name_time[0] + ':     **' + localtime + '**')
-			em = discord.Embed(color=ctx.message.author.color)
+			role = discord.utils.get(message.server.roles, name=bg)
+
+			em = discord.Embed(color=role.color)
 			em.set_author(name=bg)					
-			em.add_field(name="**Local Times**", value="\n".join(bg_times),inline=False)
+			em.add_field(name="**:alarm_clock:   Local Times**", value="\n".join(bg_times),inline=False)
 			await self.bot.say(embed=em)
 			await self.bot.delete_message(search_msg)
 			return
@@ -894,6 +895,7 @@ class mcocProfile:
 	
 		await self.bot.say("Done! Here is your profile:")	
 		await ctx.invoke(self.view, member=author.name)
+		await self.bot.say("You can edit any field later with the !setfield command")	
 		return
 	
 			
