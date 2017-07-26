@@ -461,7 +461,7 @@ class mcocProfile:
 			clockemoji = clock_emoji(get_time)
 		if "profilechamp" not in profile:
 			url = user.avatar_url or user.default_avatar_url
-#			if user.avatar_url:
+			url = url.replace("webp","png")
 			em.set_thumbnail(url=url)
 			print(url)
 		else:
