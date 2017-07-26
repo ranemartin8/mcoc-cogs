@@ -444,7 +444,7 @@ class mcocProfile:
 			self.mcocProf[user_id] = {}
 			dataIO.save_json(self.profJSON, self.mcocProf)				
 		profile = self.mcocProf[user_id]
-		em = discord.Embed(color=user.color).set_author(name=user.display_name)
+		em = discord.Embed(color=user.color)
 		if "timezone" not in profile:
 			localtime = "N/A"
 			timezone = "N/A"
@@ -464,7 +464,7 @@ class mcocProfile:
 			profilechamp = profile["profilechamp"]
 			champ = await ChampConverter(ctx, profilechamp).convert()
 			em.set_thumbnail(url=champ.get_avatar())
-		em.add_field(name="**Time**", value='Timezone: ' + timezone + '\nLocal Time: ' + localtime + '  ' + clockemoji,inline=False)	
+		em.add_field(name="**"+user.display_name+"**", value='Local Time: ' + localtime + '  ' + clockemoji+'\nTimezone: ' + timezone,inline=False)	
 		await self.bot.say(embed=em)
 		await self.bot.delete_message(search_msg)
 		return
