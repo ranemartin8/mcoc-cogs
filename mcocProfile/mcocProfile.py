@@ -305,7 +305,7 @@ class mcocProfile:
 			valid_img = re.compile(r'[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b(?:[-a-zA-Z0-9@:%_\+.~#?&\/=]*(\.jpg|\.png|\.jpeg|\.gif))')
 			valid_value = valid_img.fullmatch(value)
 			if not valid_value:
-				await self.bot.say('**<{}>** is not a valid Image URL. URL must link to a .jpeg, .png, .gif, or .jpg file. Please try again.'.format(field))						return
+				await self.bot.say('**\<{}\>** is not a valid Image URL. URL must link to a .jpeg, .png, .gif, or .jpg file. Please try again.'.format(value))						return
 			self.profSettings[server_id].update({field : value})
 			dataIO.save_json(self.settingsJSON, self.profSettings)
 			if field not in self.profSettings[server_id]:
@@ -313,14 +313,14 @@ class mcocProfile:
 				return
 			value = self.mcocProf[user_id][field]
 			await self.bot.say(":white_check_mark:  The {}'s **{}** setting has been updated "
-							   "from **<{}>** to **<{}>**.".format(server_name,field,original_value,value))
+							   "from **\<{}\>** to **\<{}\>**.".format(server_name,field,original_value,value))
 			return
 		else:
 			if field in self.profSettings[server_id]:
 				del self.profSettings[server_id][field]
 				dataIO.save_json(self.settingsJSON, self.profSettings)
 				await self.bot.say(":white_check_mark:  The {}'s **{}** setting has been updated "
-								   "from **<{}>** to **{}**.".format(server_name,field,original_value,'deleted'))			
+								   "from ****\<{}\>**** to **{}**.".format(server_name,field,original_value,'deleted'))			
 			else: 
 				await self.bot.say('There is no **{}** setting available to delete.'.format(field))
 		
