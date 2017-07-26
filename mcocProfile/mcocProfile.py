@@ -264,9 +264,10 @@ class mcocProfile:
 		OWNER ONLY. Update fields for a specific user."""
 		message = ctx.message
 		await self.bot.say("[Owner Command]: Whose profile do you want to update?")	
-		response = await self.bot.wait_for_message(channel=message.channel, author=message.author, timeout=20.0)
+		response = await self.bot.wait_for_message(channel=message.channel, author=message.author, timeout=180.0)
 		if response is None:
 			await self.bot.say("Request timed out.")	
+			return
 		member = response.content
 		if member == 'me':
 			user = message.author
