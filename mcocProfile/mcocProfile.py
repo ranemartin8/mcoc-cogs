@@ -448,9 +448,11 @@ class mcocProfile:
 		if "timezone" not in profile:
 			localtime = "N/A"
 			timezone = "N/A"
+			clockemoji = ":alarm_clock:"
 		elif not profile["timezone"]:
 			localtime = "N/A"
 			timezone = "N/A"
+			clockemoji = ":alarm_clock:"
 		else:
 			timezone = profile["timezone"]
 			utcmoment_naive = datetime.utcnow()
