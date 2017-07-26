@@ -120,7 +120,7 @@ class mcocProfile:
 				process.update({'status':'failure','value':'Try a different champ alias.'})
 		if field == 'timezone':
 			try:
-				timezone = await self.gettimezone(location)
+				timezone = await self.gettimezone(value)
 				process.update({'status':'success','value':timezone})	
 			except:
 				process.update({'status':'failure','value':'Location not found! Timezone not set.'})
@@ -139,15 +139,15 @@ class mcocProfile:
 	async def gettimezone(self, query):
 		geolocator = Nominatim(timeout=60)
 		try:
-			location = geolocator.geocode(query)
+			location = geolocator.geocode(query)			
+			latitude = location.latitude 
+			longitude = location.longitude
+			tf = TimezoneFinder()
+			tz = tf.timezone_at(lng=longitude, lat=latitude)
+			return tz
 		except:
 			await self.bot.say('Location not found. Timezone not set.')
-			return 				
-		latitude = location.latitude 
-		longitude = location.longitude
-		tf = TimezoneFinder()
-		tz = tf.timezone_at(lng=longitude, lat=latitude)
-		return tz
+			return 	
 		
 			
 		
