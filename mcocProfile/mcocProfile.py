@@ -405,7 +405,7 @@ class mcocProfile:
 		else:
 			#get all bg times
 			bg = member_bg.lower()
-			bg_times = []
+			bg_tuple_list = []
 			for member in server.members:
 				roles = [role.name.lower() for role in member.roles] #list of roles for member
 				if bg in roles:
@@ -415,15 +415,31 @@ class mcocProfile:
 						dataIO.save_json(self.profJSON, self.mcocProf)
 					profile = self.mcocProf[user_id]
 					if "timezone" not in profile:
-						localtime = "N/A"
+						get_time = 'none'
+#						localtime = "N/A"
+
 					elif not profile["timezone"]:
-						localtime = "N/A"
+						get_time = 'none'
+#						localtime = "N/A"
 					else:
 						timezone = profile["timezone"]
 						utcmoment_naive = datetime.utcnow()
 						get_time = getLocalTime(utcmoment_naive,timezone)
-						localtime = get_time.strftime("%I:%M").lstrip('0') + ' ' + get_time.strftime("%p")
-					bg_times.append(member.display_name + ':    **' + localtime + '**')
+						
+#						localtime = get_time.strftime("%I:%M").lstrip('0') + ' ' + get_time.strftime("%p")
+					mem_time = (get_time,member.display_name)
+					bg_tuple_list.append(mem_time)
+					#[(timestr_1, name_1),(timestr_2, name_2)]
+#					bg_times.append(member.display_name + ':    **' + localtime + '**')
+			sorted(bg_tuple_list)
+			bg_dict = dict(bg_tuple_list)
+			bg_times = []
+			for time,name in bg_times.items():
+				if time != 'none':
+					localtime = time.strftime("%I:%M").lstrip('0') + ' ' + time.strftime("%p")
+				else:
+					localtime = 'N/A'
+				bg_times.append(name + ':     **' + localtime + '**')
 			em = discord.Embed(color=ctx.message.author.color)
 			em.set_author(name=bg)					
 			em.add_field(name="**Local Times**", value="\n".join(bg_times),inline=False)
