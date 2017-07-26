@@ -474,7 +474,7 @@ class mcocProfile:
 		search_msg = await self.bot.say('Searching...')
 		author = ctx.message.author
 		server = ctx.message.server
-
+		server_id = server.id
 		valid_bgs = ['bg1','bg2','bg3']
 		if not member_bg: #default to author's bg if nothing is provided. if the author isn't in a bg, default to the author
 			roles = [role.name.lower() for role in author.roles]
