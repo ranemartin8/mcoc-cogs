@@ -146,7 +146,8 @@ class mcocProfile:
 			tz = tf.timezone_at(lng=longitude, lat=latitude)
 			return tz
 		except:
-			return await self.bot.say('Location not found. Timezone not set.')
+			await self.bot.say('Location not found. Timezone not set.')
+			return 
 			 	
 		
 			
