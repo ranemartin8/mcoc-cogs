@@ -352,7 +352,7 @@ class mcocProfile:
 		search_msg = await self.bot.say('Searching...')
 		author = ctx.message.author
 		server = ctx.message.server
-		member_bg = member_bg.lower()
+
 		valid_bgs = ['bg1','bg2','bg3']
 		if not member_bg: #default to author's bg if nothing is provided. if the author isn't in a bg, default to the author
 			roles = [role.name.lower() for role in author.roles]
@@ -400,7 +400,6 @@ class mcocProfile:
 			await self.bot.say(embed=em)
 			await self.bot.delete_message(search_msg)
 			return
-		
 		user_id = user.id
 		if user_id not in self.mcocProf or self.mcocProf[user_id] == False:
 			self.mcocProf[user_id] = {}
