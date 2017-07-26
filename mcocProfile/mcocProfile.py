@@ -111,19 +111,19 @@ class mcocProfile:
 		needs_processing = {'profilechamp','timezone'}
 		if field not in needs_processing:
 			return {'status':'success','value':value}
-		process = {'status':'failure','value':value} #assume failure
+		process = {'status':'failure','value':'An unknown error occurred.'} #assume failure
 		if field == 'profilechamp':
 			try:
 				champ = await ChampConverter(ctx, value).convert()
 				process.update({'status':'success','value':champ.hookid})	
 			except:
-				process.update({'status':'failure'})
+				process.update({'status':'failure','value':'Try a different champ alias.'})
 		if field == 'timezone':
 			try:
 				timezone = await self.gettimezone(location)
 				process.update({'status':'success','value':timezone})	
 			except:
-				process.update({'status':'failure'})
+				process.update({'status':'failure','value':'Location not found! Timezone not set.'})
 		return process
 
 	async def hook_file(self, userid):
@@ -167,6 +167,7 @@ class mcocProfile:
 		if process['status'] == 'success':
 			value = process['value']
 		else:
+			await self.bot.say(process['value'])
 			return
 		if user_id not in self.mcocProf or self.mcocProf[user_id] == False:
 			self.mcocProf[user_id] = {}
