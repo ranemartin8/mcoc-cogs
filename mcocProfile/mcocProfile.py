@@ -428,7 +428,7 @@ class mcocProfile:
 				else:
 					localtime = 'N/A'
 				bg_times.append(name_time[0] + ':     **' + localtime + '**')
-			role = discord.utils.get(message.server.roles, name=bg)
+			role = discord.utils.get(server.roles, name=bg)
 
 			em = discord.Embed(color=role.color)
 			em.set_author(name=bg)					
