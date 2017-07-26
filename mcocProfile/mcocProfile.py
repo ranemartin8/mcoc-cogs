@@ -262,8 +262,7 @@ class mcocProfile:
 	async def edit(self, ctx, member : str, field : str, *, value : str):
 		"""
 		ADMIN or MOD ONLY. Update profile fields for a specific user.
-		Valid Fields:
-		{}""".format(', '.join(fields_list))
+		"""
 #		message = ctx.message
 #		await self.bot.say("Whose profile do you want to update?")	
 #		response = await self.bot.wait_for_message(channel=message.channel, author=message.author, timeout=180.0)
