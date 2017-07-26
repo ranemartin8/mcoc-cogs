@@ -66,9 +66,9 @@ class mcocProfile:
 		self.hookPath = "data/hook/users/{}"
 		self.hookJSON = "data/hook/users/{}/champs.json"
 		
-	@commands.group(no_pm=True, pass_context=True, name="member", invoke_without_command=True)
+	@commands.group(no_pm=True, pass_context=True, name="setfield", invoke_without_command=True)
 	async def mcoc_profile(self, ctx):
-		"""Create and manage your MCOC Profile."""
+		"""Set or update a field on your Summoner Profile."""
 		if ctx.invoked_subcommand is None:
 			await self.bot.send_cmd_help(ctx)
 			return
@@ -250,11 +250,11 @@ class mcocProfile:
 			await self.bot.say(':white_check_mark:  Done!\n{} updated **{}** team:\n{}'.format(identifier,team_name,'\n'.join(champ_list)))		
 
 	
-	@mcoc_profile.command(no_pm=True, pass_context=True,hidden=True)
+	@commands.command(no_pm=True, pass_context=True,hidden=True)
 	@checks.mod_or_permissions(manage_roles=True)
 	async def edit(self, ctx, member : str, field : str, *, value : str):
 		"""
-		ADMIN or MOD ONLY. Update profile fields for a specific user.
+		Update a field on the Summoner Profile of a specific member.
 		"""
 		user = await MemberFinder(ctx, member).convert()
 		user_id = user.id
@@ -297,7 +297,7 @@ class mcocProfile:
 
 	@commands.command(no_pm=True, pass_context=True)
 	async def path(self, ctx, map_name, *, member_or_bg: str=None):
-		"""View the assigned paths of a member or BG for a specific map. 
+		"""View the assigned paths of a member or BG for a map. 
 		
 		Arg Options: (*Required)
 		[map_name]* = aw, map5a, map5b, map5c, map3a, map3b, map3c, map2c, map2a, map2b
@@ -465,10 +465,10 @@ class mcocProfile:
 		await self.bot.delete_message(search_msg)
 		return
 
-	@mcoc_profile.command(no_pm=True, pass_context=True,aliases=['del',])
+	@commands.command(no_pm=True, pass_context=True,aliases=['del',])
 	async def delete(self, ctx, *, field : str):
 		"""
-		Delete a field from your member profile."""
+		Delete a field from your Summoner Profile."""
 		author = ctx.message.author
 		if field not in valid_fields:
 			await self.bot.say('**{}** is not a valid field. Try again with a valid '
@@ -498,10 +498,10 @@ class mcocProfile:
 			else: 
 				await self.bot.say('No **{}** available to delete.'.format(field_name))
 				
-	@mcoc_profile.command(no_pm=True, pass_context=True)
+	@commands.command(no_pm=True, pass_context=True)
 	async def display(self, ctx, show_or_hide : str, field: str):
 		"""
-		Toggle the visibility of a field on your member profile."""	
+		Toggle the visibility of a field on your Summoner Profile."""	
 		author = ctx.message.author
 		user_id = author.id
 		toggles = {'show','hide'}
@@ -620,9 +620,9 @@ class mcocProfile:
 			return
 
 
-	@mcoc_profile.command(no_pm=True, pass_context=True)
+	@commands.command(no_pm=True, pass_context=True)
 	async def view(self, ctx, *, member: str=None):
-		"""View a members profile.
+		"""View a member's Summoner Profile.
 		
 		Arg Options: (*Required)
 		[member] = None (default->self), partial username, mention, 'self' 
@@ -771,9 +771,9 @@ class mcocProfile:
 			return content
 		
 					 
-	@mcoc_profile.command(no_pm=True, pass_context=True)
+	@commands.command(no_pm=True, pass_context=True)
 	async def make(self, ctx):
-		"""Interactively set up a new profile by answering each prompt.
+		"""Interactively set up a new Summoner Profile
 		You have 3 MINUTES to answer each question.
 		You can reply SKIP to skip a question or STOP to exit this session.
 		"""
