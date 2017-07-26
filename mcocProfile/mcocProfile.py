@@ -300,33 +300,36 @@ class mcocProfile:
 		if field not in self.profSettings[server_id]:
 			original_value = "empty"
 		else:
-			original_value = self.profSettings[server_id][field]
+			orig_value = self.profSettings[server_id][field]
+			original_value = "<" + orig_value + ">"
 		if value.lower() != 'delete':
 			valid_img = re.compile(r'[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b(?:[-a-zA-Z0-9@:%_\+.~#?&\/=]*(\.jpg|\.png|\.jpeg|\.gif))')
 			valid_value = valid_img.fullmatch(value)
 			if not valid_value:
-				await self.bot.say('**\<{}\>** is not a valid Image URL. URL must link to a .jpeg, .png, .gif, or .jpg file. Please try again.'.format(value))						return
+				value = "<" + value + ">"
+				await self.bot.say('**{}** is not a valid Image URL. URL must link to a .jpeg, .png, .gif, or .jpg file. Please try again.'.format(value))						return
 			self.profSettings[server_id].update({field : value})
 			dataIO.save_json(self.settingsJSON, self.profSettings)
 			if field not in self.profSettings[server_id]:
 				await self.bot.say('Something went wrong. **{}** not set'.format(field))
 				return
 			value = self.mcocProf[user_id][field]
+			value = "<" + value + ">"
 			await self.bot.say(":white_check_mark:  The {}'s **{}** setting has been updated "
-							   "from **\<{}\>** to **\<{}\>**.".format(server_name,field,original_value,value))
+							   "from **{}** to **{}**.".format(server_name,field,original_value,value))
 			return
 		else:
 			if field in self.profSettings[server_id]:
 				del self.profSettings[server_id][field]
 				dataIO.save_json(self.settingsJSON, self.profSettings)
 				await self.bot.say(":white_check_mark:  The {}'s **{}** setting has been updated "
-								   "from ****\<{}\>**** to **{}**.".format(server_name,field,original_value,'deleted'))			
+								   "from **{}** to **{}**.".format(server_name,field,original_value,'deleted'))			
 			else: 
 				await self.bot.say('There is no **{}** setting available to delete.'.format(field))
 		
 		
 		
-		
+
 	@commands.command(no_pm=True, pass_context=True)
 	@checks.mod_or_permissions(manage_roles=True)
 	async def setpath(self, ctx, member : str, map_name, *, path : str):
