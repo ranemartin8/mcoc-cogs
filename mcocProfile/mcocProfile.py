@@ -286,6 +286,7 @@ class mcocProfile:
 		search_msg = await self.bot.say('Searching...')
 		author = ctx.message.author
 		server = ctx.message.server
+		member_bg = member_bg.lower()
 		valid_bgs = ['bg1','bg2','bg3']
 		if map_name not in valid_maps:
 			await self.bot.say('**{}** is not a valid map. Try again with a valid '
@@ -303,16 +304,10 @@ class mcocProfile:
 			#get all bg paths
 			bg = member_bg
 			bg_paths = []
-			
 			for member in server.members:
-#				roles = []
 				roles = [role.name.lower() for role in member.roles] #list of roles for member
-#				print("r_name: "+str(r_name))
-#				roles.extend(r_name) #list of roles for member
-				print("roles: "+str(roles))
 				if bg in roles:
 					user_id = member.id
-					print("user_id: "+user_id)
 					if user_id not in self.mcocProf or self.mcocProf[user_id] == False:
 						self.mcocProf[user_id] = {}
 						dataIO.save_json(self.profJSON, self.mcocProf)
@@ -321,17 +316,11 @@ class mcocProfile:
 						path_assignment = "N/A"
 					else:
 						path_assignment = profile[map_name]	
-					print("path_assignment: "+path_assignment)
 					bg_paths.append(member.display_name + ':  **' + path_assignment + '**')
-					
 			em = discord.Embed(color=ctx.message.author.color)
 			em.set_author(name=bg)					
 			em.add_field(name="**"+map_names[map_name]+"**", value="\n".join(bg_paths),inline=False)
 			pem = em.to_dict()
-			print("print(pem): " + str(pem))
-			print("bg: "+bg)
-			print("bg_paths: "+"\n".join(bg_paths))
-			print("map_names[map_name]: "+map_names[map_name])
 			await self.bot.say(embed=em)
 			await self.bot.delete_message(search_msg)
 			return					
@@ -356,8 +345,92 @@ class mcocProfile:
 		await self.bot.say(embed=em)
 		await self.bot.delete_message(search_msg)
 		return
-	
+
+	@commands.command(no_pm=True, pass_context=True)
+	async def time(self, ctx, *, member_bg: str=None):
+		"""View the local time for a member or battlegroup. Defaults to your own battlegroup. """	
+		search_msg = await self.bot.say('Searching...')
+		author = ctx.message.author
+		server = ctx.message.server
+		member_bg = member_bg.lower()
+		valid_bgs = ['bg1','bg2','bg3']
+		if not member_bg: #default to author's bg if nothing is provided. if the author isn't in a bg, default to the author
+			roles = [role.name.lower() for role in author.roles]
+			bg_name = []
+			for role in roles:
+				if role in valid_bgs:
+					bg_name.append(role)
+			if not bg_name[0]:
+				member_bg = author.name
+			else:
+				member_bg = bg_name[0]	
+				
+		member_bg = member_bg.lower()	
+		if member_bg not in valid_bgs:
+			try:
+				user = await MemberFinder(ctx, member_bg).convert()
+			except (TooManyMatches,NoMemberFound):
+				await self.bot.delete_message(search_msg)
+				return			
+		else:
+			#get all bg times
+			bg = member_bg.lower()
+			bg_times = []
+			for member in server.members:
+				roles = [role.name.lower() for role in member.roles] #list of roles for member
+				if bg in roles:
+					user_id = member.id
+					if user_id not in self.mcocProf or self.mcocProf[user_id] == False:
+						self.mcocProf[user_id] = {}
+						dataIO.save_json(self.profJSON, self.mcocProf)
+					profile = self.mcocProf[user_id]
+					if "timezone" not in profile:
+						localtime = "N/A"
+					elif not profile["timezone"]:
+						localtime = "N/A"
+					else:
+						timezone = profile["timezone"]
+						utcmoment_naive = datetime.utcnow()
+						get_time = getLocalTime(utcmoment_naive,timezone)
+						localtime = get_time.strftime("%I:%M").lstrip('0') + ' ' + get_time.strftime("%p")
+					bg_times.append(member.display_name + ':    **' + localtime + '**')
+			em = discord.Embed(color=ctx.message.author.color)
+			em.set_author(name=bg)					
+			em.add_field(name="**Local Times**", value="\n".join(bg_times),inline=False)
+			await self.bot.say(embed=em)
+			await self.bot.delete_message(search_msg)
+			return
 		
+		user_id = user.id
+		if user_id not in self.mcocProf or self.mcocProf[user_id] == False:
+			self.mcocProf[user_id] = {}
+			dataIO.save_json(self.profJSON, self.mcocProf)				
+		profile = self.mcocProf[user_id]
+		em = discord.Embed(color=user.color).set_author(name=user.display_name)
+		if "timezone" not in profile:
+			localtime = "N/A"
+			timezone = "N/A"
+		elif not profile["timezone"]:
+			localtime = "N/A"
+			timezone = "N/A"
+		else:
+			timezone = profile["timezone"]
+			utcmoment_naive = datetime.utcnow()
+			get_time = getLocalTime(utcmoment_naive,timezone)
+			localtime = get_time.strftime("%I:%M").lstrip('0') + ' ' + get_time.strftime("%p")
+			clockemoji = clock_emoji(get_time)
+		if "profilechamp" not in profile:
+			if user.avatar_url:
+				em.set_thumbnail(url=user.avatar_url)
+		else:
+			profilechamp = profile["profilechamp"]
+			champ = await ChampConverter(ctx, profilechamp).convert()
+			em.set_thumbnail(url=champ.get_avatar())
+		em.add_field(name="**Time**", value='Timezone: ' + timezone + '\nLocal Time: ' + localtime + '  ' + clockemoji,inline=False)	
+		await self.bot.say(embed=em)
+		await self.bot.delete_message(search_msg)
+		return
+
 	@mcoc_profile.command(no_pm=True, pass_context=True,aliases=['del',])
 	async def delete(self, ctx, *, field : str):
 		"""
