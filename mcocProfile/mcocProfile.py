@@ -427,7 +427,7 @@ class mcocProfile:
 					localtime = time.strftime("%I:%M").lstrip('0') + ' ' + time.strftime("%p")
 				else:
 					localtime = 'N/A'
-				bg_times.append(name_time[0] + ':     **' + localtime + '**')
+				bg_times.append(name_time[0] + ':  **' + localtime + '**')
 			role = discord.utils.get(server.roles, name=bg.upper())
 			if not role:
 				color = author.color
