@@ -66,7 +66,7 @@ class mcocProfile:
 		self.hookPath = "data/hook/users/{}"
 		self.hookJSON = "data/hook/users/{}/champs.json"
 		
-	@commands.group(no_pm=True, pass_context=True, name="profiler",aliases=['prof',], invoke_without_command=True)
+	@commands.group(no_pm=True, pass_context=True, name="member", invoke_without_command=True)
 	async def mcoc_profile(self, ctx):
 		"""mcocProfile allows you to create and manage your MCOC Profile."""
 		if ctx.invoked_subcommand is None:
