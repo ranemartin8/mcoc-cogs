@@ -545,7 +545,7 @@ class gsheet_cog:
 			await self.bot.say("Something went wrong.")
 			raise
 	
-	@commands.command(pass_context=True,aliases=['localtime',], no_pm=True)
+	@commands.command(pass_context=True, no_pm=True)
 	async def timexxx(self, ctx, *, user: discord.Member=None):
 		"""Get the local time of an Alliance Member.
 		This command requires a Google Sheet containing Alliance member info. Set up command coming soon.
