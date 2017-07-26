@@ -100,13 +100,31 @@ class mcocProfile:
 			is_number = await self.is_number(value)
 			if is_number is False:
 				validity.update({'status':'invalid','reason':'Hero Rating must be a number. Hero Rating not set.'})
+#		if field == 'profilechamp':
+#			try:
+#				champ = await ChampConverter(ctx, value).convert()
+#			except:
+#				validity.update({'status':'invalid','reason':'Try a different champ alias.'})			
+		return validity
+	
+	async def process_field(self,field,value,ctx):
+		needs_processing = {'profilechamp','timezone'}
+		if field not in needs_processing:
+			return {'status':'success','value':value}
+		process = {'status':'failue','value':value} #assume failure
 		if field == 'profilechamp':
 			try:
 				champ = await ChampConverter(ctx, value).convert()
+				process.update({'status':'success','value':champ.hookid})	
 			except:
-				validity.update({'status':'invalid','reason':'Try a different champ alias.'})			
-		return validity
-			
+				pass	
+		if field == 'timezone':
+			try:
+				timezone = await self.gettimezone(location)
+				process.update({'status':'success','value':timezone})	
+			except:
+				pass
+		return process
 
 	async def hook_file(self, userid):
 		data = {}
@@ -122,14 +140,14 @@ class mcocProfile:
 		geolocator = Nominatim(timeout=60)
 		try:
 			location = geolocator.geocode(query)
+			latitude = location.latitude 
+			longitude = location.longitude
+			tf = TimezoneFinder()
+			tz = tf.timezone_at(lng=longitude, lat=latitude)
+			return tz
 		except:
-			await self.bot.say('Location not found.')
-			return 		
-		latitude = location.latitude 
-		longitude = location.longitude
-		tf = TimezoneFinder()
-		tz = tf.timezone_at(lng=longitude, lat=latitude)
-		return tz
+			await self.bot.say('Location not found. Timezone not set.')
+			return 	
 		
 	def get_avatar(self):
 		image = '{}portraits/portrait_{}.png'.format(remote_data_basepath, self.mcocportrait)
@@ -144,6 +162,11 @@ class mcocProfile:
 		check = await self.check_field(field,value,ctx)
 		if check['status'] == 'invalid':
 			await self.bot.say(check['reason'])
+			return
+		process = await self.process_field(field,value,ctx)
+		if process['status'] == 'success':
+			value = process['value']
+		else:
 			return
 		if user_id not in self.mcocProf or self.mcocProf[user_id] == False:
 			self.mcocProf[user_id] = {}
@@ -514,8 +537,8 @@ class mcocProfile:
 		"""
 		Provide your location to set your timezone."""	
 		user_id = ctx.message.author.id		
-		timezone = await self.gettimezone(location)
-		await self.edit_field(user_id, 'timezone', ctx, timezone)
+#		timezone = await self.gettimezone(location)
+		await self.edit_field(user_id, 'timezone', ctx, location)
 	
 	@mcoc_profile.command(no_pm=True, pass_context=True,aliases=['summonerlevel',])
 	async def level(self, ctx, *, summonerlevel : str):
@@ -766,8 +789,8 @@ class mcocProfile:
 		elif answer == 'skip':
 			pass
 		else:
-			timezone = await self.gettimezone(answer)
-			await self.edit_field(user_id,'timezone', ctx, timezone)
+#			timezone = await self.gettimezone(answer)
+			await self.edit_field(user_id,'timezone', ctx, answer)
 			
 		await self.bot.say("What is your Summonor Level? (0-60)")	
 		response = await self.bot.wait_for_message(channel=channel, author=author, timeout=180.0)
