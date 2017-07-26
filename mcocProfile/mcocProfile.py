@@ -140,14 +140,16 @@ class mcocProfile:
 		geolocator = Nominatim(timeout=60)
 		try:
 			location = geolocator.geocode(query)
-			latitude = location.latitude 
-			longitude = location.longitude
-			tf = TimezoneFinder()
-			tz = tf.timezone_at(lng=longitude, lat=latitude)
-			return tz
 		except:
 			await self.bot.say('Location not found. Timezone not set.')
-			return 	
+			return 				
+		latitude = location.latitude 
+		longitude = location.longitude
+		tf = TimezoneFinder()
+		tz = tf.timezone_at(lng=longitude, lat=latitude)
+		return tz
+		
+			
 		
 	def get_avatar(self):
 		image = '{}portraits/portrait_{}.png'.format(remote_data_basepath, self.mcocportrait)
