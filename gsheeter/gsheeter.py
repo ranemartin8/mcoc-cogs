@@ -94,6 +94,11 @@ class MemberFinder(commands.Converter):
 			user = message.author
 			print('Search Method: User author.')
 			return user
+		user_string = user_string.lower()
+		if user_string == 'me' or user_string == 'self':
+			user = message.author
+			print('Search Method: User author.')
+			return user
 		if message.mentions:
 			user = message.mentions[0]
 			print('Search Method: User found by mention.')
@@ -105,7 +110,7 @@ class MemberFinder(commands.Converter):
 		else:
 			mem_dict = {}
 			for member in server.members:
-				mem_dict.update({member.display_name:member.id})
+				mem_dict.update({member.display_name.lower():member.id,member.name.lower():member.id})
 			results = []
 			for key,value in mem_dict.items():
 				checkfor_str = key.find(user_string)
