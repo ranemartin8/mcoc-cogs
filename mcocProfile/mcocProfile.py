@@ -479,7 +479,7 @@ class mcocProfile:
 			profilechamp = profile["profilechamp"]
 			champ = await ChampConverter(ctx, profilechamp).convert()
 			em.set_thumbnail(url=champ.get_avatar())
-		em.add_field(name="**"+user.display_name+"**", value='Local Time: ' + localtime + '  ' + clockemoji+'\nTimezone: ' + timezone,inline=False)	
+		em.add_field(name="**"+user.display_name+"**", value='Local Time: ' + localtime + '  ' + clockemoji+'\n' + timezone,inline=False)	
 		await self.bot.say(embed=em)
 		await self.bot.delete_message(search_msg)
 		return
