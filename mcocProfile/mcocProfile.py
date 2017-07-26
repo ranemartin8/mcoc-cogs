@@ -428,9 +428,12 @@ class mcocProfile:
 				else:
 					localtime = 'N/A'
 				bg_times.append(name_time[0] + ':     **' + localtime + '**')
-			role = discord.utils.get(server.roles, name=bg)
-
-			em = discord.Embed(color=role.color)
+			role = discord.utils.get(server.roles, name=bg.upper())
+			if not role:
+				color = author.color
+			else:
+				color = role.color
+			em = discord.Embed(color=color)
 			em.set_author(name=bg)					
 			em.add_field(name="**:alarm_clock:   Local Times**", value="\n".join(bg_times),inline=False)
 			await self.bot.say(embed=em)
