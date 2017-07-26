@@ -25,7 +25,7 @@ achievements_dict = {'rol':'Realm of Legends','lol':'Labyrinth of Legends','rtl'
 bg_set = {'bg1','bg2','bg3'}
 remote_data_basepath = 'https://raw.githubusercontent.com/JasonJW/mcoc-cogs/master/mcoc/data/'
 
-map_names = {'map5a':'Map 5 - Section A', 'map5b':'Map 5 - Section B', 'map5c':'Map 5 - Section C', 'aw':'Alliance War', 'map3a':'Map 3 - Section A', 'map3b':'Map 3 - Section B', 'map3c':'Map 3 - Section C', 'map2a':'Map 2 - Section A', 'map2b':'Map 2 - Section B', 'map2c':'Map 2 - Section C'}
+map_names = {'map5':'Map 5','map3':'Map 3','map2':'Map 2','map5a':'Map 5 - Section A', 'map5b':'Map 5 - Section B', 'map5c':'Map 5 - Section C', 'aw':'Alliance War', 'map3a':'Map 3 - Section A', 'map3b':'Map 3 - Section B', 'map3c':'Map 3 - Section C', 'map2a':'Map 2 - Section A', 'map2b':'Map 2 - Section B', 'map2c':'Map 2 - Section C'}
 valid_maps = map_names.keys()
 			
 def getLocalTime(datetime_obj,timezone):
@@ -182,7 +182,7 @@ class mcocProfile:
 			
 		if field in self.mcocProf[user_id]:
 			value = self.mcocProf[user_id][field]
-			await self.bot.say(':white_check_mark:  {} **{}** is updated from **{}** to **{}**.'.format(identifier,field_name,original_value,value))
+			await self.bot.say(':white_check_mark:  {} **{}** has been updated from **{}** to **{}**.'.format(identifier,field_name,original_value,value))
 		else:
 			await self.bot.say('Something went wrong. **{}** not set'.format(field_name))
 			return
@@ -287,13 +287,24 @@ class mcocProfile:
 		except (TooManyMatches,NoMemberFound):
 			return
 		user_id = user.id
+		
 		if map_name not in valid_maps:
 			await self.bot.say('**{}** is not a valid map. Try again with a valid '
 							   'map from the following list: \n- {}'.format(map_name,'\n- '.join(valid_maps)))
 			return	
-		
-		await self.edit_field(user_id, map_name, ctx, path)
-		return
+		whole_maps = ['map5','map3','map2']
+		sections = ['a','b','c']
+		if map_name in whole_maps:
+			paths = path.split(',')
+			i = 0
+			for item in paths:
+				full_map_name = map_name + sections[i]
+				i +=1
+				await self.edit_field(user_id, map_name, ctx, item)
+			return
+		else:		
+			await self.edit_field(user_id, map_name, ctx, path)
+			return
 
 	@commands.command(no_pm=True, pass_context=True)
 	async def path(self, ctx, map_name, *, member_or_bg: str=None):
@@ -353,8 +364,9 @@ class mcocProfile:
 		else:
 			path_assignment = profile[map_name]
 		if "profilechamp" not in profile:
-			if user.avatar_url:
-				em.set_thumbnail(url=user.avatar_url)
+			url = user.avatar_url or user.default_avatar_url
+			url = url.replace("webp","png")
+			em.set_thumbnail(url=url)
 		else:
 			profilechamp = profile["profilechamp"]
 			champ = await ChampConverter(ctx, profilechamp).convert()
@@ -729,8 +741,9 @@ class mcocProfile:
 			em.add_field(name="**Time**", value='Timezone: ' + timezone + '\nLocal Time: ' + localtime + '  ' + clockemoji,inline=False)	
 		
 		if "profilechamp" not in profile or "profilechamp" in hidden_fields:
-			if user.avatar_url:
-				em.set_thumbnail(url=user.avatar_url)
+			url = user.avatar_url or user.default_avatar_url
+			url = url.replace("webp","png")
+			em.set_thumbnail(url=url)
 		else:
 			profilechamp = profile["profilechamp"]
 			champ = await ChampConverter(ctx, profilechamp).convert()
