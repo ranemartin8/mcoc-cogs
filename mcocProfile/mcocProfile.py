@@ -460,9 +460,10 @@ class mcocProfile:
 			localtime = get_time.strftime("%I:%M").lstrip('0') + ' ' + get_time.strftime("%p")
 			clockemoji = clock_emoji(get_time)
 		if "profilechamp" not in profile:
-			if user.avatar_url:
-				em.set_thumbnail(url=user.avatar_url)
-				print(user.avatar_url)
+			url = user.avatar_url or user.default_avatar_url
+#			if user.avatar_url:
+			em.set_thumbnail(url=url)
+			print(url)
 		else:
 			profilechamp = profile["profilechamp"]
 			champ = await ChampConverter(ctx, profilechamp).convert()
