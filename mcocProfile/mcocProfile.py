@@ -314,10 +314,10 @@ class mcocProfile:
 			if field not in self.profSettings[server_id]:
 				await self.bot.say('Something went wrong. **{}** not set'.format(field))
 				return
-			value = self.mcocProf[user_id][field]
+			value = self.profSettings[server_id][field]
 			value = "<" + value + ">"
 			await self.bot.say(":white_check_mark:  The {}'s **{}** setting has been updated "
-							   "from **{}** to **{}**.".format(server_name,field,original_value,value))
+							   "from **<{}>** to **<{}>**.".format(server_name,field,original_value,value))
 			return
 		else:
 			if field in self.profSettings[server_id]:
