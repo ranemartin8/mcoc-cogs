@@ -300,13 +300,11 @@ class mcocProfile:
 		if field not in self.profSettings[server_id]:
 			original_value = "empty"
 		else:
-			orig_value = self.profSettings[server_id][field]
-			original_value = "<" + orig_value + ">"
+			original_value = self.profSettings[server_id][field]
 		if value.lower() != 'delete':
 			valid_img = re.compile(r'[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b(?:[-a-zA-Z0-9@:%_\+.~#?&\/=]*(\.jpg|\.png|\.jpeg|\.gif))')
 			valid_value = valid_img.fullmatch(value)
 			if not valid_value:
-#				value = "<" + value + ">"
 				await self.bot.say('**<{}>** is not a valid Image URL. URL must link to a .jpeg, .png, .gif, or .jpg file. Please try again.'.format(value))	
 				return
 			self.profSettings[server_id].update({field : value})
@@ -315,7 +313,6 @@ class mcocProfile:
 				await self.bot.say('Something went wrong. **{}** not set'.format(field))
 				return
 			value = self.profSettings[server_id][field]
-			value = "<" + value + ">"
 			await self.bot.say(":white_check_mark:  The {}'s **{}** setting has been updated "
 							   "from **<{}>** to **<{}>**.".format(server_name,field,original_value,value))
 			return
@@ -324,7 +321,7 @@ class mcocProfile:
 				del self.profSettings[server_id][field]
 				dataIO.save_json(self.settingsJSON, self.profSettings)
 				await self.bot.say(":white_check_mark:  The {}'s **{}** setting has been updated "
-								   "from **{}** to **{}**.".format(server_name,field,original_value,'deleted'))			
+								   "from **<{}>** to **{}**.".format(server_name,field,original_value,'deleted'))			
 			else: 
 				await self.bot.say('There is no **{}** setting available to delete.'.format(field))
 		
@@ -419,7 +416,10 @@ class mcocProfile:
 					bg_thumb_img = self.profSettings[server_id][bg_thumb]					
 					
 			role = discord.utils.get(server.roles, name=bg.upper())
-			color = role.color or author.color
+			if not role:
+				color = author.color
+			else:
+				color = role.color
 			em = discord.Embed(color=color)
 			if bg_thumb_img:
 				em.set_thumbnail(url=bg_thumb_img)
@@ -427,7 +427,6 @@ class mcocProfile:
 			em.add_field(name="**"+map_names[map_name]+"**", value="\n".join(bg_paths),inline=False)
 			await self.bot.say(embed=em)
 			await self.bot.delete_message(search_msg)
-			
 			if map_img:
 				await self.bot.say('{}'.format(map_img))
 			return
@@ -437,7 +436,15 @@ class mcocProfile:
 			self.mcocProf[user_id] = {}
 			dataIO.save_json(self.profJSON, self.mcocProf)				
 		profile = self.mcocProf[user_id]
-		em = discord.Embed(color=user.color).set_author(name=user.display_name)
+		#server settings
+		em = discord.Embed(color=user.color).set_author(name=user.display_name)		
+		map_img = False	
+		if server_id in self.profSettings or self.profSettings[server_id] == True:
+			map_image_name = map_name
+			if map_image_name == 'aw':
+				map_image_name = 'awmap'
+			if map_image_name in self.profSettings[server_id]:
+				map_img = self.profSettings[server_id][map_image_name]		
 		if map_name not in profile:
 			path_assignment = "No Path Assigned"
 		else:
@@ -453,7 +460,10 @@ class mcocProfile:
 		em.add_field(name="**"+map_names[map_name]+"**", value=path_assignment,inline=False)
 		await self.bot.say(embed=em)
 		await self.bot.delete_message(search_msg)
+		if map_img:
+			await self.bot.say('{}'.format(map_img))
 		return
+		
 
 	@commands.command(no_pm=True, pass_context=True)
 	async def time(self, ctx, *, member_bg: str=None):
@@ -520,11 +530,11 @@ class mcocProfile:
 					localtime = 'N/A'
 				bg_times.append(name_time[0] + ':  **' + localtime + '**')
 			role = discord.utils.get(server.roles, name=bg.upper())
-			color = role.color or author.color
-#			if not role:
-#				color = author.color
-#			else:
-#				color = role.color
+#			color = role.color or author.color
+			if not role:
+				color = author.color
+			else:
+				color = role.color
 			em = discord.Embed(color=color)
 			em.set_author(name=bg)					
 			em.add_field(name="**:alarm_clock:   Local Times**", value="\n".join(bg_times),inline=False)
