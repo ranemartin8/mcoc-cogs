@@ -729,16 +729,17 @@ class mcocProfile:
 		"""
 		Set your Alliance Quest team.
 
-		DEFAULT ATTR: 4\* r5 Sig 99
+		DEFAULT ATTR: 4* r5 Sig 99
 
 		EXAMPLE:
-		`r4s20yj 5*r2s40ironman gr`
+		r4s20yj 5*r2s40ironman gr
 		=
-		4\* 4/40 sig 20 Yellowjacket
-		5\* 2/25 sig 40 Iron Man
-		4\* 5/50 sig 99 Ghost Rider
+		4* 4/40 sig 20 Yellowjacket
+		5* 2/25 sig 40 Iron Man
+		4* 5/50 sig 99 Ghost Rider
 
 		"""	
+		user_id = ctx.message.author.id
 		try:
 			champs = await ChampConverterMult(ctx, champions).convert()
 			await self.hook_update(user_id, 'aq', champs, ctx.message)	
