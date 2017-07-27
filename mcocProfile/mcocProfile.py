@@ -20,8 +20,8 @@ valid_fields = set(fields_list)
 
 valid_int = {'1','2','3','4','5'}
 valid_stop = {'stop','end','cancel'}
-achievements_set = {'rol','lol','RTL','100%act4','legend'}
-achievements_dict = {'rol':'Realm of Legends','lol':'Labyrinth of Legends','rtl':'Road to the Labyrinth','100%act4':'100% Act 4','legend':'**Legend**'}
+achievements_set = {'rol','lol','rttl','100%act4','legend','uncollected'}
+achievements_dict = {'rol':'Realm of Legends','lol':'Labyrinth of Legends','rttl':'Road to the Labyrinth','100%act4':'100% Act 4','legend':'**Legend**','uncollected':'The Uncollected'}
 bg_set = {'bg1','bg2','bg3'}
 remote_data_basepath = 'https://raw.githubusercontent.com/JasonJW/mcoc-cogs/master/mcoc/data/'
 
