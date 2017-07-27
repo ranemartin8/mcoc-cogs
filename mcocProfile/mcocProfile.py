@@ -13,7 +13,8 @@ from .gsheeter import MemberFinder
 import re
 import collections
 
-field_names = {'summonerlevel':'Summoner Level','herorating':'Base Hero Rating','timezone':'Timezone','gamename':'In-Game Name','aq':'Alliance Quest','awd':'AW Defense','awo':'AW Offense','alliance':'Alliance','bg':'Battlegroup','achievements':'Achievements','profilechamp':'Profile Champion','map5a':'Map5 - A Path', 'map5b':'Map 5 - B Path', 'map5c':'Map 5 - C Path', 'aw':'Alliance War Path', 'map3a':'Map 3 - A Path', 'map3b':'Map 3 - B Path', 'map3c':'Map 3 - C Path', 'map2a':'Map 2 - A Path', 'map2b':'Map 2 - B Path', 'map2c':'Map 2 - C Path'}
+field_names = {'summonerlevel':'Summoner Level','herorating':'Base Hero Rating','timezone':'Timezone','gamename':'In-Game Name','aq':'Alliance Quest','awd':'AW Defense','awo':'AW Offense','alliance':'Alliance','bg':'Battlegroup','achievements':'Achievements','profilechamp':'Profile Champion'}
+map_fields = {'map5a':'Map 5 - A Path', 'map5b':'Map 5 - B Path', 'map5c':'Map 5 - C Path', 'aw':'Alliance War Path', 'map3a':'Map 3 - A Path', 'map3b':'Map 3 - B Path', 'map3c':'Map 3 - C Path', 'map2a':'Map 2 - A Path', 'map2b':'Map 2 - B Path', 'map2c':'Map 2 - C Path'}
 hook_fields = {'awo','awd','aq'}
 fields_list = field_names.keys()
 valid_fields = set(fields_list)
@@ -179,10 +180,12 @@ class mcocProfile:
 			original_value = self.mcocProf[user_id][field]
 		self.mcocProf[user_id].update({field : value})
 		dataIO.save_json(self.profJSON, self.mcocProf)
-		if field not in field_names:
-			field_name = field
-		else:
+		if field in field_names:
 			field_name = field_names[field]
+        elif field in map_fields:
+            field_name = map_fields[field]
+		else:
+            field_name = field
 			
 		if field in self.mcocProf[user_id]:
 			value = self.mcocProf[user_id][field]
@@ -280,6 +283,7 @@ class mcocProfile:
 	async def settings(self, ctx, field : str, *, value : str):
 		"""
 		Update guild settings for Summoner Profile commands.
+        Currently, all the fields are for images, so <value> must be a valid image url (.jpeg, .png, .gif, .jpg)
 		
 		Arg Options: (*Required)
 		[field]* = map5a, map5b, map5c, awmap, bg1_thumbnail, bg2_thumbnail, bg3_thumbnail
