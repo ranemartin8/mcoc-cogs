@@ -724,15 +724,26 @@ class mcocProfile:
 			await self.bot.say('AW Offense team not set. Please try again.')
 			return
 
-	@mcoc_profile.command(no_pm=True, pass_context=True)
-	async def aq(self, ctx, *, champions):
+	@mcoc_profile.command(no_pm=True, pass_context=True,aliases=['aq',])
+	async def quest(self, ctx, *, champions):
 		"""
-		Set your Alliance Quest team."""	
+		Set your Alliance Quest team.
+        
+        DEFAULT ATTR: 4\* r5 Sig 99
+        
+        EXAMPLE:
+        `r4s20yj 5*r2s40ironman gr`
+        =
+        4\* 4/40 sig 20 Yellowjacket
+        5\* 2/25 sig 40 Iron Man
+        4\* 5/50 sig 99 Ghost Rider
+        
+        """	
 		try:
 			champs = await ChampConverterMult(ctx, champions).convert()
 			await self.hook_update(user_id, 'aq', champs, ctx.message)	
-		except:
-			await self.bot.say('Alliance Quest team not set. Please try again.')
+        except (AmbiguousArgError,commands.BadArgument) as e:
+			await self.bot.say(e + '\nAlliance Quest team not set. Please try again.')
 			return
 
 
