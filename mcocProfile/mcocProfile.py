@@ -182,10 +182,10 @@ class mcocProfile:
 		dataIO.save_json(self.profJSON, self.mcocProf)
 		if field in field_names:
 			field_name = field_names[field]
-        elif field in map_fields:
-            field_name = map_fields[field]
+		elif field in map_fields:
+			field_name = map_fields[field]
 		else:
-            field_name = field
+			field_name = field
 			
 		if field in self.mcocProf[user_id]:
 			value = self.mcocProf[user_id][field]
@@ -281,9 +281,9 @@ class mcocProfile:
 	@commands.command(no_pm=True, pass_context=True,hidden=True)
 	@checks.mod_or_permissions(manage_roles=True)
 	async def settings(self, ctx, field : str, *, value : str):
-		"""
+		"""    
 		Update guild settings for Summoner Profile commands.
-        Currently, all the fields are for images, so <value> must be a valid image url (.jpeg, .png, .gif, .jpg)
+		Currently, all the fields are for images, so <value> must be a valid image url (.jpeg, .png, .gif, .jpg)
 		
 		Arg Options: (*Required)
 		[field]* = map5a, map5b, map5c, awmap, bg1_thumbnail, bg2_thumbnail, bg3_thumbnail
@@ -728,23 +728,23 @@ class mcocProfile:
 	async def quest(self, ctx, *, champions):
 		"""
 		Set your Alliance Quest team.
-        
-        DEFAULT ATTR: 4\* r5 Sig 99
-        
-        EXAMPLE:
-        `r4s20yj 5*r2s40ironman gr`
-        =
-        4\* 4/40 sig 20 Yellowjacket
-        5\* 2/25 sig 40 Iron Man
-        4\* 5/50 sig 99 Ghost Rider
-        
-        """	
+
+		DEFAULT ATTR: 4\* r5 Sig 99
+
+		EXAMPLE:
+		`r4s20yj 5*r2s40ironman gr`
+		=
+		4\* 4/40 sig 20 Yellowjacket
+		5\* 2/25 sig 40 Iron Man
+		4\* 5/50 sig 99 Ghost Rider
+
+		"""	
 		try:
 			champs = await ChampConverterMult(ctx, champions).convert()
 			await self.hook_update(user_id, 'aq', champs, ctx.message)	
-        except (AmbiguousArgError,commands.BadArgument) as e:
+		except (AmbiguousArgError,commands.BadArgument) as e:
 			await self.bot.say(e + '\nAlliance Quest team not set. Please try again.')
-			return
+		return
 
 
 	@commands.command(no_pm=True, pass_context=True)
