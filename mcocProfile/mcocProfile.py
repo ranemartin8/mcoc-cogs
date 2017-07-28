@@ -703,7 +703,21 @@ class mcocProfile:
 	@mcoc_profile.command(no_pm=True, pass_context=True,aliases=['awd',])
 	async def defense(self, ctx, *, champions):
 		"""
-		Set your Alliance War Defense team."""			
+		Set your Alliance War Defense team. 
+		You can either swap out 1 champion or update all 5. 
+		
+		DEFAULT ATTR: 4* r5 s99
+
+		EXAMPLE:
+		r4s0yj 5*s20cap gp r3s1beast 4*s47ssm
+		=
+		4* 5/50 sig 0 Yellowjacket
+		5* 3/45 sig 20 Captain America
+		4* 5/50 sig 99 Gwenpool
+		4* 3/30 sig 1 Beast
+		4* 5/50 sig 47 Spider-Man (Symbiote)
+
+		"""	
 		user_id = ctx.message.author.id
 		try:
 			champs = await ChampConverterMult(ctx, champions).convert()
@@ -715,7 +729,18 @@ class mcocProfile:
 	@mcoc_profile.command(no_pm=True, pass_context=True,aliases=['awo',])
 	async def offense(self, ctx, *, champions):
 		"""
-		Set your Alliance War Offense team."""	
+		Set your Alliance War Offense team.
+
+		DEFAULT ATTR: 4* r5 s99
+
+		EXAMPLE:
+		r4s20yj 5*r2s40ironman gr
+		=
+		4* 4/40 sig 20 Yellowjacket
+		5* 2/25 sig 40 Iron Man
+		4* 5/50 sig 99 Ghost Rider
+
+		"""	
 		user_id = ctx.message.author.id
 		try:
 			champs = await ChampConverterMult(ctx, champions).convert()
@@ -729,7 +754,7 @@ class mcocProfile:
 		"""
 		Set your Alliance Quest team.
 
-		DEFAULT ATTR: 4* r5 Sig 99
+		DEFAULT ATTR: 4* r5 s99
 
 		EXAMPLE:
 		r4s20yj 5*r2s40ironman gr
@@ -743,8 +768,8 @@ class mcocProfile:
 		try:
 			champs = await ChampConverterMult(ctx, champions).convert()
 			await self.hook_update(user_id, 'aq', champs, ctx.message)	
-		except (AmbiguousArgError,commands.BadArgument) as e:
-			await self.bot.say(e + '\nAlliance Quest team not set. Please try again.')
+		except:
+			await self.bot.say('Alliance Quest team not set. Please try again.')
 		return
 
 
