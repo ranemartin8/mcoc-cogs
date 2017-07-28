@@ -16,7 +16,7 @@ import collections
 field_names = {'summonerlevel':'Summoner Level','herorating':'Base Hero Rating','timezone':'Timezone','gamename':'In-Game Name','aq':'Alliance Quest','awd':'AW Defense','awo':'AW Offense','alliance':'Alliance','bg':'Battlegroup','achievements':'Achievements','profilechamp':'Profile Champion'}
 map_fields = {'map5a':'Map 5 - A Path', 'map5b':'Map 5 - B Path', 'map5c':'Map 5 - C Path', 'aw':'Alliance War Path', 'map3a':'Map 3 - A Path', 'map3b':'Map 3 - B Path', 'map3c':'Map 3 - C Path', 'map2a':'Map 2 - A Path', 'map2b':'Map 2 - B Path', 'map2c':'Map 2 - C Path'}
 hook_fields = {'awo','awd','aq'}
-fields_list = field_names.keys()
+fields_list = field_names.keys().remove('bg').remove('achievements')
 valid_fields = set(fields_list)
 
 valid_int = {'1','2','3','4','5'}
@@ -67,8 +67,6 @@ class mcocProfile:
 		self.mcocProf = dataIO.load_json(self.profJSON)
 		self.hookPath = "data/hook/users/{}"
 		self.hookJSON = "data/hook/users/{}/champs.json"
-#		self.commandsJSON = "data/customcom/commands.json"
-#		self.customCommands = dataIO.load_json(self.commandsJSON)
 		self.settingsJSON = "data/mcocProfile/settings.json"
 		self.profSettings = dataIO.load_json(self.settingsJSON)
 		
@@ -258,11 +256,11 @@ class mcocProfile:
 			await self.bot.say(':white_check_mark:  Done!\n{} updated **{}** team:\n{}'.format(identifier,team_name,'\n'.join(champ_list)))		
 
 	
-	@commands.command(no_pm=True, pass_context=True,hidden=True)
+	@commands.command(no_pm=True, pass_context=True)
 	@checks.mod_or_permissions(manage_roles=True)
 	async def edit(self, ctx, member : str, field : str, *, value : str):
 		"""
-		Update a field on the Summoner Profile of a specific member.
+		Officers ONLY: Update a field on another member's Summoner Profile.
 		"""
 		user = await MemberFinder(ctx, member).convert()
 		user_id = user.id
@@ -854,7 +852,7 @@ class mcocProfile:
 					achievements_list.append(achievements_dict[achievement])
 				em.add_field(name="**"+field_names["achievements"]+"**", value=', '.join(achievements_list),inline=False)
 				if 'legend' in achievements:
-					em.set_field_at(0,name="**Summoner Profile**",value='<:legend:340360464162619392>   '+em_name,inline=False)
+					em.set_field_at(0,name="**Summoner Profile**",value='<:legend:340360464162619392>  '+em_name,inline=False)
 		if "bg" in hidden_fields:
 			pass
 		else:
