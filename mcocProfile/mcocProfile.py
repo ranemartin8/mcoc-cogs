@@ -21,8 +21,9 @@ valid_fields = set(fields_list)
 
 valid_int = {'1','2','3','4','5'}
 valid_stop = {'stop','end','cancel'}
-achievements_set = {'rol','lol','rttl','100%act4','legend','uncollected'}
-achievements_dict = {'rol':'Realm of Legends','lol':'Labyrinth of Legends','rttl':'Road to the Labyrinth','100%act4':'100% Act 4','legend':'**Legend**','uncollected':'The Uncollected'}
+achievements_set = {'legend','uncollected','lol','rol','rttl','100%act4'}
+achievements_dict = {'legend':'**Legend**','uncollected':'The Uncollected','lol':'Labyrinth of Legends','rol':'Realm of Legends','rttl':'Road to the Labyrinth','100%act4':'100% Act 4'}
+#<:legend:340360464162619392>
 bg_set = {'bg1','bg2','bg3'}
 remote_data_basepath = 'https://raw.githubusercontent.com/JasonJW/mcoc-cogs/master/mcoc/data/'
 
@@ -805,8 +806,10 @@ class mcocProfile:
 		
 		if "gamename" not in profile or "gamename" in hidden_fields:
 			em.add_field(name="**Summoner Profile**", value=user.display_name,inline=False)
+			em_name = user.display_name
 		else:
 			gamename = profile["gamename"]
+			em_name = gamename
 			em.add_field(name="**Summoner Profile**", value=gamename,inline=False)
 			
 		if "alliance" not in profile or "alliance" in hidden_fields:
@@ -850,7 +853,8 @@ class mcocProfile:
 				for achievement in achievements:
 					achievements_list.append(achievements_dict[achievement])
 				em.add_field(name="**"+field_names["achievements"]+"**", value=', '.join(achievements_list),inline=False)
-	
+				if 'legend' in achievements:
+					em.set_field_at(0,name="**Summoner Profile**",value='<:legend:340360464162619392>   '+em_name,inline=False)
 		if "bg" in hidden_fields:
 			pass
 		else:
