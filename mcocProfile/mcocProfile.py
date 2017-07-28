@@ -30,7 +30,7 @@ achievements_dict = {'legend':'**Legend**','uncollected':'The Uncollected','lol'
 bg_set = {'bg1','bg2','bg3'}
 remote_data_basepath = 'https://raw.githubusercontent.com/JasonJW/mcoc-cogs/master/mcoc/data/'
 
-map_names = {'map5a':'Map 5 - Section A', 'map5b':'Map 5 - Section B', 'map5c':'Map 5 - Section C', 'aw':'Alliance War', 'map3a':'Map 3 - Section A', 'map3b':'Map 3 - Section B', 'map3c':'Map 3 - Section C', 'map2a':'Map 2 - Section A', 'map2b':'Map 2 - Section B', 'map2c':'Map 2 - Section C'}
+map_names = {'map5a':'<:aq:340367985178836993>   Map 5 - Section A', '<:aq:340367985178836993>   map5b':'Map 5 - Section B', '<:aq:340367985178836993>   map5c':'Map 5 - Section C', 'aw':'<:aw:340368013112901633>   Alliance War', 'map3a':'Map 3 - Section A', 'map3b':'Map 3 - Section B', 'map3c':'Map 3 - Section C', 'map2a':'Map 2 - Section A', 'map2b':'Map 2 - Section B', 'map2c':'Map 2 - Section C'}
 valid_maps = map_names.keys()
 			
 def getLocalTime(datetime_obj,timezone):
