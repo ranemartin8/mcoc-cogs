@@ -16,7 +16,9 @@ import collections
 field_names = {'summonerlevel':'Summoner Level','herorating':'Base Hero Rating','timezone':'Timezone','gamename':'In-Game Name','aq':'Alliance Quest','awd':'AW Defense','awo':'AW Offense','alliance':'Alliance','bg':'Battlegroup','achievements':'Achievements','profilechamp':'Profile Champion'}
 map_fields = {'map5a':'Map 5 - A Path', 'map5b':'Map 5 - B Path', 'map5c':'Map 5 - C Path', 'aw':'Alliance War Path', 'map3a':'Map 3 - A Path', 'map3b':'Map 3 - B Path', 'map3c':'Map 3 - C Path', 'map2a':'Map 2 - A Path', 'map2b':'Map 2 - B Path', 'map2c':'Map 2 - C Path'}
 hook_fields = {'awo','awd','aq'}
-fields_list = field_names.keys().remove('bg').remove('achievements')
+field_n = del field_names['bg']
+field_n = del field_n['achievements']  
+fields_list = field_n.keys()
 valid_fields = set(fields_list)
 
 valid_int = {'1','2','3','4','5'}
