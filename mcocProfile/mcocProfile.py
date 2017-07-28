@@ -9,7 +9,7 @@ from geopy.geocoders import Nominatim
 from datetime import tzinfo, timedelta, datetime
 import pytz
 from .mcoc import ChampConverter, ChampConverterMult, QuietUserError
-from .gsheeter import MemberFinder
+from .gsheeter import MemberFinder, TooManyMatches, NoMemberFound 
 import re
 import collections
 
