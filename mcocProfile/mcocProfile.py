@@ -453,7 +453,7 @@ class mcocProfile:
 			if bg_thumb_img:
 				em.set_thumbnail(url=bg_thumb_img)
 			map_type = 'aq'
-			if map_name == 'aw'
+			if map_name == 'aw':
 				map_type = 'aw'
 			em.set_author(name=bg,icon_url=emoji_urls[map_type])					
 			em.add_field(name="**"+map_names[map_name]+"**", value="\n".join(bg_paths),inline=False)
