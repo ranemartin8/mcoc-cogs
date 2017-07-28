@@ -30,8 +30,31 @@ achievements_dict = {'legend':'**Legend**','uncollected':'The Uncollected','lol'
 bg_set = {'bg1','bg2','bg3'}
 remote_data_basepath = 'https://raw.githubusercontent.com/JasonJW/mcoc-cogs/master/mcoc/data/'
 
-map_names = {'map5a':'<:aq:340367985178836993>   Map 5 - Section A', '<:aq:340367985178836993>   map5b':'Map 5 - Section B', '<:aq:340367985178836993>   map5c':'Map 5 - Section C', 'aw':'<:aw:340368013112901633>   Alliance War', 'map3a':'Map 3 - Section A', 'map3b':'Map 3 - Section B', 'map3c':'Map 3 - Section C', 'map2a':'Map 2 - Section A', 'map2b':'Map 2 - Section B', 'map2c':'Map 2 - Section C'}
+map_names = {'map5a':'Map 5 - Section A', 'map5b':'Map 5 - Section B', 'map5c':'Map 5 - Section C', 'aw':'Alliance War', 'map3a':'Map 3 - Section A', 'map3b':'Map 3 - Section B', 'map3c':'Map 3 - Section C', 'map2a':'Map 2 - Section A', 'map2b':'Map 2 - Section B', 'map2c':'Map 2 - Section C'}
 valid_maps = map_names.keys()
+
+emoji_urls = {
+	"legend":"https://discordapp.com/api/emojis/340360464162619392.png",
+	"aq":"https://discordapp.com/api/emojis/340367985178836993.png",
+	"aw":"https://discordapp.com/api/emojis/340368013112901633.png",
+	"boss":"https://discordapp.com/api/emojis/340371184824614912.png",
+	"c_star_awake":"https://discordapp.com/api/emojis/340371185021747203.png",
+	"c_star":"https://discordapp.com/api/emojis/340371185449697280.png",
+	"circlecheck":"https://discordapp.com/api/emojis/340371185730846720.png",
+	"energy":"https://discordapp.com/api/emojis/340371185776721921.png",
+	"gold":"https://discordapp.com/api/emojis/340371186024185859.png",
+	"help_button":"https://discordapp.com/api/emojis/340371186720571393.png",
+	"question":"https://discordapp.com/api/emojis/340371187081150465.png",
+	"kabam":"https://discordapp.com/api/emojis/340371187253379082.png",
+	"quest":"https://discordapp.com/api/emojis/340371187379077120.png",
+	"loyalty":"https://discordapp.com/api/emojis/340371187911884801.png",
+	"glory":"https://discordapp.com/api/emojis/340371187987120129.png",
+	"book_mark":"https://discordapp.com/api/emojis/340371701911126017.png",
+	"warning_circle":"https://discordapp.com/api/emojis/340371702225567744.png",
+	"unknown":"https://discordapp.com/api/emojis/340371702317842433.png",
+	"max_star":"https://discordapp.com/api/emojis/340371702464905216.png",
+	"vs":"https://discordapp.com/api/emojis/340371703182131200.png"
+}
 			
 def getLocalTime(datetime_obj,timezone):
 	utcmoment = datetime_obj.replace(tzinfo=pytz.utc)
@@ -429,7 +452,10 @@ class mcocProfile:
 			em = discord.Embed(color=color)
 			if bg_thumb_img:
 				em.set_thumbnail(url=bg_thumb_img)
-			em.set_author(name=bg)					
+			map_type = 'aq'
+			if map_name == 'aw'
+				map_type = 'aw'
+			em.set_author(name=bg,icon_url=emoji_urls[map_type])					
 			em.add_field(name="**"+map_names[map_name]+"**", value="\n".join(bg_paths),inline=False)
 			await self.bot.say(embed=em)
 			await self.bot.delete_message(search_msg)
