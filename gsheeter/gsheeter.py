@@ -175,7 +175,7 @@ class gsheet_cog:
 		flags = None
 	# If modifying these scopes, delete your previously saved credentialsat ~/.credentials/sheets.googleapis.com-python-quickstart.json
 	SCOPES = 'https://www.googleapis.com/auth/spreadsheets'
-	CLIENT_SECRET_FILE = 'client_secret.json'
+	CLIENT_SECRET_FILE = 'data/gsheeter/client_secret.json'
 	APPLICATION_NAME = 'Google Sheets API Python Quickstart'
 
 	def get_credentials(self):
