@@ -258,7 +258,7 @@ class gsheet_cog:
 #		print(champs)
 ##		await self.bot.say("I can do stuff!")			
 		
-	@commands.command(pass_context=True,aliases=['loadsheet',], no_pm=True, enabled=False)
+	@commands.command(pass_context=True,aliases=['loadsheet',], no_pm=True, enabled=True)
 	async def savesheet(self, ctx, header_row: str, data_range: str,filename: str,sheet_id: str, groupRowsBy: str=None):
 		"""Save a Google Sheet as a JSON file.
 		Requires a PUBLISHED Google Sheet with Link Sharing turned ON and set to "Anybody with link can edit". 
