@@ -47,7 +47,7 @@ class mcocSeatin:
 	@commands.command(pass_context=True)
 	async def seatin(self, ctx, *, champ: ChampConverter):
 		"""
-		Get Seatin Rank and Info for a champion."""
+		Get Seatin Rank and Info for a champion. """
 		search_msg = await self.bot.say('Searching...')
 		hookid = champ.hookid
 		
