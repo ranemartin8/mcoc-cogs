@@ -1,5 +1,6 @@
 {
     "abomination" : {
+        "anchor" : "y",
         "aq_utility" : "",
         "d_awakened" : "Yes",
         "d_boss_candidate" : "",
@@ -16,6 +17,8 @@
         "utility" : "Poison Immunity"
     },
     "agentvenom" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
         "d_rating" : "3/4",
@@ -27,9 +30,11 @@
         "o_awakened" : "No",
         "o_rating" : "3/5",
         "o_tier" : "Amazing",
+        "t4cc_candidate" : "",
         "utility" : "Shrug Off Debuffs (*70%)"
     },
     "angela" : {
+        "anchor" : "y",
         "aq_utility" : "Sustainable",
         "d_awakened" : "N/A",
         "d_boss_candidate" : "",
@@ -42,20 +47,28 @@
         "o_awakened" : "No",
         "o_rating" : "4/5",
         "o_tier" : "Demi-God",
+        "t4cc_candidate" : "",
         "utility" : ""
     },
     "antman" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
+        "d_boss_candidate" : "",
         "d_rating" : "2/4",
         "d_tier" : "Good",
         "hookid" : "antman",
         "mattkraftid" : "antman",
         "name" : "Ant-Man",
+        "note" : "",
         "o_awakened" : "No",
         "o_rating" : "1/5",
-        "o_tier" : "Meh"
+        "o_tier" : "Meh",
+        "t4cc_candidate" : "",
+        "utility" : ""
     },
     "archangel" : {
+        "anchor" : "y",
         "aq_utility" : "",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
@@ -72,6 +85,8 @@
         "utility" : "Heal Block, Ability Accuracy Reduction"
     },
     "beast" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
         "d_rating" : "1/4",
@@ -83,9 +98,11 @@
         "o_awakened" : "Yes",
         "o_rating" : "3/5",
         "o_tier" : "Amazing",
+        "t4cc_candidate" : "",
         "utility" : "Regeneration"
     },
     "blackbolt" : {
+        "anchor" : "y",
         "aq_utility" : "Poison Lanes",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
@@ -98,20 +115,28 @@
         "o_awakened" : "No",
         "o_rating" : "3/5",
         "o_tier" : "Amazing",
+        "t4cc_candidate" : "",
         "utility" : "Poison Immunity, Stun"
     },
     "blackpanther" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
+        "d_boss_candidate" : "",
         "d_rating" : "1/4",
         "d_tier" : "Meh",
         "hookid" : "blackpanther",
         "mattkraftid" : "blackpanther",
         "name" : "Black Panther",
+        "note" : "",
         "o_awakened" : "Yes",
         "o_rating" : "3/5",
-        "o_tier" : "Amazing"
+        "o_tier" : "Amazing",
+        "t4cc_candidate" : "",
+        "utility" : ""
     },
     "blackpanthercivilwar" : {
+        "anchor" : "y",
         "aq_utility" : "",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
@@ -128,6 +153,8 @@
         "utility" : "Stun Reflect"
     },
     "blackwidow" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
         "d_rating" : "2/4",
@@ -139,9 +166,11 @@
         "o_awakened" : "Yes",
         "o_rating" : "4/5",
         "o_tier" : "Demi-God",
+        "t4cc_candidate" : "",
         "utility" : "Ability Accuracy Reduction"
     },
     "brothervoodoo" : {
+        "anchor" : "y",
         "aq_utility" : "Sustainable, Power Control",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
@@ -158,6 +187,8 @@
         "utility" : "Regeneration, Ability Accuracy Reduction, Nullify"
     },
     "cable" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "Yes",
         "d_boss_candidate" : "",
         "d_rating" : "3/4",
@@ -169,9 +200,11 @@
         "o_awakened" : "No",
         "o_rating" : "4/5",
         "o_tier" : "Demi-God",
+        "t4cc_candidate" : "",
         "utility" : "Regeneration, Ability Accuracy Reduction"
     },
     "captainamerica" : {
+        "anchor" : "y",
         "aq_utility" : "Sustainable",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
@@ -184,9 +217,11 @@
         "o_awakened" : "No",
         "o_rating" : "4/5",
         "o_tier" : "Demi-God",
+        "t4cc_candidate" : "",
         "utility" : "Increased Block"
     },
     "captainamericawwii" : {
+        "anchor" : "y",
         "aq_utility" : "Sustainable",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
@@ -203,6 +238,7 @@
         "utility" : "Increased Block"
     },
     "captainmarvel" : {
+        "anchor" : "y",
         "aq_utility" : "Poison Lanes",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
@@ -215,20 +251,29 @@
         "o_awakened" : "Yes",
         "o_rating" : "3/5",
         "o_tier" : "Amazing",
+        "t4cc_candidate" : "",
         "utility" : "Poison Immunity"
     },
     "carnage" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
+        "d_boss_candidate" : "",
         "d_rating" : "1/4",
         "d_tier" : "Meh",
         "hookid" : "carnage",
         "mattkraftid" : "carnage",
         "name" : "Carnage",
+        "note" : "",
         "o_awakened" : "Yes",
         "o_rating" : "2/5",
-        "o_tier" : "Good"
+        "o_tier" : "Good",
+        "t4cc_candidate" : "",
+        "utility" : ""
     },
     "civilwarrior" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
         "d_rating" : "2/4",
@@ -240,9 +285,12 @@
         "o_awakened" : "No",
         "o_rating" : "2/5",
         "o_tier" : "Good",
+        "t4cc_candidate" : "",
         "utility" : "Heal Block, Power Drain"
     },
     "colossus" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "Yes",
         "d_boss_candidate" : "",
         "d_rating" : "2/4",
@@ -254,9 +302,11 @@
         "o_awakened" : "No",
         "o_rating" : "1/5",
         "o_tier" : "Meh",
+        "t4cc_candidate" : "",
         "utility" : "Bleed Immunity"
     },
     "crossbones" : {
+        "anchor" : "y",
         "aq_utility" : "",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
@@ -273,28 +323,41 @@
         "utility" : "Ability Accuracy Reduction, Shrug Off Debuffs (*25%)"
     },
     "cyclops" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
+        "d_boss_candidate" : "",
         "d_rating" : "2/4",
         "d_tier" : "Good",
         "hookid" : "cyclops",
         "mattkraftid" : "cyclops",
         "name" : "Cyclops (New Xavier School)",
+        "note" : "",
         "o_awakened" : "Yes",
         "o_rating" : "3/5",
-        "o_tier" : "Amazing"
+        "o_tier" : "Amazing",
+        "t4cc_candidate" : "",
+        "utility" : ""
     },
     "cyclops90s" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
+        "d_boss_candidate" : "",
         "d_rating" : "2/4",
         "d_tier" : "Good",
         "hookid" : "cyclops90s",
         "mattkraftid" : "cyclops90s",
         "name" : "Cyclops (Blue Team)",
+        "note" : "",
         "o_awakened" : "Yes",
         "o_rating" : "3/5",
-        "o_tier" : "Amazing"
+        "o_tier" : "Amazing",
+        "t4cc_candidate" : "",
+        "utility" : ""
     },
     "daredevil" : {
+        "anchor" : "y",
         "aq_utility" : "Unblockable SP",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
@@ -311,6 +374,8 @@
         "utility" : "Auto Projectile Evade, Increased Block, Stun"
     },
     "daredevilnetflix" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
         "d_rating" : "1/4",
@@ -322,9 +387,12 @@
         "o_awakened" : "No",
         "o_rating" : "2/5",
         "o_tier" : "Good",
+        "t4cc_candidate" : "",
         "utility" : "Increased Block"
     },
     "deadpool" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
         "d_rating" : "1/4",
@@ -336,31 +404,45 @@
         "o_awakened" : "Yes",
         "o_rating" : "4/5",
         "o_tier" : "Demi-God",
+        "t4cc_candidate" : "",
         "utility" : "Regeneration"
     },
     "deadpoolxforce" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
+        "d_boss_candidate" : "",
         "d_rating" : "2/4",
         "d_tier" : "Good",
         "hookid" : "deadpoolxforce",
         "mattkraftid" : "deadpoolxforce",
         "name" : "Deadpool (X-Force)",
+        "note" : "",
         "o_awakened" : "Yes",
         "o_rating" : "2/5",
-        "o_tier" : "Good"
+        "o_tier" : "Good",
+        "t4cc_candidate" : "",
+        "utility" : ""
     },
     "doctoroctopus" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "N/A",
+        "d_boss_candidate" : "",
         "d_rating" : "N/A",
         "d_tier" : "Unknown",
         "hookid" : "doctoroctopus",
         "mattkraftid" : "doctoroctopus",
         "name" : "Doctor Octopus",
+        "note" : "",
         "o_awakened" : "N/A",
         "o_rating" : "N/A",
-        "o_tier" : "Unknown"
+        "o_tier" : "Unknown",
+        "t4cc_candidate" : "",
+        "utility" : ""
     },
     "dormammu" : {
+        "anchor" : "y",
         "aq_utility" : "Poison Lanes, Bleed Lanes, Power Control",
         "d_awakened" : "Yes",
         "d_boss_candidate" : "Yes",
@@ -377,17 +459,24 @@
         "utility" : "Poison Immunity, Bleed Immunity, Regeneration, Power Drain, Power Lock"
     },
     "drax" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
+        "d_boss_candidate" : "",
         "d_rating" : "1/4",
         "d_tier" : "Meh",
         "hookid" : "drax",
         "mattkraftid" : "drax",
         "name" : "Drax",
+        "note" : "",
         "o_awakened" : "No",
         "o_rating" : "4/5",
-        "o_tier" : "Demi-God"
+        "o_tier" : "Demi-God",
+        "t4cc_candidate" : "",
+        "utility" : ""
     },
     "drstrange" : {
+        "anchor" : "y",
         "aq_utility" : "Sustainable",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
@@ -400,9 +489,11 @@
         "o_awakened" : "No",
         "o_rating" : "3/5",
         "o_tier" : "Amazing",
+        "t4cc_candidate" : "",
         "utility" : "Regeneration, Heal Block, Nullify"
     },
     "electro" : {
+        "anchor" : "y",
         "aq_utility" : "",
         "d_awakened" : "Yes",
         "d_boss_candidate" : "",
@@ -419,6 +510,7 @@
         "utility" : ""
     },
     "elektra" : {
+        "anchor" : "y",
         "aq_utility" : "",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
@@ -435,6 +527,8 @@
         "utility" : "Ability Accuracy Reduction"
     },
     "falcon" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
         "d_rating" : "1/4",
@@ -446,9 +540,12 @@
         "o_awakened" : "No",
         "o_rating" : "2/5",
         "o_tier" : "Good",
+        "t4cc_candidate" : "",
         "utility" : "Ability Accuracy Reduction"
     },
     "gambit" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
         "d_rating" : "2/4",
@@ -460,20 +557,28 @@
         "o_awakened" : "No",
         "o_rating" : "3/5",
         "o_tier" : "Amazing",
+        "t4cc_candidate" : "",
         "utility" : "Ability Accuracy Reduction (L2 Debuff)"
     },
     "gamora" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
+        "d_boss_candidate" : "",
         "d_rating" : "1/4",
         "d_tier" : "Meh",
         "hookid" : "gamora",
         "mattkraftid" : "gamora",
         "name" : "Gamora",
+        "note" : "",
         "o_awakened" : "Yes",
         "o_rating" : "3/5",
-        "o_tier" : "Amazing"
+        "o_tier" : "Amazing",
+        "t4cc_candidate" : "",
+        "utility" : ""
     },
     "ghostrider" : {
+        "anchor" : "y",
         "aq_utility" : "Sustainable, Bleed Lanes",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
@@ -490,17 +595,25 @@
         "utility" : "Regeneration, Heal Block, Power Drain, Power Lock"
     },
     "greengoblin" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "N/A",
+        "d_boss_candidate" : "",
         "d_rating" : "N/A",
         "d_tier" : "Unknown",
         "hookid" : "greengoblin",
         "mattkraftid" : "greengoblin",
         "name" : "Green Goblin",
+        "note" : "",
         "o_awakened" : "N/A",
         "o_rating" : "N/A",
-        "o_tier" : "Unknown"
+        "o_tier" : "Unknown",
+        "t4cc_candidate" : "",
+        "utility" : ""
     },
     "groot" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
         "d_rating" : "3/4",
@@ -512,9 +625,11 @@
         "o_awakened" : "No",
         "o_rating" : "1/5",
         "o_tier" : "Meh",
+        "t4cc_candidate" : "",
         "utility" : "Bleed Immunity, Regeneration, Reduced Debuff Duration"
     },
     "grootking" : {
+        "anchor" : "y",
         "aq_utility" : "Sustainable, Bleed Lanes",
         "d_awakened" : "N/A",
         "d_boss_candidate" : "",
@@ -531,6 +646,7 @@
         "utility" : ""
     },
     "guillotine" : {
+        "anchor" : "y",
         "aq_utility" : "",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
@@ -547,6 +663,7 @@
         "utility" : "Regeneration, Heal Reversal"
     },
     "gwenpool" : {
+        "anchor" : "y",
         "aq_utility" : "",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
@@ -563,6 +680,7 @@
         "utility" : "Damage Received Cap, Power Lock, Ability Accuracy Reduction, Stun"
     },
     "hawkeye" : {
+        "anchor" : "y",
         "aq_utility" : "Power Control",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
@@ -575,9 +693,11 @@
         "o_awakened" : "No",
         "o_rating" : "3/5",
         "o_tier" : "Amazing",
+        "t4cc_candidate" : "",
         "utility" : "Power Drain"
     },
     "hood" : {
+        "anchor" : "y",
         "aq_utility" : "",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
@@ -594,17 +714,24 @@
         "utility" : "Regeneration, Ability Accuracy Reduction, Nullify"
     },
     "howardtheduck" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
+        "d_boss_candidate" : "",
         "d_rating" : "2/4",
         "d_tier" : "Good",
         "hookid" : "howardtheduck",
         "mattkraftid" : "howard",
         "name" : "Howard the Duck",
+        "note" : "",
         "o_awakened" : "No",
         "o_rating" : "2/5",
-        "o_tier" : "Good"
+        "o_tier" : "Good",
+        "t4cc_candidate" : "",
+        "utility" : ""
     },
     "hulk" : {
+        "anchor" : "y",
         "aq_utility" : "Poison Lanes",
         "d_awakened" : "Yes",
         "d_boss_candidate" : "",
@@ -621,17 +748,24 @@
         "utility" : "Poison Immunity, Stun"
     },
     "hulkbuster" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
+        "d_boss_candidate" : "",
         "d_rating" : "1/4",
         "d_tier" : "Meh",
         "hookid" : "hulkbuster",
         "mattkraftid" : "hulkbuster",
         "name" : "Hulkbuster",
+        "note" : "",
         "o_awakened" : "No",
         "o_rating" : "1/5",
-        "o_tier" : "Meh"
+        "o_tier" : "Meh",
+        "t4cc_candidate" : "",
+        "utility" : ""
     },
     "hyperion" : {
+        "anchor" : "y",
         "aq_utility" : "Poison Lanes",
         "d_awakened" : "Yes",
         "d_boss_candidate" : "",
@@ -644,9 +778,11 @@
         "o_awakened" : "No",
         "o_rating" : "5/5",
         "o_tier" : "God",
+        "t4cc_candidate" : "",
         "utility" : "Poison Immunity, Stun"
     },
     "iceman" : {
+        "anchor" : "y",
         "aq_utility" : "Poison Lanes, Bleed Lanes, Unblockable SP",
         "d_awakened" : "Yes",
         "d_boss_candidate" : "",
@@ -663,28 +799,42 @@
         "utility" : "Damage Received Cap"
     },
     "ironfist" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
+        "d_boss_candidate" : "",
         "d_rating" : "1/4",
         "d_tier" : "Meh",
         "hookid" : "ironfist",
         "mattkraftid" : "ironfist",
         "name" : "Iron Fist",
+        "note" : "",
         "o_awakened" : "Yes",
         "o_rating" : "3/5",
-        "o_tier" : "Amazing"
+        "o_tier" : "Amazing",
+        "t4cc_candidate" : "",
+        "utility" : ""
     },
     "ironfistwhite" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "N/A",
+        "d_boss_candidate" : "",
         "d_rating" : "N/A",
         "d_tier" : "Unknown",
         "hookid" : "ironfistwhite",
         "mattkraftid" : "ironfistwhite",
         "name" : "Immortal Iron Fist",
+        "note" : "",
         "o_awakened" : "N/A",
         "o_rating" : "N/A",
-        "o_tier" : "Unknown"
+        "o_tier" : "Unknown",
+        "t4cc_candidate" : "",
+        "utility" : ""
     },
     "ironman" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "Yes",
         "d_boss_candidate" : "",
         "d_rating" : "2/4",
@@ -696,9 +846,12 @@
         "o_awakened" : "Yes",
         "o_rating" : "2/5",
         "o_tier" : "Good",
+        "t4cc_candidate" : "",
         "utility" : "Regeneration"
     },
     "ironpatriot" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "Yes",
         "d_boss_candidate" : "",
         "d_rating" : "2/4",
@@ -710,9 +863,12 @@
         "o_awakened" : "No",
         "o_rating" : "1/5",
         "o_tier" : "Meh",
+        "t4cc_candidate" : "",
         "utility" : "Stun"
     },
     "joefixit" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
         "d_rating" : "1/4",
@@ -724,9 +880,11 @@
         "o_awakened" : "No",
         "o_rating" : "1/5",
         "o_tier" : "Meh",
+        "t4cc_candidate" : "",
         "utility" : "Poison Immunity"
     },
     "juggernaut" : {
+        "anchor" : "y",
         "aq_utility" : "",
         "d_awakened" : "Yes",
         "d_boss_candidate" : "Yes",
@@ -743,6 +901,8 @@
         "utility" : ""
     },
     "kamalakhan" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
         "d_rating" : "1/4",
@@ -754,20 +914,28 @@
         "o_awakened" : "No",
         "o_rating" : "1/5",
         "o_tier" : "Meh",
+        "t4cc_candidate" : "",
         "utility" : "Poison Immunity"
     },
     "kang" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
+        "d_boss_candidate" : "",
         "d_rating" : "2/4",
         "d_tier" : "Good",
         "hookid" : "kang",
         "mattkraftid" : "kang",
         "name" : "Kang",
+        "note" : "",
         "o_awakened" : "No",
         "o_rating" : "2/5",
-        "o_tier" : "Good"
+        "o_tier" : "Good",
+        "t4cc_candidate" : "",
+        "utility" : ""
     },
     "karlmordo" : {
+        "anchor" : "y",
         "aq_utility" : "Sustainable",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
@@ -784,6 +952,8 @@
         "utility" : "Regeneration, Stun Immunity"
     },
     "karnak" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
         "d_rating" : "1/4",
@@ -795,9 +965,12 @@
         "o_awakened" : "No",
         "o_rating" : "3/5",
         "o_tier" : "Amazing",
+        "t4cc_candidate" : "",
         "utility" : "Ability Accuracy Reduction, Reduced Debuff Duration"
     },
     "loki" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
         "d_rating" : "1/4",
@@ -809,9 +982,12 @@
         "o_awakened" : "No",
         "o_rating" : "1/5",
         "o_tier" : "Meh",
+        "t4cc_candidate" : "",
         "utility" : "Buff Steal"
     },
     "lukecage" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
         "d_rating" : "2/4",
@@ -823,9 +999,11 @@
         "o_awakened" : "No",
         "o_rating" : "1/5",
         "o_tier" : "Meh",
+        "t4cc_candidate" : "",
         "utility" : "Bleed Immunity, Stun"
     },
     "magik" : {
+        "anchor" : "y",
         "aq_utility" : "Power Control",
         "d_awakened" : "Yes",
         "d_boss_candidate" : "Yes",
@@ -842,6 +1020,8 @@
         "utility" : "Power Drain, Power Lock, Nullify"
     },
     "magneto" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
         "d_rating" : "2/4",
@@ -853,9 +1033,12 @@
         "o_awakened" : "No",
         "o_rating" : "3/5",
         "o_tier" : "Amazing",
+        "t4cc_candidate" : "",
         "utility" : "Damage Received Cap, Heal Block, Ability Accuracy Reduction (Metal Targets Only)"
     },
     "magnetomarvelnow" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
         "d_rating" : "2/4",
@@ -867,9 +1050,12 @@
         "o_awakened" : "No",
         "o_rating" : "2/5",
         "o_tier" : "Good",
+        "t4cc_candidate" : "",
         "utility" : "Damage Received Cap, Heal Block, Ability Accuracy Reduction"
     },
     "moonknight" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
         "d_rating" : "2/4",
@@ -881,9 +1067,11 @@
         "o_awakened" : "Yes",
         "o_rating" : "3/5",
         "o_tier" : "Amazing",
+        "t4cc_candidate" : "",
         "utility" : "Stun"
     },
     "msmarvel" : {
+        "anchor" : "y",
         "aq_utility" : "Poison Lanes",
         "d_awakened" : "N/A",
         "d_boss_candidate" : "",
@@ -896,20 +1084,28 @@
         "o_awakened" : "Yes",
         "o_rating" : "3/5",
         "o_tier" : "Amazing",
+        "t4cc_candidate" : "",
         "utility" : "Poison Immunity"
     },
     "nebula" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
+        "d_boss_candidate" : "",
         "d_rating" : "1/4",
         "d_tier" : "Meh",
         "hookid" : "nebula",
         "mattkraftid" : "nebula",
         "name" : "Nebula",
+        "note" : "",
         "o_awakened" : "No",
         "o_rating" : "3/5",
-        "o_tier" : "Amazing"
+        "o_tier" : "Amazing",
+        "t4cc_candidate" : "",
+        "utility" : ""
     },
     "nightcrawler" : {
+        "anchor" : "y",
         "aq_utility" : "",
         "d_awakened" : "Yes",
         "d_boss_candidate" : "Yes",
@@ -926,6 +1122,7 @@
         "utility" : ""
     },
     "phoenix" : {
+        "anchor" : "y",
         "aq_utility" : "Sustainable",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
@@ -938,9 +1135,11 @@
         "o_awakened" : "No",
         "o_rating" : "3/5",
         "o_tier" : "Amazing",
+        "t4cc_candidate" : "",
         "utility" : ""
     },
     "psylockexforce" : {
+        "anchor" : "y",
         "aq_utility" : "",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
@@ -957,28 +1156,41 @@
         "utility" : "Power Drain, Power Lock, Ability Accuracy Reduction"
     },
     "punisher" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
+        "d_boss_candidate" : "",
         "d_rating" : "1/4",
         "d_tier" : "Meh",
         "hookid" : "punisher",
         "mattkraftid" : "punisher",
         "name" : "Punisher",
+        "note" : "",
         "o_awakened" : "No",
         "o_rating" : "3/5",
-        "o_tier" : "Amazing"
+        "o_tier" : "Amazing",
+        "t4cc_candidate" : "",
+        "utility" : ""
     },
     "punisher2099" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
+        "d_boss_candidate" : "",
         "d_rating" : "1/4",
         "d_tier" : "Meh",
         "hookid" : "punisher2099",
         "mattkraftid" : "punisher2099",
         "name" : "Punisher 2099",
+        "note" : "",
         "o_awakened" : "No",
         "o_rating" : "3/5",
-        "o_tier" : "Amazing"
+        "o_tier" : "Amazing",
+        "t4cc_candidate" : "",
+        "utility" : ""
     },
     "quake" : {
+        "anchor" : "y",
         "aq_utility" : "",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
@@ -995,6 +1207,8 @@
         "utility" : "Increased Block"
     },
     "redhulk" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
         "d_rating" : "1/4",
@@ -1006,9 +1220,11 @@
         "o_awakened" : "No",
         "o_rating" : "2/5",
         "o_tier" : "Good",
+        "t4cc_candidate" : "",
         "utility" : "Poison Immunity"
     },
     "rhino" : {
+        "anchor" : "y",
         "aq_utility" : "",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
@@ -1025,6 +1241,7 @@
         "utility" : ""
     },
     "rocket" : {
+        "anchor" : "y",
         "aq_utility" : "",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
@@ -1041,6 +1258,7 @@
         "utility" : ""
     },
     "rogue" : {
+        "anchor" : "y",
         "aq_utility" : "Sustainable, Power Control",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
@@ -1057,6 +1275,8 @@
         "utility" : "Buff Copy, Reduced Debuff Duration"
     },
     "ronan" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
         "d_rating" : "1/4",
@@ -1068,9 +1288,11 @@
         "o_awakened" : "No",
         "o_rating" : "2/5",
         "o_tier" : "Good",
+        "t4cc_candidate" : "",
         "utility" : "Poison Immunity, Stun"
     },
     "scarletwitch" : {
+        "anchor" : "y",
         "aq_utility" : "Sustainable",
         "d_awakened" : "Yes",
         "d_boss_candidate" : "",
@@ -1083,9 +1305,12 @@
         "o_awakened" : "Yes",
         "o_rating" : "5/5",
         "o_tier" : "God",
+        "t4cc_candidate" : "",
         "utility" : "Regeneration, Power Drain, Power Lock, Nullify, Stun"
     },
     "shehulk" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
         "d_rating" : "1/4",
@@ -1097,20 +1322,28 @@
         "o_awakened" : "No",
         "o_rating" : "1/5",
         "o_tier" : "Meh",
+        "t4cc_candidate" : "",
         "utility" : "Poison Immunity, Stun"
     },
     "spidergwen" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
+        "d_boss_candidate" : "",
         "d_rating" : "1/4",
         "d_tier" : "Meh",
         "hookid" : "spidergwen",
         "mattkraftid" : "spidergwen",
         "name" : "Spider-Gwen",
+        "note" : "",
         "o_awakened" : "Yes",
         "o_rating" : "2/5",
-        "o_tier" : "Good"
+        "o_tier" : "Good",
+        "t4cc_candidate" : "",
+        "utility" : ""
     },
     "spiderman" : {
+        "anchor" : "y",
         "aq_utility" : "",
         "d_awakened" : "Yes",
         "d_boss_candidate" : "Yes",
@@ -1127,50 +1360,75 @@
         "utility" : ""
     },
     "spidermanblack" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "Yes",
+        "d_boss_candidate" : "",
         "d_rating" : "2/4",
         "d_tier" : "Good",
         "hookid" : "spidermanblack",
         "mattkraftid" : "spidermanblack",
         "name" : "Spider-Man (Symbiote)",
+        "note" : "",
         "o_awakened" : "No",
         "o_rating" : "3/5",
-        "o_tier" : "Amazing"
+        "o_tier" : "Amazing",
+        "t4cc_candidate" : "",
+        "utility" : ""
     },
     "spidermanmcu" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
+        "d_boss_candidate" : "",
         "d_rating" : "2/4",
         "d_tier" : "Good",
         "hookid" : "spidermanmcu",
         "mattkraftid" : "spidermanstark",
         "name" : "Spider-Man (Stark Enhanced)",
+        "note" : "",
         "o_awakened" : "No",
         "o_rating" : "5/5",
-        "o_tier" : "God"
+        "o_tier" : "God",
+        "t4cc_candidate" : "",
+        "utility" : ""
     },
     "spidermanmorales" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
+        "d_boss_candidate" : "",
         "d_rating" : "4/4",
         "d_tier" : "God",
         "hookid" : "spidermanmorales",
         "mattkraftid" : "spidermanmorales",
         "name" : "Spider-Man Morales",
+        "note" : "",
         "o_awakened" : "No",
         "o_rating" : "2/5",
-        "o_tier" : "Good"
+        "o_tier" : "Good",
+        "t4cc_candidate" : "",
+        "utility" : ""
     },
     "starlord" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
+        "d_boss_candidate" : "",
         "d_rating" : "1/4",
         "d_tier" : "Meh",
         "hookid" : "starlord",
         "mattkraftid" : "starlord",
         "name" : "Star-Lord",
+        "note" : "",
         "o_awakened" : "Yes",
         "o_rating" : "5/5",
-        "o_tier" : "God"
+        "o_tier" : "God",
+        "t4cc_candidate" : "",
+        "utility" : ""
     },
     "storm" : {
+        "anchor" : "y",
         "aq_utility" : "",
         "d_awakened" : "Yes",
         "d_boss_candidate" : "",
@@ -1187,6 +1445,7 @@
         "utility" : "Stun"
     },
     "superiorironman" : {
+        "anchor" : "y",
         "aq_utility" : "Sustainable",
         "d_awakened" : "Yes",
         "d_boss_candidate" : "",
@@ -1199,20 +1458,28 @@
         "o_awakened" : "Yes",
         "o_rating" : "2/5",
         "o_tier" : "Good",
+        "t4cc_candidate" : "",
         "utility" : "Regeneration"
     },
     "thanos" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "N/A",
+        "d_boss_candidate" : "",
         "d_rating" : "N/A",
         "d_tier" : "Unknown",
         "hookid" : "thanos",
         "mattkraftid" : "thanos",
         "name" : "Thanos",
+        "note" : "",
         "o_awakened" : "N/A",
         "o_rating" : "N/A",
-        "o_tier" : "Unknown"
+        "o_tier" : "Unknown",
+        "t4cc_candidate" : "",
+        "utility" : ""
     },
     "thevision" : {
+        "anchor" : "y",
         "aq_utility" : "Poison Lanes, Bleed Lanes, Power Control",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
@@ -1229,6 +1496,8 @@
         "utility" : "Poison Immunity, Bleed Immunity, Power Drain"
     },
     "thor" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
         "d_rating" : "1/4",
@@ -1240,9 +1509,12 @@
         "o_awakened" : "Yes",
         "o_rating" : "4/5",
         "o_tier" : "Demi-God",
+        "t4cc_candidate" : "",
         "utility" : "Stun"
     },
     "thorjanefoster" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
         "d_rating" : "1/4",
@@ -1254,9 +1526,11 @@
         "o_awakened" : "Yes",
         "o_rating" : "2/5",
         "o_tier" : "Good",
+        "t4cc_candidate" : "",
         "utility" : "Stun"
     },
     "ultron" : {
+        "anchor" : "y",
         "aq_utility" : "Sustainable, Poison Lanes, Bleed Lanes",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
@@ -1273,17 +1547,25 @@
         "utility" : "Poison Immunity, Bleed Immunity, Regeneration, Stun"
     },
     "ultronclassic" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "N/A",
+        "d_boss_candidate" : "",
         "d_rating" : "N/A",
         "d_tier" : "Unknown",
         "hookid" : "ultronclassic",
         "mattkraftid" : "ultron_classic",
         "name" : "Ultron (Classic)",
+        "note" : "",
         "o_awakened" : "N/A",
         "o_rating" : "N/A",
-        "o_tier" : "Unknown"
+        "o_tier" : "Unknown",
+        "t4cc_candidate" : "",
+        "utility" : ""
     },
     "unstoppablecolossus" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "Yes",
         "d_boss_candidate" : "",
         "d_rating" : "3/4",
@@ -1295,9 +1577,12 @@
         "o_awakened" : "Yes",
         "o_rating" : "2/5",
         "o_tier" : "Good",
+        "t4cc_candidate" : "",
         "utility" : "Bleed Immunity"
     },
     "venom" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
         "d_rating" : "2/4",
@@ -1309,9 +1594,12 @@
         "o_awakened" : "Yes",
         "o_rating" : "2/5",
         "o_tier" : "Good",
+        "t4cc_candidate" : "",
         "utility" : "Buff Copy"
     },
     "venompool" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
         "d_rating" : "1/4",
@@ -1323,9 +1611,11 @@
         "o_awakened" : "No",
         "o_rating" : "2/5",
         "o_tier" : "Good",
+        "t4cc_candidate" : "",
         "utility" : "Regeneration, Heal Block"
     },
     "vision" : {
+        "anchor" : "y",
         "aq_utility" : "Poison Lanes, Bleed Lanes, Power Control",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
@@ -1338,31 +1628,46 @@
         "o_awakened" : "Yes",
         "o_rating" : "4/5",
         "o_tier" : "Demi-God",
+        "t4cc_candidate" : "",
         "utility" : "Poison Immunity, Bleed Immunity, Power Drain"
     },
     "vulture" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "N/A",
+        "d_boss_candidate" : "",
         "d_rating" : "N/A",
         "d_tier" : "Unknown",
         "hookid" : "vulture",
         "mattkraftid" : "vulture",
         "name" : "Vulture",
+        "note" : "",
         "o_awakened" : "N/A",
         "o_rating" : "N/A",
-        "o_tier" : "Unknown"
+        "o_tier" : "Unknown",
+        "t4cc_candidate" : "",
+        "utility" : ""
     },
     "warmachine" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
+        "d_boss_candidate" : "",
         "d_rating" : "2/4",
         "d_tier" : "Good",
         "hookid" : "warmachine",
         "mattkraftid" : "warmachine",
         "name" : "War Machine",
+        "note" : "",
         "o_awakened" : "No",
         "o_rating" : "1/5",
-        "o_tier" : "Meh"
+        "o_tier" : "Meh",
+        "t4cc_candidate" : "",
+        "utility" : ""
     },
     "wintersoldier" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
         "d_rating" : "1/4",
@@ -1374,9 +1679,11 @@
         "o_awakened" : "No",
         "o_rating" : "3/5",
         "o_tier" : "Amazing",
+        "t4cc_candidate" : "",
         "utility" : "Power Drain"
     },
     "wolverine" : {
+        "anchor" : "y",
         "aq_utility" : "Sustainable",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
@@ -1393,6 +1700,8 @@
         "utility" : "Regeneration"
     },
     "wolverineoldman" : {
+        "anchor" : "y",
+        "aq_utility" : "",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
         "d_rating" : "1/4",
@@ -1404,9 +1713,11 @@
         "o_awakened" : "No",
         "o_rating" : "2/5",
         "o_tier" : "Good",
+        "t4cc_candidate" : "",
         "utility" : "Regeneration"
     },
     "x23" : {
+        "anchor" : "y",
         "aq_utility" : "Sustainable",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
@@ -1423,6 +1734,7 @@
         "utility" : "Regeneration"
     },
     "yellowjacket" : {
+        "anchor" : "y",
         "aq_utility" : "",
         "d_awakened" : "Yes",
         "d_boss_candidate" : "",
@@ -1439,6 +1751,7 @@
         "utility" : ""
     },
     "yondu" : {
+        "anchor" : "y",
         "aq_utility" : "",
         "d_awakened" : "No",
         "d_boss_candidate" : "",
