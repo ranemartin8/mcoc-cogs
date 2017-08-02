@@ -60,9 +60,9 @@ class mcocSeatin:
 		em.set_thumbnail(url=champ.get_avatar())
 		em.set_author(name=champ.full_name,icon_url=champ.get_avatar())	
 		
-		o_tier, d_tier = "Unknown"
-		o_rating, o_awakened,d_rating, d_awakened = "N/A"
-		d_boss_candidate, note, utility, aq_utility, t4cc_candidate = ""
+		o_tier=d_tier = "Unknown"
+		o_rating=o_awakened=d_rating=d_awakened = "N/A"
+		d_boss_candidate=note=utility=aq_utility=t4cc_candidate = ""
 			
 		if champ_data["o_tier"]:
 			o_tier = champ_data["o_tier"]
