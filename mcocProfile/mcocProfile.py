@@ -617,8 +617,8 @@ class mcocProfile:
 		await self.bot.delete_message(search_msg)
 		return
 
-	@commands.command(no_pm=True, pass_context=True,aliases=['del',])
-	async def delete(self, ctx, *, field : str):
+	@commands.command(no_pm=True, pass_context=True)
+	async def deletefield(self, ctx, *, field : str):
 		"""
 		Delete a field from your Summoner Profile."""
 		author = ctx.message.author
