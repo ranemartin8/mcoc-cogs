@@ -115,9 +115,13 @@ class mcocSeatin:
 			
 		em.set_footer(text="Seatin Tier List",icon_url=seatin_icon)
 		await self.bot.say(embed=em)
-		await self.bot.delete_message(search_msg)		
-		
-		
+		await self.bot.delete_message(search_msg)	
+		if champ_data["video"]:
+			await self.bot.say(champ_data["video"])
+		if champ_data["video_2"]:
+			await self.bot.say(champ_data["video_2"])
+		return
+	
 def setup(bot):
 	n = mcocSeatin(bot)
 	bot.add_cog(n)
