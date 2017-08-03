@@ -23,6 +23,7 @@ from datetime import tzinfo, timedelta, datetime
 import pytz
 from colour import Color
 import difflib
+import aiohttp
 
 colors = {
 	'red': discord.Color(0xff3333 ), 'orange': discord.Color(0xcc6600),
@@ -47,6 +48,8 @@ c_times = {
 		'500':'5','530':'530','560':'6','600':'6','630':'630','660':'7','700':'7','730':'730',
 		'760':'8','800':'8','830':'830','860':'9','900':'9','930':'930'
 		}
+
+gs_base = "https://sheets.googleapis.com/v4/spreadsheets/{}/values/{}?key=AIzaSyBugcjKbOABZEn-tBOxkj0O7j5WGyz80uA&majorDimension=ROWS"
 #def time_roundup(dt, delta):
 #		return dt + (datetime.min - dt) % delta	
 	
@@ -208,15 +211,32 @@ class gsheet_cog:
 		
 	async def main(self,sheet,range_headers,range_body,foldername,filename,groupby_key):
 		"""Shows basic usage of the Sheets API."""
-		credentials = self.get_credentials()
-		http = credentials.authorize(httplib2.Http())
-		discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?version=v4')
-		service = discovery.build('sheets', 'v4', http=http, discoveryServiceUrl=discoveryUrl)
-		headers_get = service.spreadsheets().values().get(spreadsheetId=sheet, range=range_headers).execute()
-		body_get = service.spreadsheets().values().get(spreadsheetId=sheet, range=range_body).execute()
+#		credentials = self.get_credentials()
+#		http = credentials.authorize(httplib2.Http())
+#		discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?version=v4')
+#		service = discovery.build('sheets', 'v4', http=http, discoveryServiceUrl=discoveryUrl)
+#		headers_get = service.spreadsheets().values().get(spreadsheetId=sheet, range=range_headers).execute()
+#		body_get = service.spreadsheets().values().get(spreadsheetId=sheet, range=range_body).execute()
+#		
+        head_url = gs_base.format(sheet,range_headers)
+        async with aiohttp.get(head_url) as response:
+			try:
+            	header_json = await response.json()
+			else:
+				print('No header data found.')
+				return
+		header_values = header_json["values"]
 		
-		header_values = headers_get.get('values', [])
-		body_values = body_get.get('values', [])
+        body_url = gs_base.format(sheet,range_body)
+        async with aiohttp.get(body_url) as response:
+			try:
+            	body_json = await response.json()
+			else:
+				print('No data found.')
+				return
+		body_values = body_json["values"]
+#		header_values = headers_get.get('values', [])
+#		body_values = body_get.get('values', [])
 		output_dict = {}
 		warn = ''
 		if not body_values:

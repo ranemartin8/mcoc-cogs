@@ -30,6 +30,8 @@ remote_data_basepath = 'https://raw.githubusercontent.com/JasonJW/mcoc-cogs/mast
 
 seatin_gs = "https://docs.google.com/spreadsheets/d/1beR2CAlBQ2XBA3M1jJ1aPEfwE46eQt6LU-lzA0babxQ/edit#gid=1632065512"
 
+seatin_icon = "http://i.imgur.com/N8B9qq5.jpg"
+
 
 class mcocSeatin:
 	"""Commands for creating and managing your Marvel Contest of Champions Profile"""
@@ -62,7 +64,8 @@ class mcocSeatin:
 		
 		o_tier=d_tier = "Unknown"
 		o_rating=o_awakened=d_rating=d_awakened = "N/A"
-		d_boss_candidate=note=utility=aq_utility=t4cc_candidate = ""
+		d_boss_candidate=note=utility=aq_utility = ""
+		t4cc_candidate = "No"
 			
 		if champ_data["o_tier"]:
 			o_tier = champ_data["o_tier"]
@@ -71,7 +74,7 @@ class mcocSeatin:
 		if champ_data["o_awakened"]:
 			o_awakened = champ_data["o_awakened"]	
 		
-		offense = "Tier: {}\nRating: {}\nNeeds Sig Ability? {}".format(o_tier,o_rating,o_awakened)
+		offense = "**Tier:** {}\n**Rating:** {}\n**Needs Sig Ability?** {}".format(o_tier,o_rating,o_awakened)
 			
 		em.add_field(name="**Offense**", value=offense,inline=False)	
 			
@@ -85,10 +88,10 @@ class mcocSeatin:
 			d_boss_candidate = champ_data["d_boss_candidate"]					
 		if champ_data["note"]:
 			note = champ_data["note"]				
-		defense = "Tier: {}\nRating: {}\nNeeds Sig Ability? {}".format(d_tier,d_rating,d_awakened)
+		defense = "**Tier:** {}\n**Rating:** {}\n**Needs Sig Ability?** {}".format(d_tier,d_rating,d_awakened)
 		
 		if d_boss_candidate:
-			defense = emoji["boss"] + " Boss Candidate\n" + defense
+			defense = emoji["boss"] + " **Boss Candidate**\n" + defense
 		if note:
 			defense = defense + "\n\* *{}*".format(note)
 		
@@ -101,14 +104,16 @@ class mcocSeatin:
 		
 		if len(utility+aq_utility) != 0:
 			if utility:
-				utility = "General: " + utility
+				utility = "**General:** " + utility
 			if aq_utility:
-				aq_utility = "\nAQ: " + aq_utility
+				aq_utility = "\n**AQ:** " + aq_utility
 			util = utility + aq_utility
 			em.add_field(name="**Utility**", value=util,inline=False)	
 		if champ_data["t4cc_candidate"]:
 			t4cc_candidate = champ_data["t4cc_candidate"]
 			em.add_field(name="**T4CC Candidate**", value=t4cc_candidate,inline=False)	
+			
+		em.set_footer(text="Seatin Tier List",icon_url=seatin_icon)
 		await self.bot.say(embed=em)
 		await self.bot.delete_message(search_msg)		
 		
