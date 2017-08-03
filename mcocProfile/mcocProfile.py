@@ -100,7 +100,7 @@ class mcocProfile:
 		self.settingsJSON = "data/mcocProfile/settings.json"
 		self.profSettings = dataIO.load_json(self.settingsJSON)
 		
-	@commands.group(no_pm=True, pass_context=True, name="profile",aliases=['setfield',], invoke_without_command=True)
+	@commands.group(no_pm=True, pass_context=True, name="profiler",aliases=['setfield',], invoke_without_command=True)
 	async def mcoc_profile(self, ctx):
 		"""Set or update a field on your Summoner Profile."""
 		if ctx.invoked_subcommand is None:
