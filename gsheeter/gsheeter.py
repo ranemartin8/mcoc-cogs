@@ -222,7 +222,7 @@ class gsheet_cog:
 		async with aiohttp.get(head_url) as response:
 			try:
 				header_json = await response.json()
-			else:
+			except:
 				print('No header data found.')
 				return
 		header_values = header_json["values"]
@@ -231,7 +231,7 @@ class gsheet_cog:
 		async with aiohttp.get(body_url) as response:
 			try:
 				body_json = await response.json()
-			else:
+			except:
 				print('No data found.')
 				return
 		body_values = body_json["values"]
