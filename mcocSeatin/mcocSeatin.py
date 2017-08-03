@@ -4,12 +4,9 @@ from discord.ext import commands
 from cogs.utils.dataIO import dataIO
 import os
 import asyncio
-from timezonefinder import TimezoneFinder
-from geopy.geocoders import Nominatim
-from datetime import tzinfo, timedelta, datetime
 import pytz
 from .mcoc import ChampConverter, ChampConverterMult, QuietUserError
-from .gsheeter import MemberFinder, TooManyMatches, NoMemberFound 
+#from .gsheeter import MemberFinder, TooManyMatches, NoMemberFound 
 import re
 import collections
 
@@ -27,11 +24,8 @@ emoji = {
 	}
 
 remote_data_basepath = 'https://raw.githubusercontent.com/JasonJW/mcoc-cogs/master/mcoc/data/'
-
 seatin_gs = "https://docs.google.com/spreadsheets/d/1beR2CAlBQ2XBA3M1jJ1aPEfwE46eQt6LU-lzA0babxQ/edit#gid=1632065512"
-
 seatin_icon = "http://i.imgur.com/N8B9qq5.jpg"
-
 
 class mcocSeatin:
 	"""Commands for creating and managing your Marvel Contest of Champions Profile"""
@@ -121,7 +115,7 @@ class mcocSeatin:
 	@commands.command(pass_context=True)
 	async def seatin_vid(self, ctx, *, champ: ChampConverter):
 		"""
-		Search for Seatin videos for a champion. """
+		Get Seatin videos for a champion. """
 		search_msg = await self.bot.say('Searching...')
 		hookid = champ.hookid
 		video_1=video_2 = ""

@@ -25,7 +25,7 @@ valid_fields = set(fields_list)
 valid_int = {'1','2','3','4','5'}
 valid_stop = {'stop','end','cancel'}
 achievements_set = {'legend','uncollected','lol','rol','rttl','100%act4'}
-achievements_dict = {'legend':'**Legend**','uncollected':'The Uncollected','lol':'Labyrinth of Legends','rol':'Realm of Legends','rttl':'Road to the Labyrinth','100%act4':'100% Act 4'}
+achievements_dict = {'legend':'**Legend**','uncollected':'<:title:342763077688754196> The Uncollected','lol':'Labyrinth of Legends','rol':'Realm of Legends','rttl':'Road to the Labyrinth','100%act4':'100% Act 4'}
 #<:legend:340360464162619392>
 bg_set = {'bg1','bg2','bg3'}
 remote_data_basepath = 'https://raw.githubusercontent.com/JasonJW/mcoc-cogs/master/mcoc/data/'
@@ -57,7 +57,9 @@ emoji_dict = {
     "max_star":["<:max_star:340371702464905216>","https://discordapp.com/api/emojis/340371702464905216.png "],
     "vs":["<:vs:340371703182131200>","https://discordapp.com/api/emojis/340371703182131200.png "],
     "green_check":["<:green_check:340537013126168576>","https://discordapp.com/api/emojis/340537013126168576.png "],
-    "units":["<:units:340537138787385364>","https://discordapp.com/api/emojis/340537138787385364.png "]
+    "units":["<:units:340537138787385364>","https://discordapp.com/api/emojis/340537138787385364.png "],
+    "title":["<:title:342763077688754196>",""]
+    
 }
 			
 def getLocalTime(datetime_obj,timezone):
@@ -100,7 +102,7 @@ class mcocProfile:
 		self.settingsJSON = "data/mcocProfile/settings.json"
 		self.profSettings = dataIO.load_json(self.settingsJSON)
 		
-	@commands.group(no_pm=True, pass_context=True, name="profiler",aliases=['setfield',], invoke_without_command=True)
+	@commands.group(no_pm=True, pass_context=True, name="setfield", invoke_without_command=True)
 	async def mcoc_profile(self, ctx):
 		"""Set or update a field on your Summoner Profile."""
 		if ctx.invoked_subcommand is None:
@@ -307,11 +309,11 @@ class mcocProfile:
 			await self.hook_update(user_id, field, champs, ctx.message)
 			return	
 	
-	@commands.command(no_pm=True, pass_context=True,hidden=True)
+	@commands.command(no_pm=True, pass_context=True)
 	@checks.mod_or_permissions(manage_roles=True)
 	async def settings(self, ctx, field : str, *, value : str):
 		"""    
-		Update guild settings for Summoner Profile commands.
+		Officers ONLY: Update guild settings for Summoner Profile commands.
 		Currently, all the fields are for images, so <value> must be a valid image url (.jpeg, .png, .gif, .jpg)
 		
 		Arg Options: (*Required)
@@ -617,8 +619,8 @@ class mcocProfile:
 		await self.bot.delete_message(search_msg)
 		return
 
-	@commands.command(no_pm=True, pass_context=True)
-	async def deletefield(self, ctx, *, field : str):
+	@commands.command(no_pm=True, pass_context=True,aliases=['del',])
+	async def delete(self, ctx, *, field : str):
 		"""
 		Delete a field from your Summoner Profile."""
 		author = ctx.message.author
