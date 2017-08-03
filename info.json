@@ -1,7 +1,7 @@
 {
-    "AUTHOR" : "JJW",
-    "INSTALL_MSG" : "Thanks for installing our repo.  mcoc is a cog for Marvel's Contest of Champions",
+    "AUTHOR" : "ranemartin8",
+    "INSTALL_MSG" : "Thanks for installing my repo.  The commands in these's cogs are designed for Marvel's Contest of Champions players and alliances.",
     "NAME" : "mcoc-cogs",
-    "SHORT" : "Redbot Cogs designed for Alliance Management in Marvel's Contest of Champions",
-    "DESCRIPTION" : "TBD :)s"
+    "SHORT" : "Redbot Cogs designed for Marvel's Contest of Champions players and alliances.",
+    "DESCRIPTION" : "It's great, I swear."
 }
