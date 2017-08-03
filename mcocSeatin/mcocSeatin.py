@@ -54,7 +54,7 @@ class mcocSeatin:
 		hookid = champ.hookid
 		
 		if hookid not in self.seatinData or self.seatinData[hookid] == False:	
-			await self.bot.say(':warning:  Sorry, there is no Seatin Data for **{}**.'.format(hookid))
+			await self.bot.say(':warning:  Sorry, there is no Seatin Data for **{}**.'.format(champ.full_name))
 			return
 		champ_data = self.seatinData[hookid]
 		
@@ -116,12 +116,33 @@ class mcocSeatin:
 		em.set_footer(text="Seatin Tier List",icon_url=seatin_icon)
 		await self.bot.say(embed=em)
 		await self.bot.delete_message(search_msg)	
+
+
+	@commands.command(pass_context=True)
+	async def seatin_vid(self, ctx, *, champ: ChampConverter):
+		"""
+		Search for Seatin videos for a champion. """
+		search_msg = await self.bot.say('Searching...')
+		hookid = champ.hookid
+		video_1=video_2 = ""
+		if hookid not in self.seatinData or self.seatinData[hookid] == False:	
+			await self.bot.say(':warning:  Sorry, there is no Seatin Data for **{}**.'.format(champ.full_name))
+			return
+		champ_data = self.seatinData[hookid]		
 		if champ_data["video"]:
-			await self.bot.say(champ_data["video"])
+			video_1 = champ_data["video"]
 		if champ_data["video_2"]:
-			await self.bot.say(champ_data["video_2"])
-		return
-	
+			video_2 = champ_data["video_2"]	
+		if len(video_1+video_2) == 0:
+			await self.bot.say(":warning:  Sorry, no Seatin videos found for **{}**.".format(champ.full_name))
+			await self.bot.delete_message(search_msg)
+			return
+		if video_1:
+			await self.bot.say(video_1)
+		if video_2:
+			await self.bot.say(video_2)	
+		await self.bot.delete_message(search_msg)	
+		
 def setup(bot):
 	n = mcocSeatin(bot)
 	bot.add_cog(n)
