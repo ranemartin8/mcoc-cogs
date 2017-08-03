@@ -218,19 +218,19 @@ class gsheet_cog:
 #		headers_get = service.spreadsheets().values().get(spreadsheetId=sheet, range=range_headers).execute()
 #		body_get = service.spreadsheets().values().get(spreadsheetId=sheet, range=range_body).execute()
 #		
-        head_url = gs_base.format(sheet,range_headers)
-        async with aiohttp.get(head_url) as response:
+		head_url = gs_base.format(sheet,range_headers)
+		async with aiohttp.get(head_url) as response:
 			try:
-            	header_json = await response.json()
+				header_json = await response.json()
 			else:
 				print('No header data found.')
 				return
 		header_values = header_json["values"]
 		
-        body_url = gs_base.format(sheet,range_body)
-        async with aiohttp.get(body_url) as response:
+		body_url = gs_base.format(sheet,range_body)
+		async with aiohttp.get(body_url) as response:
 			try:
-            	body_json = await response.json()
+				body_json = await response.json()
 			else:
 				print('No data found.')
 				return
