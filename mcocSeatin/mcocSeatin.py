@@ -113,7 +113,7 @@ class mcocSeatin:
 			t4cc_candidate = champ_data["t4cc_candidate"]
 		em.add_field(name="**T4CC Candidate**", value=t4cc_candidate,inline=False)	
 			
-		em.set_footer(text="Seatin Tier List",icon_url=seatin_icon)
+		em.set_footer(text="Seatin's Champion Tier List",icon_url=seatin_icon)
 		await self.bot.say(embed=em)
 		await self.bot.delete_message(search_msg)	
 
