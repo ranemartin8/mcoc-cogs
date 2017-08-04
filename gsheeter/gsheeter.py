@@ -122,7 +122,7 @@ class MemberFinder(commands.Converter):
 					if results.index(str(value)) == -1:
 						results.append(str(value))
 			if results:
-				print(", ".join(results))
+
 				#TOO MANY: if there are 5 or more possible results
 				if len(results) > 4: 
 					results_count = len(results) - 4
@@ -151,6 +151,8 @@ class MemberFinder(commands.Converter):
 											   "So I just went with first match: **{}**"
 											   " ".format(', '.join(result_names),user.display_name))
 					print('Search Method: User found by partial string matching')
+					prnt = ", ".join(results)
+					print("{}".format(prnt))
 					return user
 					
 			else:
