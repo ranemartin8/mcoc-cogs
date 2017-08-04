@@ -122,7 +122,7 @@ class MemberFinder(commands.Converter):
 					if results.index(str(value)) == -1:
 						results.append(str(value))
 			if results:
-				print(str(results))
+				print(", ".join(results))
 				#TOO MANY: if there are 5 or more possible results
 				if len(results) > 4: 
 					results_count = len(results) - 4
