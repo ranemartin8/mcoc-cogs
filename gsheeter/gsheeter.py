@@ -119,7 +119,8 @@ class MemberFinder(commands.Converter):
 			for key,value in mem_dict.items():
 				checkfor_str = key.find(user_string)
 				if checkfor_str != -1:
-					results.append(str(value))
+					if results.index(str(value)) == -1:
+						results.append(str(value))
 			if results:
 				#TOO MANY: if there are 5 or more possible results
 				if len(results) > 4: 
@@ -138,16 +139,16 @@ class MemberFinder(commands.Converter):
 					firstresult = results[0]
 					user = server.get_member(firstresult)
 					if len(results) > 1: 
-						secondresult = results[1]
-						if len(results) == 2 and firstresult == secondresult:
-							pass
-						else:
-							for mem_id in results:
-								ser_mem = server.get_member(mem_id)
-								result_names.append(ser_mem.display_name)
-							await self.ctx.bot.say("A few possible matches were found: ```{}```\n\n"
-												   "So I just went with first match: **{}**"
-												   " ".format(', '.join(result_names),user.display_name))
+#						secondresult = results[1]
+#						if len(results) == 2 and firstresult == secondresult:
+#							pass
+#						else:
+						for mem_id in results:
+							ser_mem = server.get_member(mem_id)
+							result_names.append(ser_mem.display_name)
+						await self.ctx.bot.say("A few possible matches were found: ```{}```\n\n"
+											   "So I just went with first match: **{}**"
+											   " ".format(', '.join(result_names),user.display_name))
 					print('Search Method: User found by partial string matching')
 					return user
 					
