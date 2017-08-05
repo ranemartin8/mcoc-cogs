@@ -119,7 +119,7 @@ class MemberFinder(commands.Converter):
 			for key,value in mem_dict.items():
 				checkfor_str = key.find(user_string)
 				if checkfor_str != -1:
-					if results.index(str(value)) == -1:
+					if str(value) not in results:
 						results.append(str(value))
 			if results:
 
