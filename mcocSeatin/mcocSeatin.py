@@ -33,7 +33,8 @@ class mcocSeatin:
 
 	def __init__(self, bot, **kwargs):
 		self.bot = bot
-		self.seatinJSON = "data/gsheeter/245589956012146688/Seatin_TierList.json"
+		#self.seatinJSON = "data/gsheeter/245589956012146688/Seatin_TierList.json"
+		self.seatinJSON = "data/mcocSeatin/Seatin_TierList.json"
 		self.seatinData = dataIO.load_json(self.seatinJSON)
 
 	def get_avatar(self):
