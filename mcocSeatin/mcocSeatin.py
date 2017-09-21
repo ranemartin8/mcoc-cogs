@@ -10,6 +10,7 @@ from .mcoc import ChampConverter, ChampConverterMult, QuietUserError
 import re
 import collections
 
+
 fields = ['o_tier', 'o_rating', 'o_awakened', 'd_tier','d_rating', 'd_awakened',
 		  'd_boss_candidate', 'note', 'utility', 'aq_utility', 't4cc_candidate']
 emoji = {
