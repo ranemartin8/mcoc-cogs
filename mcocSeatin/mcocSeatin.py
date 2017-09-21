@@ -10,6 +10,7 @@ from .mcoc import ChampConverter, ChampConverterMult, QuietUserError
 import re
 import collections
 
+
 fields = ['o_tier', 'o_rating', 'o_awakened', 'd_tier','d_rating', 'd_awakened',
 		  'd_boss_candidate', 'note', 'utility', 'aq_utility', 't4cc_candidate']
 emoji = {
@@ -33,6 +34,7 @@ class mcocSeatin:
 	def __init__(self, bot, **kwargs):
 		self.bot = bot
 		self.seatinJSON = "data/gsheeter/245589956012146688/Seatin_TierList.json"
+		#self.seatinJSON = "data/mcocSeatin/Seatin_TierList.json"
 		self.seatinData = dataIO.load_json(self.seatinJSON)
 
 	def get_avatar(self):
@@ -46,6 +48,7 @@ class mcocSeatin:
 		Get Seatin Rank and Info for a champion. """
 		search_msg = await self.bot.say('Searching...')
 		hookid = champ.hookid
+		print(hookid)
 		
 		if hookid not in self.seatinData or self.seatinData[hookid] == False:	
 			await self.bot.say(':warning:  Sorry, there is no Seatin Data for **{}**.'.format(champ.full_name))
