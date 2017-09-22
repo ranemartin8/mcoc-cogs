@@ -139,13 +139,14 @@ class mcocDefense:
 			await self.bot.say('No defenders have been added yet!')
 			return
 		safelist = []
-		total = len(safelist)
+		
 		for champ,value in self.defendersJSON[server_id].items():
 			champ_object = await ChampConverter(ctx, champ).convert()
 			fullname = champ_object.full_name
 			if value != 1:
 				entry = "{} - ({} placed)".format(fullname,value)
 				safelist.append(entry)
+		total = len(safelist)
 		await self.bot.say("**{} Safe Champions**\n{}".format(total,'\n'.join(safelist)))
 		return
 
@@ -162,13 +163,14 @@ class mcocDefense:
 			await self.bot.say('No defenders have been added yet!')
 			return
 		safelist = []
-		total = len(safelist)
+		
 		for champ,value in self.defendersJSON[server_id].items():
 			champ_object = await ChampConverter(ctx, champ).convert()
 			fullname = champ_object.full_name
 			if value == 1:
 				entry = "{}".format(fullname)
 				safelist.append(entry)
+		total = len(safelist)
 		await self.bot.say("**{} Unsafe Champions**\n{}".format(total,'\n'.join(safelist)))
 		return
 	
@@ -191,7 +193,7 @@ class mcocDefense:
 		
 		running_total = 0
 		for value in all_values:
-			running_total = running_total + value
+			running_total = running_total + int(value)
 		champlist = []
 		for champ,value in self.defendersJSON[server_id].items():
 			champ_object = await ChampConverter(ctx, champ).convert()
