@@ -130,7 +130,7 @@ class mcocDefense:
 	async def safe(self, ctx):
 		"""
 		View safe defender options.
-		ie. Quanity = 0 or 2 & up
+		ie. Quantity = 0 or 2 & up
 		"""
 		server_id = ctx.message.server.id
 		if server_id not in self.defendersJSON or self.defendersJSON[server_id] == False:
@@ -139,19 +139,43 @@ class mcocDefense:
 			await self.bot.say('No defenders have been added yet!')
 			return
 		safelist = []
+		total = len(safelist)
 		for champ,value in self.defendersJSON[server_id].items():
 			champ_object = await ChampConverter(ctx, champ).convert()
 			fullname = champ_object.full_name
 			if value != 1:
 				entry = "{} - ({} placed)".format(fullname,value)
 				safelist.append(entry)
-		await self.bot.say("**Safe Champions**\n{}".format('\n'.join(safelist)))
+		await self.bot.say("**{} Safe Champions**\n{}".format(total,'\n'.join(safelist)))
 		return
 
 	@mcoc_defense.command(no_pm=True, pass_context=True)
+	async def unsafe(self, ctx):
+		"""
+		View all unsafe defenders to avoid.
+		ie. Quantity = 1
+		"""
+		server_id = ctx.message.server.id
+		if server_id not in self.defendersJSON or self.defendersJSON[server_id] == False:
+			self.defendersJSON[server_id] = {}
+			dataIO.save_json(self.defendersPATH, self.defendersJSON)
+			await self.bot.say('No defenders have been added yet!')
+			return
+		safelist = []
+		total = len(safelist)
+		for champ,value in self.defendersJSON[server_id].items():
+			champ_object = await ChampConverter(ctx, champ).convert()
+			fullname = champ_object.full_name
+			if value == 1:
+				entry = "{}".format(fullname)
+				safelist.append(entry)
+		await self.bot.say("**{} Unsafe Champions**\n{}".format(total,'\n'.join(safelist)))
+		return
+	
+	@mcoc_defense.command(no_pm=True, pass_context=True)
 	async def viewall(self, ctx):
 		"""
-		View all defender quantitys.
+		View ALL defender quantities.
 		Use "!defense safe" to just view the safe defender options.
 		"""
 		server_id = ctx.message.server.id
@@ -160,13 +184,21 @@ class mcocDefense:
 			dataIO.save_json(self.defendersPATH, self.defendersJSON)
 			await self.bot.say('No defenders have been added yet!')
 			return
+                all_values = self.defendersJSON.values()
+                if len(all_values) == 0:
+ 			await self.bot.say('No defenders have been added yet!')
+			return
+		
+                running_total = 0
+                for value in all_values:
+                        running_total = running_total + value
 		champlist = []
 		for champ,value in self.defendersJSON[server_id].items():
 			champ_object = await ChampConverter(ctx, champ).convert()
 			fullname = champ_object.full_name
 			entry = "{} - ({} placed)".format(fullname,value)
 			champlist.append(entry)
-		await self.bot.say("**All Champions**\n{}".format('\n'.join(champlist)))
+		await self.bot.say("**{} Champions are placed.**\n{}".format(running_total,'\n'.join(champlist)))
 		return	
 			      
 def check_folder():
