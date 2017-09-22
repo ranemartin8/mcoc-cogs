@@ -49,7 +49,7 @@ class mcocDefense:
 				original_value = self.defendersJSON[server_id][hookid]
 				
 			value = original_value + change_amount
-			if value < 0
+			if value < 0:
 				value = 0
 			
 			self.defendersJSON[server_id].update({hookid : value})
