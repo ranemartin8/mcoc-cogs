@@ -192,14 +192,14 @@ class mcocDefense:
 			champ_object = await ChampConverter(ctx, champ).convert()
 			fullname = champ_object.full_name				
 			if value == 0:
-				entry = "{} - ({} placed)".format(fullname,value)
+				entry = "{}".format(fullname,value)
 				safelist.append(entry)
 				
 		for champ in all_champs:
 			if champ not in hookid_list:
 				champ_object = await ChampConverter(ctx, champ).convert()
 				fullname = champ_object.full_name				
-				entry = "{} - (0 placed)".format(fullname)
+				entry = "{}".format(fullname)
 				safelist.append(entry)					
 		total = len(safelist)
 		msg = pagify("**{} Available Defenders**\n{}".format(total,'\n'.join(safelist)))
@@ -208,7 +208,7 @@ class mcocDefense:
 		return	
 
 	@mcoc_defense.command(no_pm=True, pass_context=True)
-	async def taken(self, ctx):
+	async def placed(self, ctx):
 		"""
 		View which defenders to avoid.
 		
@@ -227,10 +227,10 @@ class mcocDefense:
 			champ_object = await ChampConverter(ctx, champ).convert()
 			fullname = champ_object.full_name
 			if value == 1:
-				entry = "{}".format(fullname)
+				entry = "{} - **{}**".format(fullname,value)
 				safelist.append(entry)
 		total = len(safelist)
-		msg = pagify("**{} Placed Defenders**\n{}".format(total,'\n'.join(safelist)))
+		msg = pagify("**{} Unique Placed Defenders**\n{}".format(total,'\n'.join(safelist)))
 		for page in msg:
 			await self.bot.say(page)
 		return
@@ -262,16 +262,16 @@ class mcocDefense:
 			hookid_list.append(champ)
 			champ_object = await ChampConverter(ctx, champ).convert()
 			fullname = champ_object.full_name
-			entry = "{} - ({} placed)".format(fullname,value)
+			entry = "{} - **{}**".format(fullname,value)
 			champlist.append(entry)
 			
 		for champ in all_champs:
 			if champ not in hookid_list:
 				champ_object = await ChampConverter(ctx, champ).convert()
 				fullname = champ_object.full_name				
-				entry = "{} - (0 placed)".format(fullname)
+				entry = "{} - **0**".format(fullname)
 				champlist.append(entry)
-		msg = pagify("**All Defenders**\n{}".format(running_total,'\n'.join(champlist)))
+		msg = pagify("**All Defenders**\n[{} Total Placed]\n{}".format(running_total,'\n'.join(champlist)))
 		for page in msg:
 			await self.bot.say(page)
 		return	
