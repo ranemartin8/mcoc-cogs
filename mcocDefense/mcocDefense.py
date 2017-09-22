@@ -4,12 +4,8 @@ from discord.ext import commands
 from cogs.utils.dataIO import dataIO
 import os
 import asyncio
-#from timezonefinder import TimezoneFinder
-#from geopy.geocoders import Nominatim
-#from datetime import tzinfo, timedelta, datetime
 import pytz
 from .mcoc import ChampConverter, ChampConverterMult, QuietUserError
-#from .gsheeter import MemberFinder, TooManyMatches, NoMemberFound 
 import re
 import collections
 
@@ -67,7 +63,7 @@ class mcocDefense:
 	@mcoc_defense.command(no_pm=True, pass_context=True)
 	async def clear(self, ctx):
 		"""
-		Clear all defenders.
+		Clear all defenders for this server.
 		
 		"""
 		server_id = ctx.message.server.id
@@ -82,10 +78,11 @@ class mcocDefense:
 	@mcoc_defense.command(no_pm=True, pass_context=True)
 	async def add(self, ctx, *, champions):
 		"""
-		Add defenders.
+		Add single or multiple defenders.
+		
 		EXAMPLE: !defense add sw ironman yj
 		
-		Note: This command increases the quantity for each champion by 1.
+		NOTE: This command increases the quantity for each champion by 1.
 		
 		"""	
 		try:
@@ -98,10 +95,11 @@ class mcocDefense:
 	@mcoc_defense.command(no_pm=True, pass_context=True)
 	async def remove(self, ctx, *, champions):
 		"""
-		Remove defenders.
+		Remove single or multiple defenders.
+		
 		EXAMPLE: !defense remove bpcw capwwii hawkwye
 		
-		Note: This command DECREASES the quantity for each champion by 1.
+		NOTE: This command DECREASES the quantity for each champion by 1.
 		"""	
 		try:
 			champs = await ChampConverterMult(ctx, champions).convert()
@@ -111,9 +109,9 @@ class mcocDefense:
 			return
 		
 	@mcoc_defense.command(no_pm=True, pass_context=True)
-	async def set(self, ctx, amount: int, *,champion):
+	async def set(self, ctx, amount: int, *,champions):
 		"""
-		Set the quantities of multiple defenders.
+		Set the quantities of single or multiple defenders.
 		EXAMPLE: !defense set 3 bw OR !defense 5 groot wolverine nc
 
 		Note: This command fully OVERRIDES the existing values.
@@ -129,7 +127,8 @@ class mcocDefense:
 	@mcoc_defense.command(no_pm=True, pass_context=True)
 	async def safe(self, ctx):
 		"""
-		View safe defender options.
+		View all safe defender options you can use for placement.
+		
 		ie. Quantity = 0 or 2 & up
 		"""
 		server_id = ctx.message.server.id
@@ -153,7 +152,8 @@ class mcocDefense:
 	@mcoc_defense.command(no_pm=True, pass_context=True)
 	async def unsafe(self, ctx):
 		"""
-		View all unsafe defenders to avoid.
+		View all unsafe defenders to avoid during placement.
+		
 		ie. Quantity = 1
 		"""
 		server_id = ctx.message.server.id
@@ -178,7 +178,8 @@ class mcocDefense:
 	async def viewall(self, ctx):
 		"""
 		View ALL defender quantities.
-		Use "!defense safe" to just view the safe defender options.
+		
+		NOTE: Use "!defense safe" to just view the safe defender options.
 		"""
 		server_id = ctx.message.server.id
 		if server_id not in self.defendersJSON or self.defendersJSON[server_id] == False:
