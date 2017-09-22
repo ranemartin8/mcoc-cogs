@@ -65,7 +65,7 @@ class mcocDefense:
 
 	
 	@mcoc_defense.command(no_pm=True, pass_context=True)
-	async def clear(self, ctx, *, champions):
+	async def clear(self, ctx):
 		"""
 		Clear all defenders.
 		
@@ -111,19 +111,19 @@ class mcocDefense:
 			return
 		
 	@mcoc_defense.command(no_pm=True, pass_context=True)
-	async def set(self, ctx, champion, amount: int):
+	async def set(self, ctx, amount: int, *,champion):
 		"""
-		Set the quantity of a SINGLE defender.
-		EXAMPLE: !defense set bw 3
+		Set the quantities of multiple defenders.
+		EXAMPLE: !defense set 3 bw OR !defense 5 groot wolverine nc
 
-		Note: This command fully OVERRIDES the existing value.
+		Note: This command fully OVERRIDES the existing values.
 		Use "!defense add/remove" to simply increase or decrease multiple champions by 1.
 		"""	
 		try:
 			champ = await ChampConverter(ctx, champion).convert()
-			await self.defense_update('set', champ, ctx.message, amount)
+			await self.defense_update('set', champs, ctx.message, amount)
 		except:
-			await self.bot.say('Defender not updated. Please try again.')
+			await self.bot.say('Defenders not updated. Please try again.')
 			return
 		
 	@mcoc_defense.command(no_pm=True, pass_context=True)
