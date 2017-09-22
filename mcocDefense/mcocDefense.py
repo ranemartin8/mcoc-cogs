@@ -1,5 +1,6 @@
 import discord
-from .utils import checks, pagify
+from .utils import checks
+from .utils.chat_formatting import pagify
 from discord.ext import commands
 from cogs.utils.dataIO import dataIO
 import os
