@@ -186,14 +186,14 @@ class mcocDefense:
 			dataIO.save_json(self.defendersPATH, self.defendersJSON)
 			await self.bot.say('No defenders have been added yet!')
 			return
-		all_values = self.defendersJSON.values()
+		all_values = self.defendersJSON[server_id].values()
 		if len(all_values) == 0:
  			await self.bot.say('No defenders have been added yet!')
  			return
 		
 		running_total = 0
-		for key,value in self.defendersJSON.items():
-			running_total = running_total + int(value)
+		for value in all_values:
+			running_total = running_total + value
 		champlist = []
 		for champ,value in self.defendersJSON[server_id].items():
 			champ_object = await ChampConverter(ctx, champ).convert()
