@@ -76,18 +76,19 @@ class mcocDefense:
 			dataIO.save_json(self.defendersPATH, self.defendersJSON)
 			
 			if hookid not in self.defendersJSON[server_id]:
-				await self.bot.say('Something went wrong.')
+				await self.bot.say('<:warning_circle:340371702225567744>  Something went wrong.')
 				return
 			entry = "**{}** is updated from **{}** to __**{}**__".format(fullname,original_value,value)
 			champ_list.append(entry)
-		await self.bot.say(":white_check_mark: Done!\n{}".format('\n'.join(champ_list)))
+		await self.bot.say("<:circlecheck:340371185730846720>  Done!\n{}".format('\n'.join(champ_list)))
 		return
 
 	
 	@mcoc_defense.command(no_pm=True, pass_context=True)
+	@checks.mod_or_permissions(manage_roles=True)
 	async def clear(self, ctx):
 		"""
-		Clear all defenders for this server.
+		OFFICERS ONLY. Clear all defenders.
 		
 		"""
 		server_id = ctx.message.server.id
@@ -96,7 +97,7 @@ class mcocDefense:
 			dataIO.save_json(self.defendersPATH, self.defendersJSON)
 		self.defendersJSON[server_id] = {}
 		dataIO.save_json(self.defendersPATH, self.defendersJSON)
-		await self.bot.say(":white_check_mark: Done! All champions have been removed.")
+		await self.bot.say("<:circlecheck:340371185730846720>  Done! All champions have been removed.")
 		return
 		
 	@mcoc_defense.command(no_pm=True, pass_context=True)
@@ -113,7 +114,7 @@ class mcocDefense:
 			champs = await ChampConverterMult(ctx, champions).convert()
 			await self.defense_update('add', champs, ctx.message, 1)
 		except:
-			await self.bot.say('Defenders not added. Please try again.')
+			await self.bot.say('<:warning_circle:340371702225567744>  Defenders not added. Please try again.')
 			return
 		
 	@mcoc_defense.command(no_pm=True, pass_context=True)
@@ -129,7 +130,7 @@ class mcocDefense:
 			champs = await ChampConverterMult(ctx, champions).convert()
 			await self.defense_update('remove', champs, ctx.message, -1)
 		except:
-			await self.bot.say('Defenders not removed. Please try again.')
+			await self.bot.say('<:warning_circle:340371702225567744>  Defenders not removed. Please try again.')
 			return
 		
 	@mcoc_defense.command(no_pm=True, pass_context=True)
@@ -169,7 +170,7 @@ class mcocDefense:
 			champs = await ChampConverterMult(ctx, champions).convert()
 			await self.defense_update(change_type, champs, ctx.message, amount)
 		except:
-			await self.bot.say('Defenders not updated. Please try again.')
+			await self.bot.say('<:warning_circle:340371702225567744>  Defenders not updated. Please try again.')
 			return
 		
 	@mcoc_defense.command(no_pm=True, pass_context=True)
@@ -183,7 +184,7 @@ class mcocDefense:
 		if server_id not in self.defendersJSON or self.defendersJSON[server_id] == False:
 			self.defendersJSON[server_id] = {}
 			dataIO.save_json(self.defendersPATH, self.defendersJSON)
-			await self.bot.say('All defenders are available right now, because no defenders have been added yet!')
+			await self.bot.say('<:warning_circle:340371702225567744>  All defenders are available right now, because no defenders have been added yet!')
 			return
 		safelist = []
 		hookid_list = []
@@ -203,7 +204,7 @@ class mcocDefense:
 				safelist.append(entry)					
 		total = len(safelist)
 		safelist.sort()
-		msg = pagify("**{} Available Defenders**\n{}".format(total,'\n'.join(safelist)))
+		msg = pagify("<:aw:340368013112901633>  **{} Available Defenders**\n{}".format(total,'\n'.join(safelist)))
 		
 		for page in msg:
 			await self.bot.say(page)
@@ -221,7 +222,7 @@ class mcocDefense:
 		if server_id not in self.defendersJSON or self.defendersJSON[server_id] == False:
 			self.defendersJSON[server_id] = {}
 			dataIO.save_json(self.defendersPATH, self.defendersJSON)
-			await self.bot.say('No defenders have been added yet!')
+			await self.bot.say('<:warning_circle:340371702225567744>  No defenders have been added yet!')
 			return
 		safelist = []
 		
@@ -236,7 +237,7 @@ class mcocDefense:
 		for value in self.defendersJSON[server_id].values():
 			running_total = running_total + value
 		safelist.sort()
-		msg = pagify("**{} Placed Defenders**\n[{} Unique]\n{}".format(running_total,total,'\n'.join(safelist)))
+		msg = pagify("<:aw:340368013112901633>  **{} Placed Defenders**\n[{} Unique]\n{}".format(running_total,total,'\n'.join(safelist)))
 		for page in msg:
 			await self.bot.say(page)
 		return
@@ -252,11 +253,11 @@ class mcocDefense:
 		if server_id not in self.defendersJSON or self.defendersJSON[server_id] == False:
 			self.defendersJSON[server_id] = {}
 			dataIO.save_json(self.defendersPATH, self.defendersJSON)
-			await self.bot.say('No defenders have been added yet!')
+			await self.bot.say('<:warning_circle:340371702225567744>  No defenders have been added yet!')
 			return
 		all_values = self.defendersJSON[server_id].values()
 		if len(all_values) == 0:
- 			await self.bot.say('No defenders have been added yet!')
+ 			await self.bot.say('<:warning_circle:340371702225567744>  No defenders have been added yet!')
  			return
 		
 		running_total = 0
@@ -278,7 +279,7 @@ class mcocDefense:
 				entry = "{} - **0**".format(fullname)
 				champlist.append(entry)
 		champlist.sort()
-		msg = pagify("**All Defenders**\n[{} Total Placed]\n{}".format(running_total,'\n'.join(champlist)))
+		msg = pagify("<:aw:340368013112901633>  **All Defenders**\n[{} Total Placed]\n{}".format(running_total,'\n'.join(champlist)))
 		for page in msg:
 			await self.bot.say(page)
 		return	
