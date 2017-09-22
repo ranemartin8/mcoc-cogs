@@ -62,6 +62,7 @@ class mcocDefense:
 			champ_list.append(entry)
 		await self.bot.say(":white_check_mark: Done!\n{}".format('\n'.join(champ_list)))
 		return
+
 	
 	@mcoc_defense.command(no_pm=True, pass_context=True)
 	async def clear(self, ctx, *, champions):
