@@ -112,13 +112,14 @@ class mcocDefense:
 	async def set(self, ctx, amount: int, *,champions):
 		"""
 		Set the quantities of single or multiple defenders.
+		
 		EXAMPLE: !defense set 3 bw OR !defense 5 groot wolverine nc
 
-		Note: This command fully OVERRIDES the existing values.
+		NOTE: This command fully OVERRIDES the existing values.
 		Use "!defense add/remove" to simply increase or decrease multiple champions by 1.
-		"""	
+		"""
 		try:
-			champ = await ChampConverter(ctx, champion).convert()
+			champs = await ChampConverterMult(ctx, champions).convert()
 			await self.defense_update('set', champs, ctx.message, amount)
 		except:
 			await self.bot.say('Defenders not updated. Please try again.')
@@ -127,7 +128,7 @@ class mcocDefense:
 	@mcoc_defense.command(no_pm=True, pass_context=True)
 	async def safe(self, ctx):
 		"""
-		View all safe defender options you can use for placement.
+		View ALL safe defender options.
 		
 		ie. Quantity = 0 or 2 & up
 		"""
@@ -152,7 +153,7 @@ class mcocDefense:
 	@mcoc_defense.command(no_pm=True, pass_context=True)
 	async def unsafe(self, ctx):
 		"""
-		View all unsafe defenders to avoid during placement.
+		View all unsafe defenders to avoid.
 		
 		ie. Quantity = 1
 		"""
