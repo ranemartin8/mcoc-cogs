@@ -111,7 +111,7 @@ class mcocDefense:
 			return
 		
 	@mcoc_defense.command(no_pm=True, pass_context=True)
-	async def set(self, ctx, *, champion,amount: int):
+	async def set(self, ctx, champion, amount: int):
 		"""
 		Set the quantity of a SINGLE defender.
 		EXAMPLE: !defense set bw 3
@@ -127,7 +127,7 @@ class mcocDefense:
 			return
 		
 	@mcoc_defense.command(no_pm=True, pass_context=True)
-	async def safe(self, ctx, *):
+	async def safe(self, ctx):
 		"""
 		View safe defender options.
 		ie. Quanity = 0 or 2 & up
@@ -148,7 +148,7 @@ class mcocDefense:
 		return
 
 	@mcoc_defense.command(no_pm=True, pass_context=True)
-	async def viewall(self, ctx, *):
+	async def viewall(self, ctx):
 		"""
 		View all defender quantitys.
 		Use "!defense safe" to just view the safe defender options.
