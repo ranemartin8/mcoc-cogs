@@ -187,7 +187,7 @@ class mcocDefense:
 		all_values = self.defendersJSON.values()
 		if len(all_values) == 0:
  			await self.bot.say('No defenders have been added yet!')
-			return
+ 			return
 		
 		running_total = 0
 		for value in all_values:
