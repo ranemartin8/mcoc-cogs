@@ -42,7 +42,7 @@ class mcocDefense:
 		self.defendersPATH = "data/mcocDefense/defenders.json"
 		self.defendersJSON = dataIO.load_json(self.defendersPATH)
 
-	@commands.group(no_pm=True, pass_context=True, name="defense", invoke_without_command=True)
+	@commands.group(no_pm=True, pass_context=True, name="defense", invoke_without_command=True,aliases=['def',])
 	async def mcoc_defense(self, ctx):
 		"""Set or update defenders."""
 		if ctx.invoked_subcommand is None:
