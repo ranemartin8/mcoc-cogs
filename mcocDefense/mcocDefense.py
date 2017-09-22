@@ -1,5 +1,5 @@
 import discord
-from .utils import checks
+from .utils import checks, pagify
 from discord.ext import commands
 from cogs.utils.dataIO import dataIO
 import os
@@ -201,8 +201,10 @@ class mcocDefense:
 				entry = "{} - (0 placed)".format(fullname)
 				safelist.append(entry)					
 		total = len(safelist)
-		await self.bot.say("**{} Available Defenders**\n{}".format(total,'\n'.join(safelist)))
-		return
+		msg = pagify("**{} Available Defenders**\n{}".format(total,'\n'.join(safelist)))
+		for page in msg:
+			await self.bot.say(page)
+		return	
 
 	@mcoc_defense.command(no_pm=True, pass_context=True)
 	async def taken(self, ctx):
@@ -227,7 +229,9 @@ class mcocDefense:
 				entry = "{}".format(fullname)
 				safelist.append(entry)
 		total = len(safelist)
-		await self.bot.say("**{} Placed Defenders**\n{}".format(total,'\n'.join(safelist)))
+		msg = pagify("**{} Placed Defenders**\n{}".format(total,'\n'.join(safelist)))
+		for page in msg:
+			await self.bot.say(page)
 		return
 	
 	@mcoc_defense.command(no_pm=True, pass_context=True)
@@ -265,8 +269,10 @@ class mcocDefense:
 				champ_object = await ChampConverter(ctx, champ).convert()
 				fullname = champ_object.full_name				
 				entry = "{} - (0 placed)".format(fullname)
-				champlist.append(entry)	
-		await self.bot.say("**All Defenders**\n{}".format(running_total,'\n'.join(champlist)))
+				champlist.append(entry)
+		msg = pagify("**All Defenders**\n{}".format(running_total,'\n'.join(champlist)))
+		for page in msg:
+			await self.bot.say(page)
 		return	
 			      
 def check_folder():
