@@ -43,8 +43,10 @@ class mcocDefense:
 				original_value = 0
 			else:
 				original_value = self.defendersJSON[server_id][hookid]
-				
-			value = original_value + change_amount
+			if change_type == "override":
+				value = change_amount
+			else:
+				value = original_value + change_amount
 			if value < 0:
 				value = 0
 			
@@ -112,15 +114,38 @@ class mcocDefense:
 	async def set(self, ctx, amount: int, *,champions):
 		"""
 		Set the quantities of single or multiple defenders.
-		
-		EXAMPLE: !defense set 3 bw OR !defense 5 groot wolverine nc
 
-		NOTE: This command fully OVERRIDES the existing values.
-		Use "!defense add/remove" to simply increase or decrease multiple champions by 1.
+		Use plain value to OVERRIDE existing values.
+		Add "+" or "-" before amount to ADD or SUBTRACT from existing values.
+		
+		EXAMPLE:
+		!defense set 3 bw groot
+		(Overrides existing values)
+		=
+		Black Widow (3)
+		Groot (3)
+
+		-------
+
+		!defense set +2 groot
+		(+ or - existing value)
+		=
+		Groot (5)
+		
+
+		NOTE: Use "!defense add/remove" to simply increase or decrease multiple champions by 1.
 		"""
+		change_type = "override"
+		amount_str = str(amount)
+		#if contains +
+		if amount_str.find('+') != -1:
+			change_type = "add"
+		if amount_str.find('-') != -1:
+			change_type = "remove"			
+
 		try:
 			champs = await ChampConverterMult(ctx, champions).convert()
-			await self.defense_update('set', champs, ctx.message, amount)
+			await self.defense_update(change_type, champs, ctx.message, amount)
 		except:
 			await self.bot.say('Defenders not updated. Please try again.')
 			return
