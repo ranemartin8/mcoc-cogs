@@ -192,7 +192,7 @@ class mcocDefense:
  			return
 		
 		running_total = 0
-		for value in all_values:
+		for key,value in self.defendersJSON.items():
 			running_total = running_total + int(value)
 		champlist = []
 		for champ,value in self.defendersJSON[server_id].items():
