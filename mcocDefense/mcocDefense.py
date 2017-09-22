@@ -202,7 +202,9 @@ class mcocDefense:
 				entry = "{}".format(fullname)
 				safelist.append(entry)					
 		total = len(safelist)
+		safelist.sort()
 		msg = pagify("**{} Available Defenders**\n{}".format(total,'\n'.join(safelist)))
+		
 		for page in msg:
 			await self.bot.say(page)
 		return	
@@ -226,10 +228,11 @@ class mcocDefense:
 		for champ,value in self.defendersJSON[server_id].items():
 			champ_object = await ChampConverter(ctx, champ).convert()
 			fullname = champ_object.full_name
-			if value == 1:
+			if value > 0:
 				entry = "{} - **{}**".format(fullname,value)
 				safelist.append(entry)
 		total = len(safelist)
+		safelist.sort()
 		msg = pagify("**{} Unique Placed Defenders**\n{}".format(total,'\n'.join(safelist)))
 		for page in msg:
 			await self.bot.say(page)
@@ -271,6 +274,7 @@ class mcocDefense:
 				fullname = champ_object.full_name				
 				entry = "{} - **0**".format(fullname)
 				champlist.append(entry)
+		champlist.sort()
 		msg = pagify("**All Defenders**\n[{} Total Placed]\n{}".format(running_total,'\n'.join(champlist)))
 		for page in msg:
 			await self.bot.say(page)
