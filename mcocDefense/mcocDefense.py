@@ -9,6 +9,27 @@ from .mcoc import ChampConverter, ChampConverterMult, QuietUserError
 import re
 import collections
 
+all_champs = {'abomination','agentvenom','angela','antman','archangel',
+	      'beast','blackbolt','blackpanther','blackpanthercivilwar',
+	      'blackwidow','cable','captainamerica','captainamericawwii',
+	      'captainmarvel','carnage','civilwarrior','colossus','crossbones',
+	      'cyclops90s','cyclops','daredevil','daredevilnetflix','deadpool',
+	      'deadpoolxforce','doctoroctopus','drstrange','brothervoodoo',
+	      'dormammu','drax','electro','elektra','falcon','gambit',
+	      'gamora','ghostrider','greengoblin','groot','guillotine',
+	      'gwenpool','hawkeye','howardtheduck','hulk','hulkbuster',
+	      'hyperion','iceman','ironfistwhite','ironfist','ironman',
+	      'ironpatriot','joefixit','juggernaut','kang','karnak','grootking',
+	      'kingpin','loki','lukecage','magik','magneto','magnetomarvelnow',
+	      'medusa','moonknight','karlmordo','msmarvel','kamalakhan','nebula',
+	      'nightcrawler','wolverineoldman','phoenix','psylockexforce','punisher',
+	      'punisher2099','quake','redhulk','rhino','rocket','rogue','ronan','scarletwitch',
+	      'shehulk','spidergwen','spiderman','spidermanmcu','spidermanblack',
+	      'spidermanmorales','starlord','storm','superiorironman','thanos','hood',
+	      'thor','thorjanefoster','ultronclassic','ultron','unstoppablecolossus',
+	      'venom','venompool','vision','thevision','vulture','warmachine','wintersoldier',
+	      'wolverine','x23','yellowjacket','yondu'}
+
 class AmbiguousArgError(QuietUserError):
 	pass
 
@@ -151,36 +172,45 @@ class mcocDefense:
 			return
 		
 	@mcoc_defense.command(no_pm=True, pass_context=True)
-	async def safe(self, ctx):
+	async def free(self, ctx):
 		"""
-		View ALL safe defender options.
+		View available defenders.
 		
-		ie. Quantity = 0 or 2 & up
+		These defenders have not yet been placed.
 		"""
 		server_id = ctx.message.server.id
 		if server_id not in self.defendersJSON or self.defendersJSON[server_id] == False:
 			self.defendersJSON[server_id] = {}
 			dataIO.save_json(self.defendersPATH, self.defendersJSON)
-			await self.bot.say('No defenders have been added yet!')
+			await self.bot.say('All defenders are available right now, because no defenders have been added yet!')
 			return
 		safelist = []
-		
+		hookid_list = []
 		for champ,value in self.defendersJSON[server_id].items():
+			hookid_list.append(champ)
 			champ_object = await ChampConverter(ctx, champ).convert()
-			fullname = champ_object.full_name
-			if value != 1:
+			fullname = champ_object.full_name				
+			if value == 0:
 				entry = "{} - ({} placed)".format(fullname,value)
 				safelist.append(entry)
+				
+		for champ in all_champs:
+			if champ not in hookid_list:
+				champ_object = await ChampConverter(ctx, champ).convert()
+				fullname = champ_object.full_name				
+				entry = "{} - (0 placed)".format(fullname)
+				safelist.append(entry)					
 		total = len(safelist)
-		await self.bot.say("**{} Safe Champions**\n{}".format(total,'\n'.join(safelist)))
+		await self.bot.say("**{} Available Defenders**\n{}".format(total,'\n'.join(safelist)))
 		return
 
 	@mcoc_defense.command(no_pm=True, pass_context=True)
-	async def unsafe(self, ctx):
+	async def taken(self, ctx):
 		"""
-		View all unsafe defenders to avoid.
+		View which defenders to avoid.
 		
-		ie. Quantity = 1
+		Defenders in this list are ones who have already been placed.
+		Placing a duplicate would not contribute to defender diversity.
 		"""
 		server_id = ctx.message.server.id
 		if server_id not in self.defendersJSON or self.defendersJSON[server_id] == False:
@@ -197,13 +227,13 @@ class mcocDefense:
 				entry = "{}".format(fullname)
 				safelist.append(entry)
 		total = len(safelist)
-		await self.bot.say("**{} Unsafe Champions**\n{}".format(total,'\n'.join(safelist)))
+		await self.bot.say("**{} Placed Defenders**\n{}".format(total,'\n'.join(safelist)))
 		return
 	
 	@mcoc_defense.command(no_pm=True, pass_context=True)
 	async def viewall(self, ctx):
 		"""
-		View ALL defender quantities.
+		View ALL available defender & quantities.
 		
 		NOTE: Use "!defense safe" to just view the safe defender options.
 		"""
@@ -222,12 +252,21 @@ class mcocDefense:
 		for value in all_values:
 			running_total = running_total + value
 		champlist = []
+		hookid_list = []
 		for champ,value in self.defendersJSON[server_id].items():
+			hookid_list.append(champ)
 			champ_object = await ChampConverter(ctx, champ).convert()
 			fullname = champ_object.full_name
 			entry = "{} - ({} placed)".format(fullname,value)
 			champlist.append(entry)
-		await self.bot.say("**{} Champions are placed.**\n{}".format(running_total,'\n'.join(champlist)))
+			
+		for champ in all_champs:
+			if champ not in hookid_list:
+				champ_object = await ChampConverter(ctx, champ).convert()
+				fullname = champ_object.full_name				
+				entry = "{} - (0 placed)".format(fullname)
+				safelist.append(entry)	
+		await self.bot.say("**All Defenders**\n{}".format(running_total,'\n'.join(champlist)))
 		return	
 			      
 def check_folder():
