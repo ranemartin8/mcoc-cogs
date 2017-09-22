@@ -232,8 +232,11 @@ class mcocDefense:
 				entry = "{} - **{}**".format(fullname,value)
 				safelist.append(entry)
 		total = len(safelist)
+		running_total = 0
+		for value in self.defendersJSON[server_id].values():
+			running_total = running_total + value
 		safelist.sort()
-		msg = pagify("**{} Unique Placed Defenders**\n{}".format(total,'\n'.join(safelist)))
+		msg = pagify("**{} Placed Defenders**\n[{} Unique]\n{}".format(running_total,total,'\n'.join(safelist)))
 		for page in msg:
 			await self.bot.say(page)
 		return
