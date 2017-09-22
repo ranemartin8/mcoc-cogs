@@ -58,7 +58,7 @@ class mcocDefense:
 			if hookid not in self.defendersJSON[server_id]:
 				await self.bot.say('Something went wrong.')
 				return
-			entry = "**{}** Updated: {} >> **{}**".format(fullname,original_value,value)
+			entry = "**{}** is updated from **{}** to __**{}**__".format(fullname,original_value,value)
 			champ_list.append(entry)
 		await self.bot.say(":white_check_mark: Done!\n{}".format('\n'.join(champ_list)))
 		return
@@ -131,7 +131,8 @@ class mcocDefense:
 		"""
 		View safe defender options.
 		ie. Quanity = 0 or 2 & up
-		"""		
+		"""
+		server_id = ctx.message.server.id
 		if server_id not in self.defendersJSON or self.defendersJSON[server_id] == False:
 			self.defendersJSON[server_id] = {}
 			dataIO.save_json(self.defendersPATH, self.defendersJSON)
@@ -152,7 +153,8 @@ class mcocDefense:
 		"""
 		View all defender quantitys.
 		Use "!defense safe" to just view the safe defender options.
-		"""		
+		"""
+		server_id = ctx.message.server.id
 		if server_id not in self.defendersJSON or self.defendersJSON[server_id] == False:
 			self.defendersJSON[server_id] = {}
 			dataIO.save_json(self.defendersPATH, self.defendersJSON)
