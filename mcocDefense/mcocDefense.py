@@ -231,7 +231,7 @@ class mcocDefense:
 		return
 	
 	@mcoc_defense.command(no_pm=True, pass_context=True)
-	async def viewall(self, ctx):
+	async def all(self, ctx):
 		"""
 		View ALL available defender & quantities.
 		
@@ -265,7 +265,7 @@ class mcocDefense:
 				champ_object = await ChampConverter(ctx, champ).convert()
 				fullname = champ_object.full_name				
 				entry = "{} - (0 placed)".format(fullname)
-				safelist.append(entry)	
+				champlist.append(entry)	
 		await self.bot.say("**All Defenders**\n{}".format(running_total,'\n'.join(champlist)))
 		return	
 			      
