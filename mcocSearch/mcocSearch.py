@@ -101,7 +101,7 @@ class mcocSearch:
 					
 		em.add_field(name="**Abilities**", value=tag_ability,inline=False)	
 		em.add_field(name="**Hashtags**", value=hashtags,inline=False)
-		em.add_field(name="**Class**", value=champ_data.klass,inline=False)			   
+		em.add_field(name="**Class**", value=champ.klass,inline=False)			   
 			
 			
 		#em.set_footer(text="Seatin's Champion Tier List",icon_url=seatin_icon)
