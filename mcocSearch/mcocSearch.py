@@ -56,7 +56,7 @@ class mcocSearch:
 		for hook_id,values in self.searchData.items():
 			terms = values["terms"]
 			if terms.find(query) != -1:
-				hookid = values[hookid]
+				hookid = values["hookid"]
 				champ_object = await ChampConverter(ctx, hookid).convert()
 				fullname = champ_object.full_name
 				matching_champs.append(fullname)
