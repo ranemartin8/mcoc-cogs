@@ -53,12 +53,16 @@ class mcocSearch:
 			await self.bot.say('<:warning_circle:340371702225567744>  Sorry, I was unable to find the mcocSearch.json file.')
 			return
 		matching_champs = []
-		for hook_id,values in self.searchData.items():
+		for hookid,values in self.searchData.items():
+			champ_object = await ChampConverter(ctx, hookid).convert()
+			all_tags = str(champ_object.hashtags.lower())
+			fullname = champ_object.full_name
+			
+			if all_tags.find(query) != -1:
+				matching_champs.append(fullname)
+				
 			terms = values["terms"]
 			if terms.find(query) != -1:
-				hookid = values["hookid"]
-				champ_object = await ChampConverter(ctx, hookid).convert()
-				fullname = champ_object.full_name
 				matching_champs.append(fullname)
 		if len(matching_champs) == 0:
 			await self.bot.say('<:unknown:340371702317842433>  Sorry, no results found for **\"{}\"**.'.format(query))
@@ -109,8 +113,8 @@ class mcocSearch:
 			tag_ability = ab
 		if champ.hashtags:
 			hashtags = str(champ.hashtags)
-			hashtags.replace(" #",", #")
-			print(hashtags)
+			hashtags = hashtags.replace(" #",", #")
+			#print(hashtags)
 			
 			#print(champ.class_tags)
 			#for a in champ.hashtags.split('#'):
