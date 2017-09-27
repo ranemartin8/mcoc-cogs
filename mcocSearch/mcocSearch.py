@@ -100,11 +100,11 @@ class mcocSearch:
 		if champ_data["tag_ability"]:
 			abilities = champ_data["tag_ability"]
 			if abilities.find("(a)") != -1:
-				abilities.replace(" (a)","\*")
-				a_disclaimer = "\* = signature ability only"
+				abilities.replace("(a)","\*")
+				a_disclaimer = "\n *\* = signature ability only*"
 			if abilities.find("(e)") != -1:
-				abilities.replace(" (e)","\*\*")
-				a_disclaimer = "\*\* = enhanced by signature ability"
+				abilities.replace("(e)","\*\*")
+				e_disclaimer = "\n *\*\* = enhanced by signature ability*"
 			tag_ability = abilities
 		if champ.hashtags:
 			tags_list = []
@@ -118,7 +118,7 @@ class mcocSearch:
 			#	hashtag_list.append(tag)
 			hashtags = ", ".join(tags_list)
 					
-		em.add_field(name="**Abilities**", value=tag_ability,inline=False)	
+		em.add_field(name="**Abilities**", value=tag_ability+a_disclaimer+e_disclaimer,inline=False)	
 		em.add_field(name="**Hashtags**", value=hashtags,inline=False)
 		em.add_field(name="**Class**", value=champ.klass,inline=False)			   
 			
