@@ -54,7 +54,7 @@ class mcocSearch:
 			return
 		matching_champs = []
 		for hook_id,values in self.searchData.items():
-			terms = values[terms]
+			terms = values["terms"]
 			if terms.find(query) != -1:
 				hookid = values[hookid]
 				champ_object = await ChampConverter(ctx, hookid).convert()
