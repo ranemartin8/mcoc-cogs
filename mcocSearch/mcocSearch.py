@@ -108,8 +108,10 @@ class mcocSearch:
 			tag_ability = abilities
 		if champ.hashtags:
 			tags_list = []
+			print(champ.hashtags)
+			print(champ.class_tags)
 			for a in champ.hashtags.split('#'):
-				tags_list.append(''.join(a.lower().split(' ')))
+				tags_list.append('#' + ''.join(a.split(' ')))
 			#hashtag_list = list(champ.hashtags)
 			print(tags_list)
 			#for tag in champ.hashtags:
