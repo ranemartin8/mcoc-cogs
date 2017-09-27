@@ -55,7 +55,7 @@ class mcocSearch:
 		matching_champs = []
 		for hookid,values in self.searchData.items():
 			champ_object = await ChampConverter(ctx, hookid).convert()
-			all_tags = str(champ_object.hashtags.lower())
+			all_tags = str(champ_object.hashtags).lower()
 			fullname = champ_object.full_name
 			
 			if all_tags.find(query) != -1:
