@@ -96,8 +96,8 @@ class mcocSearch:
 			
 		if champ_data["tag_ability"]:
 			tag_ability = champ_data["tag_ability"]
-		if champ_data.tags:
-			hashtags = champ_data.tags
+		if champ.tags:
+			hashtags = champ.tags
 					
 		em.add_field(name="**Abilities**", value=tag_ability,inline=False)	
 		em.add_field(name="**Hashtags**", value=hashtags,inline=False)
