@@ -97,9 +97,9 @@ class mcocSearch:
 		if champ_data["tag_ability"]:
 			tag_ability = champ_data["tag_ability"]
 		if champ.hashtags:
-			hashtag_list = []
-			for tag in champ.hashtags:
-				hashtag_list.append(tag)
+			hashtag_list = list(champ.hashtags)
+			#for tag in champ.hashtags:
+			#	hashtag_list.append(tag)
 			hashtags = ", ".join(hashtag_list)
 					
 		em.add_field(name="**Abilities**", value=tag_ability,inline=False)	
