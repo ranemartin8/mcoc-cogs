@@ -59,8 +59,8 @@ class mcocSearch:
 				fullname = champ_object.full_name
 				matching_champs.append(fullname)
 		if len(matching_champs) == 0:
-			await self.bot.say('<:unknown:340371702317842433>  Sorry, no results found for **{}**.'.format(query)
-			return			
+			await self.bot.say('<:unknown:340371702317842433>  Sorry, no results found for **{}**.'.format(query))
+			return
 		matching_champs.sort()
 		msg = pagify("<:circlecheck:340371185730846720>  Search Result for **{}**\n{}".format(query,'\n'.join(matching_champs)))				
 		for page in msg:
