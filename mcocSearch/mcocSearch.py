@@ -9,6 +9,8 @@ from .mcoc import ChampConverter, ChampConverterMult, QuietUserError
 #from .gsheeter import MemberFinder, TooManyMatches, NoMemberFound 
 import re
 import collections
+from .utils.chat_formatting import pagify
+
 
 
 fields = ['o_tier', 'o_rating', 'o_awakened', 'd_tier','d_rating', 'd_awakened',
@@ -51,10 +53,10 @@ class mcocSearch:
 			await self.bot.say('<:warning_circle:340371702225567744>  Sorry, I was unable to find the mcocSearch.json file.')
 			return
 		matching_champs = []
-		for champ in self.searchData:
-			terms = champ[terms]
+		for hook_id,values in self.searchData.items():
+			terms = values[terms]
 			if terms.find(query) != -1:
-				hookid = champ[hookid]
+				hookid = values[hookid]
 				champ_object = await ChampConverter(ctx, hookid).convert()
 				fullname = champ_object.full_name
 				matching_champs.append(fullname)
