@@ -98,14 +98,15 @@ class mcocSearch:
 
 			
 		if champ_data["tag_ability"]:
-			abilities = champ_data["tag_ability"]
-			if abilities.find("(a)") != -1:
-				abilities.replace("(a)","<:c_star_awake:340371185021747203>")
-				a_disclaimer = "\n<:c_star_awake:340371185021747203> = signature ability only*"
-			if abilities.find("(e)") != -1:
-				abilities.replace("(e)","<:c_star:340371185449697280>")
-				e_disclaimer = "\n<:c_star:340371185449697280> = enhanced by signature ability*"
-			tag_ability = abilities
+			ab = champ_data["tag_ability"]
+
+			if ab.find("(a)") != -1:
+				a_disclaimer = "\n<:c_star_awake:340371185021747203> *= signature ability only*"
+			if ab.find("(e)") != -1:
+				e_disclaimer = "\n<:c_star:340371185449697280> *= enhanced by signature ability*"
+			ab = ab.replace("(a)","<:c_star_awake:340371185021747203>")
+			ab = ab.replace("(e)","<:c_star:340371185449697280>")
+			tag_ability = ab
 		if champ.hashtags:
 			hashtags = str(champ.hashtags)
 			hashtags.replace(" #",", #")
