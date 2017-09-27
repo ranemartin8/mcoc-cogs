@@ -61,13 +61,14 @@ class mcocSearch:
 				fullname = champ_object.full_name
 				matching_champs.append(fullname)
 		if len(matching_champs) == 0:
-			await self.bot.say('<:unknown:340371702317842433>  Sorry, no results found for **{}**.'.format(query))
+			await self.bot.say('<:unknown:340371702317842433>  Sorry, no results found for **\"{}\"**.'.format(query))
 			return
 		matching_champs.sort()
-		msg = pagify("<:circlecheck:340371185730846720>  Search Result for **{}**\n{}".format(query,'\n'.join(matching_champs)))				
+		msg = pagify("<:circlecheck:340371185730846720>  Search Results for **\"{}\"**\n{}".format(query,'\n'.join(matching_champs)))				
 		for page in msg:
 			await self.bot.say(page)
-		return	
+		await self.bot.delete_message(search_msg)
+		return
 
 	@commands.command(pass_context=True)
 	async def lookup(self, ctx, *, champ : ChampConverter):
@@ -95,8 +96,8 @@ class mcocSearch:
 			
 		if champ_data["tag_ability"]:
 			tag_ability = champ_data["tag_ability"]
-		if champ_data.hashtags:
-			hashtags = champ_data.hashtags
+		if champ_data.tags:
+			hashtags = champ_data.tags
 					
 		em.add_field(name="**Abilities**", value=tag_ability,inline=False)	
 		em.add_field(name="**Hashtags**", value=hashtags,inline=False)
