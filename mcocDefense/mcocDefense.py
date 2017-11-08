@@ -31,7 +31,7 @@ all_champs = {'abomination','agentvenom','angela','antman','archangel',
 	      'venom','venompool','vision','thevision','vulture','warmachine','wintersoldier',
 	      'wolverine','x23','yellowjacket','yondu'}
 
-bg_list = ['bg1','bg2','bg3']
+bg_list = {'bg1','bg2','bg3'}
 
 class AmbiguousArgError(QuietUserError):
 	pass
@@ -55,7 +55,7 @@ class mcocDefense:
 		server = message.server
 		server_id = server.id
 		battlegroup = battlegroup.lower()
-		if battlegroup not in bg_list or bg_list[battlegroup] == False:
+		if battlegroup not in bg_list:
 			await self.bot.say('<:warning_circle:340371702225567744> Invalid Battlegroup. Please indicate **bg1, bg2 or bg3**.')
 			return                       
 		if server_id not in self.defendersJSON or self.defendersJSON[server_id] == False:
@@ -98,7 +98,7 @@ class mcocDefense:
 		"""
 		server_id = ctx.message.server.id
 		battlegroup = battlegroup.lower()
-		if battlegroup not in bg_list or bg_list[battlegroup] == False:
+		if battlegroup not in bg_list:
 			await self.bot.say('<:warning_circle:340371702225567744> Invalid Battlegroup. Please indicate **bg1, bg2 or bg3**.')
 			return 	
 		if server_id not in self.defendersJSON or self.defendersJSON[server_id] == False:
@@ -230,7 +230,7 @@ class mcocDefense:
 		"""
 		server_id = ctx.message.server.id
 		battlegroup = battlegroup.lower()
-		if battlegroup not in bg_list or bg_list[battlegroup] == False:
+		if battlegroup not in bg_list:
 			await self.bot.say('<:warning_circle:340371702225567744> Invalid Battlegroup. Please indicate **bg1, bg2 or bg3**.')
 			return 		
 		if server_id not in self.defendersJSON or self.defendersJSON[server_id] == False:
