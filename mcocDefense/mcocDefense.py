@@ -31,7 +31,7 @@ all_champs = {'abomination','agentvenom','angela','antman','archangel',
 	      'venom','venompool','vision','thevision','vulture','warmachine','wintersoldier',
 	      'wolverine','x23','yellowjacket','yondu'}
 
-bg_list = {'bg1','bg2','bg3'}
+bg_list = ['bg1','bg2','bg3']
 
 class AmbiguousArgError(QuietUserError):
 	pass
