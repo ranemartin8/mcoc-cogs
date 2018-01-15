@@ -16,6 +16,7 @@ import collections
 field_names = {'summonerlevel':'Summoner Level','herorating':'Base Hero Rating','timezone':'Timezone','gamename':'In-Game Name','aq':'Alliance Quest','awd':'AW Defense','awo':'AW Offense','alliance':'Alliance','bg':'Battlegroup','achievements':'Achievements','profilechamp':'Profile Champion'}
 map_fields = {'map5a':'Map 5 - A Path', 'map5b':'Map 5 - B Path', 'map5c':'Map 5 - C Path', 'aw':'Alliance War Path', 'map3a':'Map 3 - A Path', 'map3b':'Map 3 - B Path', 'map3c':'Map 3 - C Path', 'map2a':'Map 2 - A Path', 'map2b':'Map 2 - B Path', 'map2c':'Map 2 - C Path'}
 hook_fields = {'awo','awd','aq'}
+bg_mapping = {'Q-BG1':'bg1','Q-BG2':'bg2','Q-BG3':'bg3'}
 field_n = field_names.copy()
 del field_n['bg']
 del field_n['achievements']  
@@ -27,7 +28,7 @@ valid_stop = {'stop','end','cancel'}
 achievements_set = {'legend','uncollected','lol','rol','rttl','100%act4'}
 achievements_dict = {'legend':'**Legend**','uncollected':'<:title:342763077688754196> The Uncollected','lol':'Labyrinth of Legends','rol':'Realm of Legends','rttl':'Road to the Labyrinth','100%act4':'100% Act 4'}
 #<:legend:340360464162619392>
-bg_set = {'bg1','bg2','bg3'}
+bg_set = {'bg1','bg2','bg3','q-bg1','q-bg2','q-bg3','w-bg1','w-bg2','w-bg3'}
 remote_data_basepath = 'https://raw.githubusercontent.com/JasonJW/mcoc-cogs/master/mcoc/data/'
 
 map_names = {'map5a':'Map 5 - Section A', 'map5b':'Map 5 - Section B', 'map5c':'Map 5 - Section C', 'aw':'Alliance War', 'map3a':'Map 3 - Section A', 'map3b':'Map 3 - Section B', 'map3c':'Map 3 - Section C', 'map2a':'Map 2 - Section A', 'map2b':'Map 2 - Section B', 'map2c':'Map 2 - Section C'}
@@ -407,7 +408,7 @@ class mcocProfile:
 		author = ctx.message.author
 		server = ctx.message.server
 		server_id = server.id
-		valid_bgs = ['bg1','bg2','bg3']
+		valid_bgs = ['bg1','bg2','bg3','q-bg1','q-bg2','q-bg3','w-bg1','w-bg2','w-bg3']
 		if map_name not in valid_maps:
 			await self.bot.say('**{}** is not a valid map. Try again with a valid '
 							   'map from the following list: \n- {}'.format(map_name,'\n- '.join(valid_maps)))
@@ -513,7 +514,7 @@ class mcocProfile:
 		author = ctx.message.author
 		server = ctx.message.server
 		server_id = server.id
-		valid_bgs = ['bg1','bg2','bg3']
+		valid_bgs = ['bg1','bg2','bg3','q-bg1','q-bg2','q-bg3','w-bg1','w-bg2','w-bg3']
 		if not member_bg: #default to author's bg if nothing is provided. if the author isn't in a bg, default to the author
 			roles = [role.name.lower() for role in author.roles]
 			bg_name = []
