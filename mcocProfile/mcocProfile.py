@@ -290,7 +290,7 @@ class mcocProfile:
 
 	
 	@commands.command(no_pm=True, pass_context=True)
-	@checks.mod_or_permissions(manage_roles=True)
+#	@checks.mod_or_permissions(manage_roles=True)
 	async def edit(self, ctx, member : str, field : str, *, value : str):
 		"""
 		Officers ONLY: Update a field on another member's Summoner Profile.
@@ -311,7 +311,7 @@ class mcocProfile:
 			return	
 	
 	@commands.command(no_pm=True, pass_context=True)
-	@checks.mod_or_permissions(manage_roles=True)
+#	@checks.mod_or_permissions(manage_roles=True)
 	async def settings(self, ctx, field : str, *, value : str):
 		"""    
 		Officers ONLY: Update guild settings for Summoner Profile commands.
@@ -365,7 +365,7 @@ class mcocProfile:
 		
 
 	@commands.command(no_pm=True, pass_context=True)
-	@checks.mod_or_permissions(manage_roles=True)
+#	@checks.mod_or_permissions(manage_roles=True)
 	async def setpath(self, ctx, member : str, map_name, *, path : str):
 		"""
 		Assign a path for a member on a specific map.
